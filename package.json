@@ -1,0 +1,43 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "vite build && vite build --ssr",
+    "test": "vitest",
+    "dev": "vite",
+    "watch": "vite build --watch",
+    "reset-dev-linu": "rm -rf node_modules package-lock.json && npm install && npm run dev",
+    "reset-dev-win": "del -rf node_modules package-lock.json && npm install && npm run dev",
+    "wipe-seed": "php artisan db:wipe --force && php artisan db:seed"
+  },
+  "dependencies": {
+    "@headlessui/vue": "^1.7.23",
+    "@heroicons/vue": "^2.2.0",
+    "@jridgewell/sourcemap-codec": "^1.5.0",
+    "@vuepic/vue-datepicker": "^11.0.3",
+    "@vueuse/core": "^14.0.0",
+    "floating-vue": "^5.2.2",
+    "openai": "^6.7.0",
+    "vue-select": "^4.0.0-beta.6",
+    "vue-sticky-directive": "0.0.10",
+    "ziggy-js": "^2.6.0"
+  },
+  "devDependencies": {
+    "@inertiajs/vue3": "^2.2.11",
+    "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/postcss": "^4.1.16",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/server-renderer": "^3.5.13",
+    "@vue/test-utils": "^2.4.6",
+    "autoprefixer": "^10.4.21",
+    "axios": "^1.7.9",
+    "dotenv": "^17.2.3",
+    "jsdom": "^27.0.1",
+    "laravel-vite-plugin": "^2.0.1",
+    "lodash": "^4.17.21",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^4.1.16",
+    "vite": "^7.1.12",
+    "vitest": "^4.0.3",
+    "vue": "^3.5.13"
+  }
+}
