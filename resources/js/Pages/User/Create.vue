@@ -6,7 +6,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import SelectInput from '@/Components/SelectInput.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import { watchEffect,ref } from 'vue';
 
 import VueDatePicker from '@vuepic/vue-datepicker';
@@ -19,6 +19,10 @@ const props = defineProps({
     titulos: Object, //parametros de la clase principal
 })
 const emit = defineEmits(["close"]);
+
+const lang = () => {
+    return usePage().props.language.original;
+}
 
 // VueDatePicker
 const formatToVue = (date) => {
@@ -37,20 +41,9 @@ const anio18 = anioHoy - 18;
 
 
 const form = useForm({
-    // name: 'alejo pruebas', //temp
-    // email: 'ajelof22@gmail.com',
-    // role: 'trabajador',
-
-    // identificacion: 123456654,
-    // sexo: 'Masculino',
-    // fecha_nacimiento: anio18+'-12-01T00:00',
-    // celular: '',
-    // area: '',
-    // cargo: '',
-
     name: '',
     email: '',
-    role: 'trabajador',
+     role: 'empleado',
 
     identificacion:'',
     sexo:'',
@@ -82,8 +75,8 @@ watchEffect(() => {
     }
     if(form.fecha_nacimiento)
         anio = parseInt(anioHoy - new Date(form.fecha_nacimiento).getFullYear())
-    if(form.semestre)
-        anio = 2024
+    // if(form.semestre)
+    //     anio = 2024
 })
 //TOSTUDY
 const roles = props.roles?.map(role => ({
@@ -100,7 +93,7 @@ const daynames = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'];
 <template>
     <section class="space-y-6">
         <Modal :show="props.show" @close="emit('close')">
-            <form class="p-6 pb-8 md:pb-28" @submit.prevent="create">
+            <form class="p-6" @submit.prevent="create">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                     {{ lang().label.add }} {{ props.title }}
                 </h2>
@@ -185,10 +178,10 @@ const daynames = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'];
                             <InputLabel for="fecha_nacimiento" :value="lang().label.fecha_nacimiento" />
                             <small class="text-lg ml-1 font-bold">ㅤ</small>
                           </div>
-                          <VueDatePicker :is-24="false" :day-names="daynames" :format="formatToVue" :flow="flow"
-                                         auto-apply :enable-time-picker="false" id="fecha_nacimiento" class="mt-1 block w-full"
-                                         v-model="form.fecha_nacimiento" required :placeholder="lang().placeholder.fecha_nacimiento"
-                                         :error="form.errors.fecha_nacimiento" />
+<!--                          <VueDatePicker :is-24="false" :day-names="daynames" :format="formatToVue" :flow="flow"-->
+<!--                                         auto-apply :enable-time-picker="false" id="fecha_nacimiento" class="mt-1 block w-full"-->
+<!--                                         v-model="form.fecha_nacimiento" required :placeholder="lang().placeholder.fecha_nacimiento"-->
+<!--                                         :error="form.errors.fecha_nacimiento" />-->
                           <InputError class="mt-2" :message="form.errors.fecha_nacimiento" />
                         </div>
 
@@ -219,8 +212,7 @@ const daynames = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'];
 
                 </div>
                 <div class="flex justify-end">
-                    <SecondaryButton :disabled="form.processing" @click="emit('close')"> {{ lang().button.close }}
-                    </SecondaryButton>
+                    <SecondaryButton :disabled="form.processing" @click="emit('close')"> {{ lang().button.close }}</SecondaryButton>
                     <PrimaryButton class="ml-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
                         @click="create">
                         {{ form.processing ? lang().button.add + '...' : lang().button.add }}

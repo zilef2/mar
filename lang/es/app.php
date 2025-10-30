@@ -20,7 +20,6 @@ return [
         'Reproceso' => 'Reproceso',
         'Nombre' => 'Nombre',
         'Email' => 'Email',
-        'cedula' => 'cedula',
         'Sexo' => 'Sexo',
         'Fecha nacimiento' => 'Fecha nacimiento',
         //dashboard

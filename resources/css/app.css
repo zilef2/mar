@@ -1,13 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
   --color-primary: 2 132 199;
 }
 
 .scrollbar::-webkit-scrollbar {
-    @apply w-1.5 h-1.5 bg-gray-800 dark:bg-gray-300;
+    @apply bg-gray-800 dark:bg-gray-300;
 }
 
 .scrollbar::-webkit-scrollbar-track {
@@ -39,7 +37,7 @@
 }
 
 .scrollbar-table::-webkit-scrollbar {
-    @apply w-1.5 h-1.5 bg-gray-800 dark:bg-white;
+    @apply bg-gray-800 dark:bg-white;
 }
 
 .scrollbar-table::-webkit-scrollbar-track {

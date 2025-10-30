@@ -8,8 +8,9 @@ module.exports = {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.vue',
-        './node_modules/vue-select/dist/vue-select.css',
-        './node_modules/@vuepic/vue-datepicker/dist/main.css'
+        './resources/js/**/*.js',
+        './resources/js/**/*.ts',
+        './node_modules/vue-select/dist/vue-select.css'
     ],
 
     theme: {

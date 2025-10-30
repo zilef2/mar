@@ -19,6 +19,7 @@ import Checkbox from '@/Components/Checkbox.vue';
 import { router, usePage, useForm, Link } from '@inertiajs/vue3';
 
 import { number_format, formatDate, CalcularEdad, CalcularSexo } from '@/global.ts';
+import Modal from "@/Components/Modal.vue";
 
 const { _, debounce, pickBy } = pkg
 const props = defineProps({
@@ -74,7 +75,7 @@ const selectAll = (event) => {
     }
 }
 const select = () => {
-    if (props.users?.data.length == data.selectedId.length) {
+    if (props.users?.data.length === data.selectedId.length) {
         data.multipleSelect = true
     } else {
         data.multipleSelect = false
@@ -109,6 +110,11 @@ const titulos = [
     <Head :title="props.title" />
 
     <AuthenticatedLayout>
+        <Modal :show="true" @close="emit('close')">
+            asdasdasdasdasdasdasd
+                    <SecondaryButton :disabled="form.processing" @click="emit('close')"> {{ lang().button.close }}</SecondaryButton>
+            
+        </Modal>
         <Breadcrumb :title="title" :breadcrumbs="breadcrumbs" />
         <div class="space-y-4">
             <div class="px-4 sm:px-0">

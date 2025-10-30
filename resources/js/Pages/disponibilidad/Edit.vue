@@ -211,6 +211,7 @@ const tiposOptions = [
 </template>
 
 <style>
+@reference "../../../css/app.css";
 textarea {
     @apply px-3 py-2 border border-gray-300 rounded-md;
 }
