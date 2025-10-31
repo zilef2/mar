@@ -32,7 +32,7 @@ class UserStoreRequest extends FormRequest
             // 'password' => ['required', 'confirmed', Password::defaults()],
             // 'role' => ['required'],
 
-            'cedula' => 'required|Integer|unique:' . User::class,
+            'identificacion' => 'required|Integer|unique:' . User::class,
             'area' => 'required',
             'cargo' => 'required',
             'sexo' => 'nullable',

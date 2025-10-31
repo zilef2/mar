@@ -1,5 +1,5 @@
 // excel para la BD
-- el login debe quedar con cedula y pass
+- el login debe quedar con identificacion y pass
 
 - ver quien esta activo
 

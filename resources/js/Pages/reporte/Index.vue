@@ -52,7 +52,11 @@ const props = defineProps({
     losSelect: Object,
     valuesGoogleCabeza: Object,
     valuesGoogleBody: Object,
-    Trabajadores: Object,
+    empleados: Object,
+    vectorTriple: {
+        type: Array,
+        required: true
+    }
 })
 
 const data = reactive({
@@ -157,11 +161,13 @@ const mostrarTiempoTranscurrido = (raw) => {
         return number_format(valor, 3, false) + ' hrs'
     }
 }
+
 </script>
 
 <template>
     <!--    <Head :title="props.title" />-->
 
+<!--    <TripleSelect></TripleSelect>-->
     <AuthenticatedLayout>
         <!--        <Breadcrumb :title="title" :breadcrumbs="breadcrumbs" />-->
         <div class="space-y-4">
@@ -173,7 +179,7 @@ const mostrarTiempoTranscurrido = (raw) => {
                             :losSelect=props.losSelect
                             :valuesGoogleCabeza=props.valuesGoogleCabeza
                             :valuesGoogleBody=props.valuesGoogleBody
-                            :Trabajadores=props.Trabajadores
+                            :empleados=props.empleados
                     />
 
                     <Edit v-if="can(['update reporte']) && numberPermissions > 1"
@@ -183,7 +189,7 @@ const mostrarTiempoTranscurrido = (raw) => {
                           :losSelect=props.losSelect
                           :valuesGoogleCabeza=props.valuesGoogleCabeza
                           :valuesGoogleBody=props.valuesGoogleBody
-                          :Trabajadores=props.Trabajadores
+                          :empleados=props.empleados
                     />
 
                     <TerminarReporte v-if="can(['read reporte'])" :numberPermissions="props.numberPermissions"
@@ -244,7 +250,7 @@ const mostrarTiempoTranscurrido = (raw) => {
 
                             <div v-if="numberPermissions > 1" class="w-64">
                                 <label class="block text-sm dark:text-white">Trabajador</label>
-                                <vSelect :options="props.Trabajadores" label="title"
+                                <vSelect :options="props.empleados" label="title"
                                          class="dark:bg-gray-400"
                                          append-to-body
                                          v-model="data.params.search2"></vSelect>
@@ -294,77 +300,75 @@ const mostrarTiempoTranscurrido = (raw) => {
                         </tr>
                         </thead>
                         <!-- {{ props.fromController.data[0] }} -->
-                        <tbody>
-                        <div v-if="data.hayCongelado !== 0" v-sticky="{ zIndex: 100 }"
-                             class="w-full bg-white border border-blue-500 inamovible">
-                            <tr class="dark:bg-gray-900/50 text-left">
-                                <th class="px-2 py-4"></th>
-                                <th class="px-2 py-4"></th>
+                        <tbody v-if="data.hayCongelado !== 0" v-sticky="{ zIndex: 100 }"
+                               class="w-full bg-white border border-blue-500 inamovible">
+                        <tr class="dark:bg-gray-900/50 text-left">
+                            <th class="px-2 py-4"></th>
+                            <th class="px-2 py-4"></th>
 
-                                <th class="px-2 py-4 text-center">
-                                    <PrimaryButton @click="data.hayCongelado = 0"
-                                                   v-show="data.hayCongelado && can(['delete reporte'])"
-                                                   class="px-3 py-1.5"
-                                                   v-tooltip="'Descongelar'">
-                                        <ArrowTrendingDownIcon class="w-5 h-5"/>
-                                    </PrimaryButton>
-                                </th>
-                                <th v-for="titulo in titulos" class="px-2 py-4 cursor-pointer">
-                                    <div class="flex justify-between items-center">
-                                        <p class="w-20 text-sm">{{ lang().label[titulo['label']] }}</p>
-                                    </div>
-                                </th>
-                            </tr>
-                            <tr>
-                                <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
-                                <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
-                                <td class="whitespace-nowrap py-4 px-2 sm:py-3"></td>
-                                <td v-for="titulo in titulos" class="whitespace-nowrap py-4 px-2 sm:py-3">
+                            <th class="px-2 py-4 text-center">
+                                <PrimaryButton @click="data.hayCongelado = 0"
+                                               v-show="data.hayCongelado && can(['delete reporte'])"
+                                               class="px-3 py-1.5"
+                                               v-tooltip="'Descongelar'">
+                                    <ArrowTrendingDownIcon class="w-5 h-5"/>
+                                </PrimaryButton>
+                            </th>
+                            <th v-for="titulo in titulos" class="px-2 py-4 cursor-pointer">
+                                <div class="flex justify-between items-center">
+                                    <p class="w-20 text-sm">{{ lang().label[titulo['label']] }}</p>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
+                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
+                            <td class="whitespace-nowrap py-4 px-2 sm:py-3"></td>
+                            <td v-for="titulo in titulos" class="whitespace-nowrap py-4 px-2 sm:py-3">
                                     <span v-if="titulo['type'] === 'text'"> {{
                                             props.fromController.data[0][titulo['order']]
                                         }} </span>
-                                    <span v-if="titulo['type'] === 'time'"> {{
-                                            TimeTo12Format(props.fromController.data[0][titulo['order']])
-                                        }} </span>
-                                    <span v-if="titulo['type'] === 'number'"> {{
-                                            number_format(props.fromController.data[0][titulo['order']], 0, false)
-                                        }} </span>
+                                <span v-if="titulo['type'] === 'time'"> {{
+                                        TimeTo12Format(props.fromController.data[0][titulo['order']])
+                                    }} </span>
+                                <span v-if="titulo['type'] === 'number'"> {{
+                                        number_format(props.fromController.data[0][titulo['order']], 0, false)
+                                    }} </span>
 
-                                    <span v-if="titulo['type'] === 'dinero'"> {{
-                                            number_format(props.fromController.data[0][titulo['order']], 0, true)
-                                        }} </span>
-                                    <span v-if="titulo['type'] === 'date'"> {{
-                                            formatDate(props.fromController.data[0][titulo['order']], '')
-                                        }} </span>
-                                    <span v-if="titulo['type'] === 'datetime'"> {{
-                                            formatDate(props.fromController.data[0][titulo['order']], 'conLaHora')
-                                        }} </span>
-                                    <span v-if="titulo['type'] === 'foreign'"> {{
-                                            props.fromController.data[0][titulo['nameid']]
-                                        }} </span>
-                                    <span
-                                        v-if="titulo['order'] === 'hora_final' && props.fromController.data[0][titulo['order']] == null">-</span>
-                                    asdasdasd {{ props.fromController.data[0][titulo['order']] > 60 }}
+                                <span v-if="titulo['type'] === 'dinero'"> {{
+                                        number_format(props.fromController.data[0][titulo['order']], 0, true)
+                                    }} </span>
+                                <span v-if="titulo['type'] === 'date'"> {{
+                                        formatDate(props.fromController.data[0][titulo['order']], '')
+                                    }} </span>
+                                <span v-if="titulo['type'] === 'datetime'"> {{
+                                        formatDate(props.fromController.data[0][titulo['order']], 'conLaHora')
+                                    }} </span>
+                                <span v-if="titulo['type'] === 'foreign'"> {{
+                                        props.fromController.data[0][titulo['nameid']]
+                                    }} </span>
+                                <span
+                                    v-if="titulo['order'] === 'hora_final' && props.fromController.data[0][titulo['order']] == null">-</span>
+                                asdasdasd {{ props.fromController.data[0][titulo['order']] > 60 }}
 
-                                    <span
-                                        v-if="titulo['type'] === 'decimal' && titulo['order'] === 'tiempo_transcurrido'"> 
+                                <span
+                                    v-if="titulo['type'] === 'decimal' && titulo['order'] === 'tiempo_transcurrido'"> 
                                         {{
-                                            props.fromController.data[0][titulo['order']] > 60 ?
-                                                number_format((props.fromController.data[0][titulo['order']] * 60), 3, false) + 'mins'
-                                                : number_format((props.fromController.data[0][titulo['order']]), 3, false)
-                                        }} </span>
-                                    <span v-else-if="titulo['type'] === 'decimal'"> {{
-                                            number_format(props.fromController.data[0][titulo['order']], 3, false)
-                                        }} </span>
-                                </td>
-                            </tr>
-                        </div>
+                                        props.fromController.data[0][titulo['order']] > 60 ?
+                                            number_format((props.fromController.data[0][titulo['order']] * 60), 3, false) + 'mins'
+                                            : number_format((props.fromController.data[0][titulo['order']]), 3, false)
+                                    }} </span>
+                                <span v-else-if="titulo['type'] === 'decimal'"> {{
+                                        number_format(props.fromController.data[0][titulo['order']], 3, false)
+                                    }} </span>
+                            </td>
+                        </tr>
                         <tr v-for="(clasegenerica, indexu) in props.fromController.data" :key="indexu"
                             class="hover:dark:bg-gray-900/20">
                             <td v-if="props.numberPermissions > 1"
                                 class="whitespace-nowrap py-4 px-2 sm:py-3 text-center">
                                 <input
-                                    class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-primary dark:text-primary shadow-sm focus:ring-primary/80 dark:focus:ring-primary dark:focus:ring-offset-gray-800 dark:checked:bg-primary dark:checked:border-primary"
+                                    class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-primary dark:text-primary shadow-sm focus:ring-primary/80 dark:focus:ring-primary dark:focus:ring-offset-gray-800 dark:checked:bg-blue-600 dark:checked:border-primary"
                                     type="checkbox" @change="select" :value="clasegenerica.id"
                                     v-model="data.selectedId"/>
                             </td>
@@ -458,7 +462,7 @@ const mostrarTiempoTranscurrido = (raw) => {
 
     </AuthenticatedLayout>
 </template>
-<style scope>
+<style>
 .inamovible {
     position: fixed;
     top: 0;
@@ -466,10 +470,4 @@ const mostrarTiempoTranscurrido = (raw) => {
     z-index: 5000;
 }
 
-.divmarica {
-    z-index: 500;
-
-}
-
-/* Añade estilos adicionales según tus necesidades */
 </style>

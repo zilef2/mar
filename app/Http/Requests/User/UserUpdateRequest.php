@@ -30,12 +30,12 @@ class UserUpdateRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             // 'email' => 'required|string|email|max:255|unique:' . User::class,
-            // 'cedula' => 'required|Integer|unique:' . User::class,
-            Rule::unique('users','cedula')->ignore($id),
+            // 'identificacion' => 'required|Integer|unique:' . User::class,
+            Rule::unique('users','identificacion')->ignore($id),
             Rule::unique('users','email')->ignore($id),
 
             'email' => 'required|string|max:255',
-            'cedula' => 'required|Integer',
+            'identificacion' => 'required|Integer',
             'area' => 'required',
             'cargo' => 'required',
             'sexo' => 'nullable',

@@ -98,7 +98,7 @@ const select = () => {
                             <div class="flex items-center justify-start space-x-2"
                                 v-for="(permission, index) in props.permissions" :key="index">
                                 <input @change="select"
-                                    class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-primary dark:text-primary shadow-sm focus:ring-primary/80 dark:focus:ring-primary dark:focus:ring-offset-gray-800 dark:checked:bg-primary dark:checked:border-primary"
+                                    class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-primary dark:text-primary shadow-sm focus:ring-primary/80 dark:focus:ring-primary dark:focus:ring-offset-gray-800 dark:checked:bg-blue-600 dark:checked:border-primary"
                                     type="checkbox" :id="'permission_' + permission.id" :value="permission.id"
                                     v-model="form.permissions" />
                                 <InputLabel :for="'permission_' + permission.id" :value="permission.name" />

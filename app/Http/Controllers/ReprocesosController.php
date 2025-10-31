@@ -213,7 +213,7 @@ class ReprocesosController extends Controller
     }
 
 
-    // Duplicate entry '1152194566' for key 'Reprocesos_cedula_unique'
+    // Duplicate entry '1152194566' for key 'Reprocesos_identificacion_unique'
     private function MensajeWar()
     {
         $bandera = false;
@@ -228,9 +228,9 @@ class ReprocesosController extends Controller
         $mensajesWarnings = [
             '#correos Existentes: ',
             'Novedad, error interno: ',
-            '#cedulas no numericas: ',
+            '#identificacions no numericas: ',
             '#generos distintos(M,F,otro): ',
-            '#cedulaes repetidas: ',
+            '#identificaciones repetidas: ',
             '#filas con celdas vacias: ',
         ];
 

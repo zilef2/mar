@@ -3,6 +3,8 @@
 return [
     'label' => [
         //actividad
+        'identificacion' => 'Identificación',
+        //actividad
         'tipo' => 'tipo',
         'Tipo' => 'Tipo',
         'centros' => 'Centros',
@@ -60,7 +62,6 @@ return [
         'cargo' => 'Cargo',
         'celular' => 'Celular',
         'pgrado' => 'Nivel',
-        'cedula' => 'cedula',
         'edad' => 'edad',
         'anio' => 'edad',
         'sexo' => 'sexo',

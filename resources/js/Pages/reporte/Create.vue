@@ -27,7 +27,7 @@ const props = defineProps({
     numberPermissions: Number,
     valuesGoogleCabeza: Object,
     valuesGoogleBody: Object,
-    Trabajadores: Object,
+    empleados: Object,
 })
 const emit = defineEmits(["close"]);
 
@@ -40,6 +40,9 @@ const data = reactive({
     disponibilidad_id: props.losSelect.disponibilidad,
     ordentrabajo_id: props.losSelect.ordentrabajo,
     reproceso_id: props.losSelect.reproceso,
+    /*
+    fin de los select
+     */
     temp_disponibilidad_id: null,
     temp_reproceso_id: null,
     temp_actividad_id: null,
@@ -52,7 +55,7 @@ const data = reactive({
     mensajeTiemposAuto: '',
     soloUnaVez: true,
     limiteMinimo: '',
-    tempCentro: 0
+    tempCentro: 0,
 })
 
 
@@ -383,7 +386,7 @@ const Cabezera = ['Nombre_tablero', 'avance'];
                     <div v-if="props.numberPermissions > 1" id="opcinesActividadO" class="xl:col-span-2 col-span-1">
                         <label class=" dark:text-white" name=""> Reportar en nombre de:
                             <small>(Opcional) </small></label>
-                        <vSelect :options="props.Trabajadores" label="title" class="dark:bg-gray-400"
+                        <vSelect :options="props.empleados" label="title" class="dark:bg-gray-400"
                                   v-model="form.user_id" append-to-body></vSelect>
                     </div>
                     <div id="opcinesActividadO" class="xl:col-span-2 col-span-1 ">
@@ -498,6 +501,8 @@ const Cabezera = ['Nombre_tablero', 'avance'];
 </template>
 
 <style>
+@reference "../../../css/app.css";
+
 textarea {
     @apply px-3 py-2 border border-gray-300 rounded-md;
 }

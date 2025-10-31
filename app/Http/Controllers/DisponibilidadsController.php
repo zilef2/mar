@@ -217,7 +217,7 @@ class DisponibilidadsController extends Controller
     }
 
 
-    // Duplicate entry '1152194566' for key 'Disponibilidads_cedula_unique'
+    // Duplicate entry '1152194566' for key 'Disponibilidads_identificacion_unique'
     private function MensajeWar() {
         $bandera = false;
         $contares = [
@@ -231,9 +231,9 @@ class DisponibilidadsController extends Controller
         $mensajesWarnings = [
             '#correos Existentes: ',
             'Novedad, error interno: ',
-            '#cedulas no numericas: ',
+            '#identificacions no numericas: ',
             '#generos distintos(M,F,otro): ',
-            '#cedulaes repetidas: ',
+            '#identificaciones repetidas: ',
             '#filas con celdas vacias: ',
         ];
 

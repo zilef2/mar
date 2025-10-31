@@ -20,6 +20,7 @@ import { router, usePage, useForm, Link } from '@inertiajs/vue3';
 
 import { number_format, formatDate, CalcularEdad, CalcularSexo } from '@/global.ts';
 import Modal from "@/Components/Modal.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
 
 const { _, debounce, pickBy } = pkg
 const props = defineProps({
@@ -46,7 +47,8 @@ const data = reactive({
     deleteBulkOpen: false,
     user: null,
     ArchivoNombre: '',
-    dataSet: usePage().props.app.perpage
+    dataSet: usePage().props.app.perpage,
+    achu:true,
 })
 
 const order = (field) => {
@@ -95,8 +97,7 @@ watchEffect(() => {
 const titulos = [
     { order: 'name', label: 'Nombre', type: 'text',required: true },
     { order: 'email', label: 'Email', type: 'text' ,required: true},
-    { order: 'identificacion', label: 'Identificacion', type: 'text' ,required: true},
-    // { order: 'sexo', label: 'Sexo', type: 'foreign' },
+    { order: 'identificacion', label: 'identificacion', type: 'text' ,required: true},
     { order: 'area', label: 'area', type: 'text',required: true},
     { order: 'cargo', label: 'cargo', type: 'text',required: true},
     { order: 'sexo', label: 'sexo', type: 'foreign', nameid: 'sexo_S' ,required: false},
@@ -110,19 +111,11 @@ const titulos = [
     <Head :title="props.title" />
 
     <AuthenticatedLayout>
-        <Modal :show="true" @close="emit('close')">
-            asdasdasdasdasdasdasd
-                    <SecondaryButton :disabled="form.processing" @click="emit('close')"> {{ lang().button.close }}</SecondaryButton>
-            
-        </Modal>
         <Breadcrumb :title="title" :breadcrumbs="breadcrumbs" />
-        <div class="space-y-4">
-            <div class="px-4 sm:px-0">
+        <div class="">
+            <div class="">
                 <div class="rounded-lg overflow-hidden w-fit">
-                    <PrimaryButton v-show="can(['create user'])" class="rounded-none" @click="data.createOpen = true">
-                        {{ lang().button.add }}
-                    </PrimaryButton>
-                    <Create :show="data.createOpen" @close="data.createOpen = false" :roles="props.roles"
+                    <Create :show="data.createOpen" @close="data.createOpen = false" :roles="props.roles" :numberPermissions="props.numberPermissions"
                         v-if="can(['create user'])" :title="props.title" :titulos="titulos"/>
                     <Edit :show="data.editOpen" @close="data.editOpen = false" :user="data.user" :roles="props.roles"
                         v-if="can(['update user'])" :title="props.title" :titulos="titulos" />
@@ -136,9 +129,15 @@ const titulos = [
             <div class="relative bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="flex justify-between p-2">
                     <div class="flex space-x-2">
+                         <PrimaryButton v-show="can(['create user'])"  @click="data.createOpen = true" class="rounded-xl">
+                            {{ lang().button.add }}
+                        </PrimaryButton>
+                        <div class="px-2">
+                            <small class="px-2">Reg/página</small>
                         <SelectInput v-model="data.params.perPage" :dataSet="data.dataSet" />
+                        </div>
                         <DangerButton @click="data.deleteBulkOpen = true"
-                            v-show="data.selectedId.length != 0 && can(['delete user'])" class="px-3 py-1.5"
+                            v-show="data.selectedId.length !== 0 && can(['delete user'])" class="px-3 py-1.5"
                             v-tooltip="lang().tooltip.delete_selected">
                             <TrashIcon class="w-5 h-5" />
                         </DangerButton>
@@ -171,6 +170,17 @@ const titulos = [
                                         <ChevronUpDownIcon class="w-4 h-4" />
                                     </div>
                                 </th>
+                                   <th class="px-2 py-4 cursor-pointer" v-on:click="order('area')">
+                                    <div class="flex justify-between items-center"> <span>{{ lang().label.area }}</span>
+                                        <ChevronUpDownIcon class="w-4 h-4" />
+                                    </div>
+                                </th>
+                                <th class="px-2 py-4 cursor-pointer" v-on:click="order('cargo')">
+                                    <div class="flex justify-between items-center"> <span>{{ lang().label.cargo }}</span>
+                                        <ChevronUpDownIcon class="w-4 h-4" />
+                                    </div>
+                                </th>
+                                
                                 <th class="px-2 py-4 cursor-pointer" v-on:click="order('sexo')">
                                     <div class="flex justify-between items-center"> <span>{{ lang().label.sexo }}</span>
                                         <ChevronUpDownIcon class="w-4 h-4" />
@@ -181,18 +191,10 @@ const titulos = [
                                         <ChevronUpDownIcon class="w-4 h-4" />
                                     </div>
                                 </th>
-                                <th class="px-2 py-4 cursor-pointer" v-on:click="order('celular')">
+                               
+                             
+                                 <th class="px-2 py-4 cursor-pointer" v-on:click="order('celular')">
                                     <div class="flex justify-between items-center"> <span>{{ lang().label.celular }}</span>
-                                        <ChevronUpDownIcon class="w-4 h-4" />
-                                    </div>
-                                </th>
-                                <th class="px-2 py-4 cursor-pointer" v-on:click="order('area')">
-                                    <div class="flex justify-between items-center"> <span>{{ lang().label.area }}</span>
-                                        <ChevronUpDownIcon class="w-4 h-4" />
-                                    </div>
-                                </th>
-                                <th class="px-2 py-4 cursor-pointer" v-on:click="order('cargo')">
-                                    <div class="flex justify-between items-center"> <span>{{ lang().label.cargo }}</span>
                                         <ChevronUpDownIcon class="w-4 h-4" />
                                     </div>
                                 </th>
@@ -205,7 +207,7 @@ const titulos = [
                                 class="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-200/30 hover:dark:bg-gray-900/20">
                                 <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center">
                                     <input
-                                        class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-primary dark:text-primary shadow-sm focus:ring-primary/80 dark:focus:ring-primary dark:focus:ring-offset-gray-800 dark:checked:bg-primary dark:checked:border-primary"
+                                        class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-primary dark:text-primary shadow-sm focus:ring-primary/80 dark:focus:ring-primary dark:focus:ring-offset-gray-800 dark:checked:bg-blue-600 dark:checked:border-primary"
                                         type="checkbox" @change="select" :value="user.id" v-model="data.selectedId" />
                                 </td>
                                 <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center">{{ ++index }}</td>
@@ -226,11 +228,13 @@ const titulos = [
                                 <!-- <td class="whitespace-nowrap py-4 px-2 sm:py-3">{{ user.created_at }}</td>
                                 <td class="whitespace-nowrap py-4 px-2 sm:py-3">{{ user.updated_at }}</td> -->
                                 <td class="whitespace-nowrap py-4 px-2 sm:py-3">{{ user.identificacion }}</td>
+                                       <td class="whitespace-nowrap py-4 px-2 sm:py-3">{{ user.area }}</td>
+                                <td class="whitespace-nowrap py-4 px-2 sm:py-3">{{ user.cargo }}</td>
+                                
                                 <td class="whitespace-nowrap py-4 px-2 sm:py-3">{{ user.sexo }}</td>
                                 <td class="whitespace-nowrap text-center py-4 px-2 sm:py-3">{{ CalcularEdad(user.fecha_nacimiento) }}</td>
                                 <td class="whitespace-nowrap py-4 px-2 sm:py-3">{{ user.celular }}</td>
-                                <td class="whitespace-nowrap py-4 px-2 sm:py-3">{{ user.area }}</td>
-                                <td class="whitespace-nowrap py-4 px-2 sm:py-3">{{ user.cargo }}</td>
+                         
                                 <td class="whitespace-nowrap py-4 px-2 sm:py-3">
                                     <div class="flex justify-center items-center">
                                         <div class="rounded-md overflow-hidden">

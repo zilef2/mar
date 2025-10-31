@@ -38,7 +38,7 @@ class PersonalImport implements ToModel
                 session(['contar1' => ++$contar1]);
                 return null;
             }
-            if (User::where('cedula', $row[2])->exists()) {
+            if (User::where('identificacion', $row[2])->exists()) {
                 session(['contar5' => ++$contar5]);
                 return null;
             }
@@ -63,7 +63,7 @@ class PersonalImport implements ToModel
             //# fin validaciones
 
             //todo: si encuentra otro email, que actualize la info
-            //todo: si encuentra con la misma cedula, que actualize la info
+            //todo: si encuentra con la misma identificacion, que actualize la info
             //todo: Primaria, bachillerato, tecnologia, profesional,especializacion,maestría,doctorado
             // if(strtolower($row[3]) != 'femenino' && strtolower($row[3]) != 'masculino' && strtolower($row[3]) != 'otro'){
             //     session(['contar4' => $contar4++]);
@@ -75,7 +75,7 @@ class PersonalImport implements ToModel
             $user = new User([
                 'name'     => $row[0],
                 'email'    => $row[1],
-                'cedula' => intval($row[2]),
+                'identificacion' => intval($row[2]),
                 'sexo' => $row[3],
                 'fecha_nacimiento' => $fechaNacimiento,
                 'semestre' => $row[5],
@@ -108,4 +108,4 @@ class PersonalImport implements ToModel
 }
 
 
-//todo: Operacion errada. Nombre del error: alejou error en la fila 0 SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1152194566' for key 'users_cedula_unique' (SQL: insert into `users` (`name`, `email`, `cedula`, `sexo`, `fecha_nacimiento`, `semestre`, `pgrado`, `password`, `updated_at`, `created_at`) values (alejou, emaildesde@excel.com, 1152194566, masculino, 2023-06-20 16:37, 10, universitario,
+//todo: Operacion errada. Nombre del error: alejou error en la fila 0 SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1152194566' for key 'users_identificacion_unique' (SQL: insert into `users` (`name`, `email`, `identificacion`, `sexo`, `fecha_nacimiento`, `semestre`, `pgrado`, `password`, `updated_at`, `created_at`) values (alejou, emaildesde@excel.com, 1152194566, masculino, 2023-06-20 16:37, 10, universitario,

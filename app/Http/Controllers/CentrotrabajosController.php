@@ -195,7 +195,7 @@ class CentrotrabajosController extends Controller
     }
 
 
-    // Duplicate entry '1152194566' for key 'Centrotrabajos_cedula_unique'
+    // Duplicate entry '1152194566' for key 'Centrotrabajos_identificacion_unique'
     private function MensajeWar()
     {
         $bandera = false;
@@ -210,9 +210,9 @@ class CentrotrabajosController extends Controller
         $mensajesWarnings = [
             '#correos Existentes: ',
             'Novedad, error interno: ',
-            '#cedulas no numericas: ',
+            '#identificacions no numericas: ',
             '#generos distintos(M,F,otro): ',
-            '#cedulaes repetidas: ',
+            '#identificaciones repetidas: ',
             '#filas con celdas vacias: ',
         ];
 

@@ -17,7 +17,7 @@
     </transition>
     <transition name="slide-fade">
         <div v-if="flash.info && isVisible" class="absolute top-4 right-4 w-8/12 md:w-6/12 lg:w-3/12 z-[100]">
-            <div class="flex p-4 justify-between items-center bg-primary rounded-lg">
+            <div class="flex p-4 justify-between items-center bg-blue-600 rounded-lg">
                 <div>
                     <InformationCircleIcon class="h-8 w-8 text-white" fill="currentColor" />
                 </div>

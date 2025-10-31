@@ -62,7 +62,7 @@ class UserController extends Controller
             $users->where(function ($query) use ($request) {
                 $query->where('name', 'LIKE', "%" . $request->search . "%")
                     ->orWhere('email', 'LIKE', "%" . $request->search . "%")
-                    ->orWhere('cedula', 'LIKE', "%" . $request->search . "%");
+                    ->orWhere('identificacion', 'LIKE', "%" . $request->search . "%");
             })->where('name', '!=', 'admin')->where('name', '!=', 'Superadmin');
             // $users->where('name', 'LIKE', "%" . $request->search . "%");
         }
@@ -137,11 +137,11 @@ class UserController extends Controller
                 'email'     => $request->email,
                 'area'     => $request->area,
                 'cargo'     => $request->cargo,
-                'cedula' => $request->cedula,
+                'identificacion' => $request->identificacion,
                 'celular' => $request->celular,
                 'sexo' => $sexo,
                 'fecha_nacimiento' => $this->updatingDate($request->fecha_nacimiento),
-                'password' => Hash::make($request->cedula . '*'),
+                'password' => Hash::make($request->identificacion . '*'),
             ]);
             $user->assignRole($request->role);
             DB::commit();
@@ -168,7 +168,7 @@ class UserController extends Controller
                 'email'     => $request->email,
                 'area'     => $request->area,
                 'cargo'     => $request->cargo,
-                'cedula' => $request->cedula,
+                'identificacion' => $request->identificacion,
                 'celular' => $request->celular,
                 'sexo' => $sexo,
                 'fecha_nacimiento' => $this->updatingDate($request->fecha_nacimiento),
@@ -231,7 +231,7 @@ class UserController extends Controller
     }
 
 
-    // Duplicate entry '1152194566' for key 'users_cedula_unique'
+    // Duplicate entry '1152194566' for key 'users_identificacion_unique'
     private function MensajeWar(){
         $bandera = false;
         $contares = [
@@ -245,9 +245,9 @@ class UserController extends Controller
         $mensajesWarnings = [
             '#correos Existentes: ',
             'Novedad, error interno: ',
-            '#cedulas no numericas: ',
+            '#identificacions no numericas: ',
             '#generos distintos(M,F,otro): ',
-            '#cedulaes repetidas: ',
+            '#identificaciones repetidas: ',
             '#filas con celdas vacias: ',
         ];
 

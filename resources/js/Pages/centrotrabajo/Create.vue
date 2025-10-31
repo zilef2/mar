@@ -146,6 +146,8 @@ const sexos = [{ label: 'Masculino', value: 0 }, { label: 'Femenino', value: 1 }
 
 <style>
 @reference "../../../css/app.css";
+
+@reference "../../../css/app.css";
 textarea {
     @apply px-3 py-2 border border-gray-300 rounded-md;
 }

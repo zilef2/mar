@@ -20,7 +20,7 @@ return new class extends Migration {
 			
 			$table->string('sexo')->default('Masculino');
 			$table->string('celular')->nullable();
-			$table->string('cedula')->nullable();
+			$table->string('identificacion')->nullable();
 			$table->string('area')->default('PRODUCCION');
 			$table->string('cargo')->nullable();
 			$table->dateTime('fecha_nacimiento')->nullable();

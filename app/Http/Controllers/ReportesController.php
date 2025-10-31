@@ -8,7 +8,6 @@ use App\helpers\HelpExcel;
 use App\Http\Requests\ReporteRequest;
 use App\Http\Requests\ReporteUpdateRequest;
 use App\Imports\PersonalImport;
-use App\Models\GuardarGoogleSheetsComercial;
 use App\Models\Reporte;
 use App\Models\User;
 use Carbon\Carbon;
@@ -28,8 +27,8 @@ class ReportesController extends Controller {
 		$numberPermissions = Myhelp::getPermissionToNumber($permissions);
 		$user = Myhelp::AuthU();
 		
-		$readGoogle = new ReadGoogleSheets();
-		[$valuesGoogleCabeza, $valuesGoogleBody] = $readGoogle->GetValuesFromSheets();
+//		$readGoogle = new ReadGoogleSheets();
+//		[$valuesGoogleCabeza, $valuesGoogleBody] = $readGoogle->GetValuesFromSheets();
 		//dd($valuesGoogleBody);
 		if ($numberPermissions > 1) {
 			$reportes = Reporte::query();
@@ -38,13 +37,12 @@ class ReportesController extends Controller {
 			$reportes = Reporte::Where('operario_id', $user->id);
 		}
 		
-		$this->ZounaSearch($request, $reportes);
-		$this->MapearClasePP($reportes, $numberPermissions, $valuesGoogleBody);
+		$this->ZounaSearch($request, $reportes); //se hace get()
 		
-		$empleadoes = User::WhereHas('roles', function ($query) {
+		$empleados = User::WhereHas('roles', function ($query) {
 			return $query->whereIn('name', ['supervisor', 'empleado']);
 		})->get();
-		$empleadoes = Myhelp::NEW_turnInSelectID($empleadoes, ' operario', 'name');
+		$empleados = Myhelp::NEW_turnInSelectID($empleados, ' operario', 'name');
 		
 		$perPage = $request->has('perPage') ? $request->perPage : 50;
 		$total = $reportes->count();
@@ -59,7 +57,7 @@ class ReportesController extends Controller {
 			'fromController'     => $fromController,
 			'total'              => $total,
 			'numberPermissions'  => $numberPermissions,
-			'empleadoes'       => $empleadoes,
+			'empleados'       => $empleados,
 			'losSelect'          => $this->SelectsMasivos() ?? [],
 			'valuesGoogleCabeza' => $valuesGoogleCabeza ?? [],
 			'valuesGoogleBody'   => $valuesGoogleBody ?? [],
@@ -122,16 +120,12 @@ class ReportesController extends Controller {
 		}
 		
 		if ($request->has(['field', 'order'])) {
-			$reportes = $reportes
-				->orderByRaw('ISNULL(hora_final) DESC')->orderbyDesc('fecha')->orderBy($request->field, $request->order)
-			;
+			$reportes = $reportes->orderByRaw('ISNULL(hora_final) DESC')->orderbyDesc('fecha')->orderBy($request->field, $request->order);
+		}else {
+			$reportes = $reportes->orderByRaw('ISNULL(hora_final) DESC')->orderbyDesc('fecha')->orderByDesc('updated_at');
 		}
-		else {
-			$reportes = $reportes
-				->orderByRaw('ISNULL(hora_final) DESC')->orderbyDesc('fecha')->orderByDesc('updated_at')
-			;
-			//            ->orderbyDesc('hora_final')
-		}
+		
+		$reportes = $reportes->get();
 	}
 	
 	public function MapearClasePP(&$reportes, $numberPermissions, $valuesGoogleBody): void {
@@ -144,23 +138,6 @@ class ReportesController extends Controller {
 			$reporte->disponibilidad_s = $reporte->disponibilidad()->first() !== null ? $reporte->disponibilidad()->first()->nombre : '';
 			$reporte->reproceso_s = $reporte->reproceso()->first() !== null ? $reporte->reproceso()->first()->nombre : '';
 			
-			//            if($reporte->hora_final !== null){
-			//                $fin = new \DateTime($reporte->hora_final);
-			//                $ini = new \DateTime($reporte->hora_inicial);
-			//                $intervalo = $fin->diff($ini);
-			//
-			//                $horas = $intervalo->h; // Obtiene las horas de diferencia
-			//                $minutos = $intervalo->i; // Obtiene los minutos de diferencia
-			//                $segundos = $intervalo->s; // Obtiene los segundos de diferencia
-			//
-			//                $total_segundos = $horas * 3600 + $minutos * 60 + $segundos; // Convierte a segundos
-			//                $reporte->tiempot = ($total_segundos/3600);
-			//
-			//            }else{
-			//                $reporte->tiempot = 0;
-			//            }
-			
-			// $reporte->calendario_s = $reporte->calendario()->first() !== null ? $reporte->calendario()->first()->nombre : '';
 			return $reporte;
 		})->filter();
 	}
@@ -213,13 +190,6 @@ class ReportesController extends Controller {
 	
 	public function store(ReporteRequest $request) {
 		
-		if ($request->ordentrabajo_id) {
-			$ordenID = GuardarGoogleSheetsComercial::Where('Item', $request->ordentrabajo_id['title'])->first()->id;
-		}
-		else {
-			$ordenID = null;
-		}
-		
 		$user = Myhelp::AuthU();
 		$numberPermissions = Myhelp::getPermissionToNumber(Myhelp::EscribirEnLog($this, 'STORE:reportes'));
 		if ($numberPermissions > 1) {
@@ -234,9 +204,6 @@ class ReportesController extends Controller {
 			$ValueDisponibilidad = null;
 			if (isset($request->disponibilidad_id['value'])) { //listo(1a) disponibilidad
 				$ValueDisponibilidad = $request->disponibilidad_id['value'];
-				$request->nombreTablero = null;
-				$request->OTItem = null;
-				$request->TiempoEstimado = null;
 			}
 			//todo: (1a) falta validar si es reproceso. | validar porque disponibilidades mandan OTitem
 			$hoy = date('Y-m-d');
@@ -247,15 +214,12 @@ class ReportesController extends Controller {
 				                           'tipoReporte'      => $tipoReport,
 				                           'hora_inicial'     => $request->hora_inicial,
 				                           'hora_final'       => null,
-				                           'ordentrabajo_id'  => $ordenID,
 				                           'centrotrabajo_id' => $request->centrotrabajo_id['value'] ?? null,
-				                           
 				                           'operario_id'       => $userID,
 				                           'actividad_id'      => $request->actividad_id['value'] ?? null,
 				                           'disponibilidad_id' => $ValueDisponibilidad,
 				                           'reproceso_id'      => ($request->reproceso_id['value']) ?? null,
-				                           'tipoFinalizacion'  => $tipoFin,
-				                           //BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
+				                           'tipoFinalizacion'  => $tipoFin,  //BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
 				                           'nombreTablero'     => $request->nombreTablero,
 				                           'OTItem'            => $request->OTItem,
 				                           'TiempoEstimado'    => $request->TiempoEstimado,
@@ -328,16 +292,13 @@ class ReportesController extends Controller {
 			$reporte = Reporte::findOrFail($id);
 			if ($request->hora_final === null) {
 				$orden = null;
-				if (isset($request->tipoReporte['value']) && $request->tipoReporte['value'] != 2) {
-					$orden = GuardarGoogleSheetsComercial::Where('Item', $request->ordentrabajo_id['title'])->first();
-				}
 				
 				if ($numberPermissions > 8) {
 					$actualizar_reporte['codigo'] = $request->codigo == '' ? null : $request->codigo;
 					$actualizar_reporte['fecha'] = $request->fecha == '' ? null : $request->fecha;
 					$actualizar_reporte['hora_inicial'] = $request->hora_inicial == '' ? null : $request->hora_inicial;
 				}
-				$actualizar_reporte['ordentrabajo_id'] = $request->ordentrabajo_id == null ? null : $orden->id;
+//				$actualizar_reporte['ordentrabajo_id'] = $request->ordentrabajo_id == null ? null : $orden->id;
 				$actualizar_reporte['centrotrabajo_id'] = $request->centrotrabajo_id == null ? null : $request->centrotrabajo_id;
 				
 				if ($request->actividad_id && is_integer($request->actividad_id)) {
@@ -492,9 +453,9 @@ class ReportesController extends Controller {
 		$mensajesWarnings = [
 			'#correos Existentes: ',
 			'Novedad, error interno: ',
-			'#cedulas no numericas: ',
+			'#identificacions no numericas: ',
 			'#generos distintos(M,F,otro): ',
-			'#cedulaes repetidas: ',
+			'#identificaciones repetidas: ',
 			'#filas con celdas vacias: ',
 		];
 		

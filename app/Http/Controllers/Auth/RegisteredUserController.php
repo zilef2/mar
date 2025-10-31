@@ -33,7 +33,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'cedula' => 'required|Integer|min:6',
+            'identificacion' => 'required|Integer|min:6',
             'fecha_nacimiento' => 'required|Date',
             'sexo' => 'required',
             'email' => 'required|string|max:255|unique:' . User::class,
@@ -45,7 +45,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'sexo' => $request->sexo,
-            'cedula' => $request->cedula,
+            'identificacion' => $request->identificacion,
             'fecha_nacimiento' => $request->fecha_nacimiento,
             'password' => Hash::make($request->password),
         ]);

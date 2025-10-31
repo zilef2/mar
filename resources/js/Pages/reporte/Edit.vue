@@ -22,7 +22,7 @@ const props = defineProps({
     numberPermissions: Number,
     valuesGoogleCabeza: Object,
     valuesGoogleBody: Object,
-    Trabajadores: Object,
+    empleados: Object,
 })
 
 const emit = defineEmits(["close"]);
@@ -225,8 +225,8 @@ watch(() => props.show, () => {
         form.hora_inicial = props.generica?.hora_inicial
 
 
-        let posicionUser = props.Trabajadores.findIndex(obj => obj.value == props.generica?.operario_id)
-        form.user_id = props.Trabajadores[posicionUser]
+        let posicionUser = props.empleados.findIndex(obj => obj.value == props.generica?.operario_id)
+        form.user_id = props.empleados[posicionUser]
 
         form.nombreTablero = props.generica?.nombreTablero
         form.OTItem = props.generica?.OTItem
@@ -363,7 +363,7 @@ const update = () => {
                     <div v-if="props.numberPermissions > 8" id="opcinesActividadO"
                          class="xl:col-span-2 col-span-1">
                         <label name=""> Reportar en nombre de: </label>
-                        <v-select :options="props.Trabajadores" disabled label="title"
+                        <v-select :options="props.empleados" disabled label="title"
                                   v-model="form.user_id" class="bg-gray-500"></v-select>
                     </div>
                     <div id="opcinesActividadO" class="xl:col-span-2 col-span-1">
@@ -494,6 +494,8 @@ const update = () => {
 </template>
 
 <style>
+@reference "../../../css/app.css";
+
 textarea {
     @apply px-3 py-2 border border-gray-300 rounded-md;
 }
