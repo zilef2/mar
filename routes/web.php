@@ -7,8 +7,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ActividadsController;
 use App\Http\Controllers\CentrotrabajosController;
-use App\Http\Controllers\DisponibilidadsController;
-//use App\Http\Controllers\OrdentrabajosController;
+use App\Http\Controllers\parosController;
+//use App\Http\Controllers\ordenproduccionsController;
 //use App\Http\Controllers\PiezasController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReadGoogleSheets;
@@ -61,12 +61,13 @@ Route::middleware('auth', 'verified')->group(function () {
     //# SIDEBARMENU
     Route::resource('/reporte', ReportesController::class);
     Route::post('/reporte/destroy-bulk', [ReportesController::class, 'destroyBulk'])->name('reporte.destroy-bulk');
+    Route::get('/reporte/createdev', [ReportesController::class, 'createdev'])->name('createdev');
 
 
     Route::resource('/actividad', ActividadsController::class);
 
     Route::resource('/centrotrabajo', CentrotrabajosController::class);
-    Route::resource('/disponibilidad', DisponibilidadsController::class);
+    Route::resource('/paro', parosController::class);
     Route::resource('/reproceso', ReprocesosController::class);
     Route::get('/gsheet', ReadGoogleSheets::class);
 

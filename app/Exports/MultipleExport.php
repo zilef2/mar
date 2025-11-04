@@ -43,7 +43,7 @@ class MultipleExport implements WithMultipleSheets,ShouldAutoSize
             "Permission",
             "Pieza",
             "Role",
-            "Ordentrabajo",
+            "ordenproduccion",
         ];
 
         // Filtrar los nombres de clase que sean modelos

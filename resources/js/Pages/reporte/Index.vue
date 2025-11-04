@@ -50,8 +50,6 @@ const props = defineProps({
 
     numberPermissions: Number,
     losSelect: Object,
-    valuesGoogleCabeza: Object,
-    valuesGoogleBody: Object,
     empleados: Object,
     vectorTriple: {
         type: Array,
@@ -129,7 +127,7 @@ watchEffect(() => {
 // text // number // dinero // date // datetime // foreign // decimal
 const titulos = [
     {order: 'fecha', label: 'fecha', type: 'date', CanOrder: true},
-    {order: 'operario_id', label: 'operario', type: 'foreign', nameid: 'operario_s', CanOrder: true},
+    {order: 'user_id', label: 'operario', type: 'foreign', nameid: 'operario_s', CanOrder: true},
     {order: 'hora_inicial', label: 'hora inicial', type: 'time', CanOrder: true},
     {order: 'hora_final', label: 'hora final', type: 'time', CanOrder: true},
     {
@@ -141,15 +139,15 @@ const titulos = [
     },
     {order: 'actividad_id', label: 'actividad', type: 'foreign', nameid: 'actividad_s', CanOrder: true},
     {order: 'centrotrabajo_id', label: 'centrotrabajo', type: 'foreign', nameid: 'centrotrabajo_s', CanOrder: true},
-    {order: 'OTItem', label: 'ordentrabajo', type: 'text', CanOrder: false},
+    {order: 'OTItem', label: 'ordenproduccion', type: 'text', CanOrder: false},
     {order: 'TiempoEstimado', label: 'TiempoEstimado', type: 'text', CanOrder: true},
-    {order: 'disponibilidad_id', label: 'disponibilidad', type: 'foreign', nameid: 'disponibilidad_s', CanOrder: true},
+    {order: 'paro_id', label: 'paro', type: 'foreign', nameid: 'paro_s', CanOrder: true},
     {order: 'reproceso_id', label: 'reproceso', type: 'foreign', nameid: 'reproceso_s', CanOrder: true},
 ];
 
 const tipoReporte = [
     {value: 'soloreporte', title: 'Reportes'},
-    {value: 'solodisponibilidad', title: 'Disponibilidades'},
+    {value: 'soloparo', title: 'paroes'},
     {value: 'soloreproceso', title: 'Reprocesos'},
 ]
 const mostrarTiempoTranscurrido = (raw) => {
@@ -177,20 +175,16 @@ const mostrarTiempoTranscurrido = (raw) => {
                     <Create v-if="can(['create reporte'])" :numberPermissions="props.numberPermissions"
                             :show="data.createOpen" @close="data.createOpen = false" :title="props.title"
                             :losSelect=props.losSelect
-                            :valuesGoogleCabeza=props.valuesGoogleCabeza
-                            :valuesGoogleBody=props.valuesGoogleBody
                             :empleados=props.empleados
                     />
 
-                    <Edit v-if="can(['update reporte']) && numberPermissions > 1"
-                          :numberPermissions="props.numberPermissions"
-                          :show="data.editOpen"
-                          @close="data.editOpen = false" :generica="data.generico" :title="props.title"
-                          :losSelect=props.losSelect
-                          :valuesGoogleCabeza=props.valuesGoogleCabeza
-                          :valuesGoogleBody=props.valuesGoogleBody
-                          :empleados=props.empleados
-                    />
+<!--                    <Edit v-if="can(['update reporte']) && numberPermissions > 1"-->
+<!--                          :numberPermissions="props.numberPermissions"-->
+<!--                          :show="data.editOpen"-->
+<!--                          @close="data.editOpen = false" :generica="data.generico" :title="props.title"-->
+<!--                          :losSelect=props.losSelect-->
+<!--                          :empleados=props.empleados-->
+<!--                    />-->
 
                     <TerminarReporte v-if="can(['read reporte'])" :numberPermissions="props.numberPermissions"
                                      :show="data.TerminarOpen"

@@ -74,7 +74,7 @@ let validar = () => {
 const create = () => {
     validar()
     if(data.valido){
-        form.post(route('disponibilidad.store'), {
+        form.post(route('paro.store'), {
             preserveScroll: true,
             onSuccess: () => {
                 emit("close")

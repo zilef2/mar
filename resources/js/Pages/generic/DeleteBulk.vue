@@ -2,8 +2,8 @@
 import DangerButton from '@/Components/DangerButton.vue';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { useForm } from '@inertiajs/vue3';
-import { watchEffect } from 'vue';
+import {useForm} from '@inertiajs/vue3';
+import {watchEffect} from 'vue';
 
 const props = defineProps({
     show: Boolean,
@@ -52,7 +52,7 @@ watchEffect(() => {
                     </SecondaryButton>
                     <DangerButton class="ml-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
                         @click="destory">
-                        {{ form.processing ? 'Delete...' : 'Delete' }}
+                        {{ form.processing ? 'Eliminando...' : 'Eliminar' }}
                     </DangerButton>
                 </div>
             </form>

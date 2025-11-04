@@ -84,7 +84,7 @@ watchEffect(() => {
         });
     }else{
         form.centro_id[0]={
-            title: 'Disponibilidad no seleccionada',
+            title: 'paro no seleccionada',
             value: 0
         }
     }
@@ -123,7 +123,7 @@ let validar = () => {
 const update = () => {
     validar()
     if(data.valido){
-        form.put(route('disponibilidad.update', props.generica?.id), {
+        form.put(route('paro.update', props.generica?.id), {
             preserveScroll: true,
             onSuccess: () => {
                 emit("close")

@@ -110,19 +110,19 @@ const titulos = [
             <!-- {{ props.fromController.data[2] }} -->
             <div class="px-4 sm:px-0">
                 <div class="rounded-lg overflow-hidden w-fit">
-                    <PrimaryButton class="rounded-none" @click="data.createOpen = true" v-if="can(['create actividad'])">
+                    <PrimaryButton class="rounded-none" @click="data.createOpen = true" v-if="can(['isAdmin','create actividad'])">
                         {{ lang().button.add }}
                     </PrimaryButton>
 
-                    <Create v-if="can(['create actividad'])" :numberPermissions="props.numberPermissions" :titulos="titulos"
+                    <Create v-if="can(['isAdmin','create actividad'])" :numberPermissions="props.numberPermissions" :titulos="titulos"
                         :show="data.createOpen" @close="data.createOpen = false" :title="props.title"
                         :losSelect=props.losSelect />
 
-                    <Edit v-if="can(['update actividad'])" :titulos="titulos" :numberPermissions="props.numberPermissions"
+                    <Edit v-if="can(['isAdmin','update actividad'])" :titulos="titulos" :numberPermissions="props.numberPermissions"
                         :show="data.editOpen" @close="data.editOpen = false" :generica="data.generico" :title="props.title"
                         :losSelect=props.losSelect />
 
-                    <Delete v-if="can(['delete actividad'])" :numberPermissions="props.numberPermissions"
+                    <Delete v-if="can(['isAdmin','delete actividad'])" :numberPermissions="props.numberPermissions"
                         :show="data.deleteOpen" @close="data.deleteOpen = false" :generica="data.generico"
                         :title="props.title" />
                 </div>
@@ -132,7 +132,7 @@ const titulos = [
                     <div class="flex space-x-2">
                         <SelectInput v-model="data.params.perPage" :dataSet="data.dataSet" />
                         <!-- <DangerButton @click="data.deleteBulkOpen = true"
-                            v-show="data.selectedId.length != 0 && can(['delete actividad'])" class="px-3 py-1.5"
+                            v-show="data.selectedId.length != 0 && can(['isAdmin',delete actividad'])" class="px-3 py-1.5"
                             v-tooltip="lang().tooltip.delete_selected">
                             <TrashIcon class="w-5 h-5" />
                         </DangerButton> -->
@@ -178,12 +178,12 @@ const titulos = [
                                 <td v-if="numberPermissions > 1" class="whitespace-nowrap py-4 w-12 px-1 sm:py-3 w-12">
                                     <div class="flex justify-center items-center">
                                         <div class="rounded-md overflow-hidden">
-                                            <InfoButton v-show="can(['update user'])" type="button"
+                                            <InfoButton v-show="can(['isAdmin','update user'])" type="button"
                                                 @click="(data.editOpen = true), (data.generico = clasegenerica)"
                                                 class="px-2 py-1.5 rounded-none" v-tooltip="lang().tooltip.edit">
                                                 <PencilIcon class="w-4 h-4" />
                                             </InfoButton>
-                                            <DangerButton v-show="can(['delete user'])" type="button"
+                                            <DangerButton v-show="can(['isAdmin','delete user'])" type="button"
                                                 @click="(data.deleteOpen = true), (data.generico = clasegenerica)"
                                                 class="px-2 py-1.5 rounded-none" v-tooltip="lang().tooltip.delete">
                                                 <TrashIcon class="w-4 h-4" />

@@ -30,10 +30,8 @@ class User extends Authenticatable
         'sexo',
         'fecha_nacimiento',
         'salario',
-        // 19 sept
         'cargo',
         'area',
-//        'centrotrabajo_id',
     ];
     /**
      * The attributes that should be hidden for serialization.
@@ -45,62 +43,30 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function getCreatedAtAttribute()
-    {
+    public function getCreatedAtAttribute() {
         return date('d-m-Y H:i', strtotime($this->attributes['created_at']));
     }
 
-    public function getUpdatedAtAttribute()
-    {
+    public function getUpdatedAtAttribute() {
         return date('d-m-Y H:i', strtotime($this->attributes['updated_at']));
     }
 
-    public function getEmailVerifiedAtAttribute()
-    {
+    public function getEmailVerifiedAtAttribute() {
         return $this->attributes['email_verified_at'] == null ? null : date('d-m-Y H:i', strtotime($this->attributes['email_verified_at']));
     }
 
-    public function getPermissionArray()
-    {
+    public function getPermissionArray() {
         return $this->getAllPermissions()->mapWithKeys(function ($pr) {
             return [$pr['name'] => true];
         });
     }
 
-    // public function reportes() { return $this->hasMany('App\Models\Reporte'); }
-    public function Centrotrabajos(): BelongsTo { return $this->BelongsTo(Centrotrabajo::class); }
     public function reportes(): HasMany {
-        return $this->HasMany(Reporte::class,'operario_id');
+        return $this->HasMany(Reporte::class,'user_id');
     }
 
-    // //# belongs to many
-
-    // public function carreras(): BelongsToMany { return $this->BelongsToMany(Carrera::class); }
-    // public function materias(): BelongsToMany { return $this->BelongsToMany(Materia::class); }
-
-    // public function unidads() {
-    //     $result = $this->materias->flatMap(function ($materia) {
-    //         return collect($materia->unidads);
-    //     });
-    //     // dd($result);
-    //     return $result;
-    // }
-
-    // public function empleadosSinUniversidad($elrol) {
-    //     $this->doesntHave('universidad')
-    //         ->WhereHas('roles', function ($query) use ($elrol) {
-    //             $query->where('name', $elrol);
-    //         })
-    //         ->get();
-    // }
-
-
     // public function actividad(): BelongsToMany { return $this->BelongsToMany(Actividad::class); }
-    // public function centrotrabajo(): BelongsToMany { return $this->BelongsToMany(Centrotrabajo::class,'centrotrabajo_id'); }
-    // public function disponibilidad(): BelongsToMany { return $this->BelongsToMany(Disponibilidad::class,'disponibilidad_id'); }
-    // public function material(): BelongsToMany { return $this->BelongsToMany(Material::class, 'material_id'); }
-    // public function ordentrabajo(): BelongsToMany { return $this->BelongsToMany(Ordentrabajo::class); }
-    // public function pieza(): BelongsToMany { return $this->BelongsToMany(Pieza::class); }
+    // public function ordenproduccion(): BelongsToMany { return $this->BelongsToMany(ordenproduccion::class); }
     // public function reproceso(): BelongsToMany { return $this->BelongsToMany(Reproceso::class); }
 
 }

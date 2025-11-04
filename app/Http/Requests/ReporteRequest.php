@@ -31,15 +31,12 @@ class ReporteRequest extends FormRequest
             'fecha' => 'required',
             'hora_inicial' => 'required',
             'hora_final' => 'nullable',
-            'centrotrabajo_id' => 'required',
-            'ordentrabajo_id' => 'nullable',
             
             // 'material_id' => 'required',
             // 'pieza_id' => 'nullable',
             // 'cantidad' => 'nullable',
             
             'actividad_id' => 'nullable',
-            'disponibilidad_id' => 'nullable',
             'reproceso_id' => 'nullable',
             'user_id' => 'nullable',
             'tipoReporte' => 'required',

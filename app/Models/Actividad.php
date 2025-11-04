@@ -16,15 +16,4 @@ class Actividad extends Model
         'nombre',
         'tipo',
     ];
-
-    //centrotrabajo_id
-    public function centroTrabajos(): BelongsToMany { return $this->BelongsToMany(Centrotrabajo::class); }
-    // public function ActividadTipo($centroid,$ADR) {
-    //     return
-    //     DB::table('actividad_centrotrabajo')->insert([
-    //         'Acti_dispo_repro' => $ADR,
-    //         'actividad_id' => $this->id,
-    //         'centrotrabajo_id' => $centroid,
-    //     ]);
-    // }
 }

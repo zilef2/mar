@@ -11,6 +11,7 @@ import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import '@vuepic/vue-datepicker/dist/main.css';
 import {DiferenciaMinutos, formatTime, TransformTdate} from '@/global.ts';
+import Elselect from "@/Pages/reporte/elselect.vue";
 
 
 
@@ -25,8 +26,6 @@ const props = defineProps({
 
     losSelect: Object,
     numberPermissions: Number,
-    valuesGoogleCabeza: Object,
-    valuesGoogleBody: Object,
     empleados: Object,
 })
 const emit = defineEmits(["close"]);
@@ -37,19 +36,18 @@ const data = reactive({
     },
     actividad_id: props.losSelect.actividad,
     centrotrabajo_id: props.losSelect.centrotrabajo,
-    disponibilidad_id: props.losSelect.disponibilidad,
-    ordentrabajo_id: props.losSelect.ordentrabajo,
+    paro_id: props.losSelect.paro,
+    ordenproduccion_id: props.losSelect.ordenproduccion,
     reproceso_id: props.losSelect.reproceso,
     /*
     fin de los select
      */
-    temp_disponibilidad_id: null,
+    temp_paro_id: null,
     temp_reproceso_id: null,
     temp_actividad_id: null,
     valorInactivo: 'NA',
     cabeza: props.valuesGoogleCabeza,
-    nombresOT: Object.values(props.valuesGoogleBody),
-    ordentrabajo_ids: [],
+    ordenproduccion_ids: [],
     mensajeFalta: '',
     BanderaTipo: true,
     mensajeTiemposAuto: '',
@@ -68,12 +66,12 @@ const justNames = [
     'hora_final',
     'actividad_id',
     'centrotrabajo_id',
-    'disponibilidad_id',
-    'operario_id',
-    'ordentrabajo_id',
+    'paro_id',
+    'user_id',
+    'ordenproduccion_id',
     'reproceso_id',
 
-    'ordentrabajo_ids',
+    'ordenproduccion_ids',
     'otitem',
     'user_id',
 
@@ -132,34 +130,14 @@ const tiemposEstimados = [
 
 
 function ParaElSuper() {
-    let elindex = data.ordentrabajo_ids.findIndex((ele) => {
+    let elindex = data.ordenproduccion_ids.findIndex((ele) => {
         return ele.title === Hardcoded[0];
     });
 
-    form.ordentrabajo_ids = data.ordentrabajo_ids[elindex];
+    form.ordenproduccion_ids = data.ordenproduccion_ids[elindex];
     form.centrotrabajo_id = data.centrotrabajo_id[2];
     form.actividad_id = data.actividad_id[2];
     data.mensajeTiemposAuto = 'Super administrador';
-}
-
-//GetTiempoNotNull:: Selecciona automaticamente un centro que tenga tiempos no nulos
-function GetTiempoNotNull() {
-    let contador = 0
-    form.centrotrabajo_id = data.centrotrabajo_id[1]
-
-
-    while (data.nombresOT[form.ordentrabajo_ids.value][tiemposEstimados[contador]] === "" && contador <= tiemposEstimados.length) {
-        contador++
-    }
-    form.TiempoEstimado = data.nombresOT[form.ordentrabajo_ids.value][tiemposEstimados[contador]];
-    if (contador !== tiemposEstimados.length) {
-        form.centrotrabajo_id = data.centrotrabajo_id[contador + 1];
-        data.mensajeTiemposAuto = ''
-    } else {
-        data.mensajeTiemposAuto = 'Tiempos vacios!'
-    }
-
-    data.soloUnaVez = false
 }
 
 
@@ -195,7 +173,7 @@ let ValidarCreateReporte = () => {
 
     if (tipo === 0) {
         result = ValidarNotNull([
-            'ordentrabajo_ids',
+            'ordenproduccion_ids',
             'centrotrabajo_id',
             'actividad_id',
         ])
@@ -204,7 +182,7 @@ let ValidarCreateReporte = () => {
     if (tipo === 1) {
         result = ValidarNotNull([
             'centrotrabajo_id',
-            'ordentrabajo_ids',
+            'ordenproduccion_ids',
             'actividad_id',
             'reproceso_id',
         ])
@@ -213,16 +191,16 @@ let ValidarCreateReporte = () => {
     if (tipo === 2) {
         result = ValidarNotNull([
             'centrotrabajo_id',
-            'disponibilidad_id',
+            'paro_id',
         ])
-    } //disponibilidad
+    } //paro
 
     let objectMessages = {
-        'ordentrabajo_ids': 'Orden trabajo',
+        'ordenproduccion_ids': 'Orden trabajo',
         'actividad_id': 'Actividad',
         'reproceso_id': 'Reproceso',
         'centrotrabajo_id': 'Centro de trabajo',
-        'disponibilidad_id': 'Disponibilidad',
+        'paro_id': 'paro',
     }
     if (result !== '') return objectMessages[result] + mensaje
     else return result
@@ -246,24 +224,8 @@ watchEffect(() => {
             form.fecha = (TransformTdate(currentDate, '')).substring(0, 10);
             form.hora_inicial = formatTime()
 
-            data.ordentrabajo_ids = data.nombresOT.map((val, inde) => ({
-                title: val.Item?.replace(/_/g, " "),
-                value: inde,
-                // value2: val.id,
-            }))
         }
 
-        //valores implicitos
-        if (form.ordentrabajo_ids && form.ordentrabajo_ids.value != null) {
-            form.nombreTablero = data.nombresOT[form.ordentrabajo_ids.value][Cabezera[0]]
-            form.OTItem = data.nombresOT[form.ordentrabajo_ids.value]['Item']
-
-            if (data.soloUnaVez) {
-                GetTiempoNotNull();
-            } else {
-                //ño
-            }
-        }
     } else {
         data.BanderaTipo = true
     }
@@ -273,11 +235,11 @@ watchEffect(() => {
 watch(() => form.tipoReporte, (newX) => {
     form.actividad_id = null
     form.centrotrabajo_id = null
-    form.disponibilidad_id = null
-    form.operario_id = null
-    form.ordentrabajo_id = null
+    form.paro_id = null
+    form.user_id = null
+    form.ordenproduccion_id = null
     form.reproceso_id = null
-    form.ordentrabajo_ids = null
+    form.ordenproduccion_ids = null
     // tipoReporte
     form.otitem = null
     form.nombreTablero = null
@@ -285,7 +247,7 @@ watch(() => form.tipoReporte, (newX) => {
     form.TiempoEstimado = null
 })
 
-watch(() => form.ordentrabajo_ids, (newX) => {
+watch(() => form.ordenproduccion_ids, (newX) => {
     data.soloUnaVez = true
 })
 
@@ -294,44 +256,11 @@ watch(() => form.centrotrabajo_id, (newCentro) => { //bookmark: el watcher mas m
         let actividadesDelCentro = 'centrotrabajo' + newCentro.title
         data.actividad_id = props.losSelect[actividadesDelCentro]
 
-        if (form.tipoReporte.value !== 2 && form.ordentrabajo_ids) { //si no es una disponibilidad
+        if (form.tipoReporte.value !== 2 && form.ordenproduccion_ids) { //si no es una paro
 
-            console.log("=>(Create.vue:299) form.centrotrabajo_id.title", form.centrotrabajo_id.title);
-            switch (form.centrotrabajo_id.title) {
-                case 'CORTE': data.tempCentro = 0; 
-                break;
-                case 'DOBLEZ': data.tempCentro = 1; 
-                break;
-                case 'SOLDADURA': data.tempCentro = 2; 
-                break;
-                case 'PULIDA': data.tempCentro = 3; 
-                break;
-                case 'ENSAMBLE': data.tempCentro = 4; 
-                break;
-                case 'COBRE': data.tempCentro = 5; 
-                break;
-                case 'CABLEADO': data.tempCentro = 6; 
-                break;
-                case 'INGENIERIA MECANICA': data.tempCentro = 7; 
-                break;
-                case 'INGENIERIA ELECTRICA': data.tempCentro = 8; 
-                break;
-                case 'FRENTE MUERTO': data.tempCentro = 9; 
-                break; //todo: si hay un centro nuevo
-                case 'TIEMPO AMARILLADO': data.tempCentro = 10;break; 
-                case 'TIEMPO PRUEBAS': data.tempCentro = 11;break; 
-            }
-            // data.tempCentro = form.centrotrabajo_id.value - 1 //esto esta horrible con id
             
-            form.TiempoEstimado = data.nombresOT[form.ordentrabajo_ids.value][tiemposEstimados[data.tempCentro]];
-// console.log("resultado", data.nombresOT[form.ordentrabajo_ids.value][tiemposEstimados[data.tempCentro]]);
-console.table( data.nombresOT[form.ordentrabajo_ids.value]);
-console.table( tiemposEstimados);
-console.log("=>(Create.vue:305) data.tempCentro", data.tempCentro);
-console.table( data.centrotrabajo_id);
         } else {
-            // form.ordentrabajo_id =
-            console.log(form.ordentrabajo_ids) //nuevo requerimiento 2dic2023: se pondra dos digitos del año seguido de 000
+            console.log(form.ordenproduccion_ids) //nuevo requerimiento 2dic2023: se pondra dos digitos del año seguido de 000
         }
     }
     form.actividad_id = {title: 'Seleccione actividad', value: null}
@@ -341,7 +270,7 @@ console.table( data.centrotrabajo_id);
 
 // <!--<editor-fold desc="SendToBackend">-->
     const create = () => {
-    form.ordentrabajo_id = form.ordentrabajo_ids
+    form.ordenproduccion_id = form.ordenproduccion_ids
     data.mensajeFalta = ValidarCreateReporte();
     form.hora_inicial = formatTime()
     if (data.mensajeFalta === '') {
@@ -368,7 +297,7 @@ const SendToBackend = () => {
 const opcinesActividadOTros = [{title: 'Actividad', value: 0}, {
     title: 'Reproceso',
     value: 1
-}, {title: 'Disponibilidad(paro)', value: 2}];
+}, {title: 'paro(paro)', value: 2}];
 const arrayMostrarDelCodigo = ['Nombre Tablero', '% avance', 'OT+Item', 'Tiempo estimado'];
 const Cabezera = ['Nombre_tablero', 'avance'];
 </script>
@@ -413,46 +342,32 @@ const Cabezera = ['Nombre_tablero', 'avance'];
                         <InputError class="mt-2" :message="form.errors['hora_inicial']"/>
                     </div>
 
-                    <div id="Sordentrabajo" v-if="form.tipoReporte.value !== 2" class="xl:col-span-2 col-span-1">
-                        <label name="ordentrabajo_ids" class=" dark:text-white"> Orden de trabajo </label>
-                        <vSelect :options="data['ordentrabajo_ids']" label="title" class="dark:bg-gray-400"
-                                  v-model="form['ordentrabajo_ids']" append-to-body
+                    <div id="Sordenproduccion" v-if="form.tipoReporte.value !== 2" class="xl:col-span-2 col-span-1">
+                        <label name="ordenproduccion_ids" class=" dark:text-white"> Orden de trabajo </label>
+                        <vSelect :options="data['ordenproduccion_ids']" label="title" class="dark:bg-gray-400"
+                                  v-model="form['ordenproduccion_ids']" append-to-body
                         ></vSelect>
-                        <InputError class="mt-2" :message="form.errors['ordentrabajo_id']"/>
+                        <InputError class="mt-2" :message="form.errors['ordenproduccion_id']"/>
                     </div>
 
-                    <div v-if="form.ordentrabajo_ids && form.tipoReporte.value !== 2" class="w-full lg:col-span-2 col-span-1  dark:text-white">
-                        <InputLabel :for="index" :value="arrayMostrarDelCodigo[0]" class=""/>
-                        <TextInput :id="index" type="text" disabled class="mt-1 h-[36px] block w-full bg-gray-200"
-                                   :value="data.nombresOT[form.ordentrabajo_ids.value][Cabezera[0]]"
-                        />
-                    </div>
-
-<!--                    avanze-->
-                    <div v-if="form.ordentrabajo_ids && form.tipoReporte.value !== 2" class="w-full col-span-1 dark:text-white">
-                        <InputLabel :for="index" :value="arrayMostrarDelCodigo[1]"/>
-                        <TextInput :id="index" type="text" disabled class="mt-1 h-[36px] block w-full bg-gray-200"
-                                   :value="data.nombresOT[form.ordentrabajo_ids.value][Cabezera[1]]"
-                        />
-                    </div>
+<!--todo: borrar ordenproduccion_ids-->
 
                   
 
 
                     <!-- tiempo estimado -->
-                    <div v-if="form.ordentrabajo_ids && form.centrotrabajo_id && form.tipoReporte.value !== 2" class=" col-span-1 dark:text-white">
+                    <div v-if="form.ordenproduccion_ids && form.centrotrabajo_id && form.tipoReporte.value !== 2" class=" col-span-1 dark:text-white">
                         <InputLabel :for="index" :value="arrayMostrarDelCodigo[3]"/>
                         <TextInput :id="index" type="text" disabled class="mt-1 h-[36px] block w-full bg-gray-200 dark:bg-gray-400 dark:text-white"
                                    v-model="form.TiempoEstimado"
                         />
                     </div>
-                    <div id="Scentrotrabajo" class=" xs:col-span-1 md:col-span-2">
-                        <label name="centrotrabajo_id" class=" dark:text-white"> Centro de trabajo </label>
-                        <vSelect :options="data['centrotrabajo_id']" label="title" class="dark:bg-gray-400"
-                                  v-model="form['centrotrabajo_id']" append-to-body
-                        ></vSelect>
-                        <InputError class="mt-2" :message="form.errors['centrotrabajo_id']"/>
-                    </div>
+                    
+                    asdasd{{props.centrotrabajo}} <br>
+                    
+                    <elselect name="centrotrabajo" :form="form" :data="data" />
+
+                   
 
                     <!-- eleccion -->
                     <div id="actividad" v-if="form.tipoReporte.value === 0 || form.tipoReporte.value === 1" class="xl:col-span-2 col-span-1">
@@ -469,12 +384,12 @@ const Cabezera = ['Nombre_tablero', 'avance'];
                         ></vSelect>
                         <InputError class="mt-2" :message="form.errors['reproceso_id']"/>
                     </div>
-                    <div id="disponibilidad" v-if="form.tipoReporte.value === 2" class="xl:col-span-3  col-span-1">
-                        <label name="disponibilidad_id" class=" dark:text-white"> Disponibilidad</label>
-                        <vSelect :options="data['disponibilidad_id']" label="title" required append-to-body
-                                  v-model="form['disponibilidad_id']" class="dark:bg-gray-400"
+                    <div id="paro" v-if="form.tipoReporte.value === 2" class="xl:col-span-3  col-span-1">
+                        <label name="paro_id" class=" dark:text-white"> paro</label>
+                        <vSelect :options="data['paro_id']" label="title" required append-to-body
+                                  v-model="form['paro_id']" class="dark:bg-gray-400"
                         ></vSelect>
-                        <InputError class="mt-2" :message="form.errors['disponibilidad_id']"/>
+                        <InputError class="mt-2" :message="form.errors['paro_id']"/>
                     </div>
                     <!-- termina -->
                 </div>

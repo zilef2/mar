@@ -15,9 +15,9 @@ import Pagination from '@/Components/Pagination.vue';
 import { ChevronUpDownIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/solid';
 // import { CursorArrowRippleIcon, ChevronUpDownIcon,QuestionMarkCircleIcon, EyeIcon, PencilIcon, TrashIcon, UserGroupIcon } from '@heroicons/vue/24/solid';
 
-import Create from '@/Pages/disponibilidad/Create.vue';
-import Edit from '@/Pages/disponibilidad/Edit.vue';
-import Delete from '@/Pages/disponibilidad/Delete.vue';
+import Create from '@/Pages/paro/Create.vue';
+import Edit from '@/Pages/paro/Edit.vue';
+import Delete from '@/Pages/paro/Delete.vue';
 
 import Checkbox from '@/Components/Checkbox.vue';
 import InfoButton from '@/Components/InfoButton.vue';
@@ -63,7 +63,7 @@ const order = (field) => {
 
 watch(() => _.cloneDeep(data.params), debounce(() => {
     let params = pickBy(data.params)
-    router.get(route("disponibilidad.index"), params, {
+    router.get(route("paro.index"), params, {
         replace: true,
         preserveState: true,
         preserveScroll: true,
@@ -74,13 +74,13 @@ const selectAll = (event) => {
     if (event.target.checked === false) {
         data.selectedId = []
     } else {
-        props.disponibilidads?.data.forEach((disponibilidad) => {
-            data.selectedId.push(disponibilidad.id)
+        props.paros?.data.forEach((paro) => {
+            data.selectedId.push(paro.id)
         })
     }
 }
 const select = () => {
-    if (props.disponibilidads?.data.length == data.selectedId.length) {
+    if (props.paros?.data.length == data.selectedId.length) {
         data.multipleSelect = true
     } else {
         data.multipleSelect = false
@@ -112,19 +112,19 @@ const titulos = [
             <div class="px-4 sm:px-0">
                 <div class="rounded-lg overflow-hidden w-fit">
                     <PrimaryButton class="rounded-none" @click="data.createOpen = true"
-                        v-if="can(['create disponibilidad'])">
+                        v-if="can(['create paro'])">
                         {{ lang().button.add }}
                     </PrimaryButton>
 
-                    <Create v-if="can(['create disponibilidad'])" :numberPermissions="props.numberPermissions"
+                    <Create v-if="can(['create paro'])" :numberPermissions="props.numberPermissions"
                         :titulos="titulos" :show="data.createOpen" @close="data.createOpen = false" :title="props.title"
                         :losSelect=props.losSelect />
 
-                    <Edit v-if="can(['update disponibilidad'])" :titulos="titulos"
+                    <Edit v-if="can(['update paro'])" :titulos="titulos"
                         :numberPermissions="props.numberPermissions" :show="data.editOpen" @close="data.editOpen = false"
                         :generica="data.generico" :title="props.title" :losSelect=props.losSelect />
 
-                    <Delete v-if="can(['delete disponibilidad'])" :numberPermissions="props.numberPermissions"
+                    <Delete v-if="can(['delete paro'])" :numberPermissions="props.numberPermissions"
                         :show="data.deleteOpen" @close="data.deleteOpen = false" :generica="data.generico"
                         :title="props.title" />
                 </div>
@@ -134,7 +134,7 @@ const titulos = [
                     <div class="flex space-x-2">
                         <SelectInput v-model="data.params.perPage" :dataSet="data.dataSet" />
                         <!-- <DangerButton @click="data.deleteBulkOpen = true"
-                            v-show="data.selectedId.length != 0 && can(['delete disponibilidad'])" class="px-3 py-1.5"
+                            v-show="data.selectedId.length != 0 && can(['delete paro'])" class="px-3 py-1.5"
                             v-tooltip="lang().tooltip.delete_selected">
                             <TrashIcon class="w-5 h-5" />
                         </DangerButton> -->

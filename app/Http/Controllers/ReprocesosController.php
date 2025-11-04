@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 
-use App\Models\Disponibilidad;
+use App\Models\paro;
 use App\Models\Reproceso;
 use App\helpers\Myhelp;
 
 use App\helpers\HelpExcel;
 use App\Http\Requests\ReprocesoRequest;
 use App\Imports\PersonalImport;
-use App\Models\Centrotrabajo;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -33,8 +32,9 @@ class ReprocesosController extends Controller
 
     public function MapearClasePP(&$Reprocesos, $numberPermissions)
     {
+		//el reproceso deberia tener un centro
         $Reprocesos = $Reprocesos->get()->map(function ($Reproceso) use ($numberPermissions) {
-            $Reproceso->centros = implode(',', $Reproceso->centroTrabajos->pluck('nombre')->toArray());
+//            $Reproceso->centros = implode(',', $Reproceso->centroTrabajos->pluck('nombre')->toArray());
 
             return $Reproceso;
         })->filter();
@@ -46,11 +46,7 @@ class ReprocesosController extends Controller
         $numberPermissions = Myhelp::getPermissionToNumber($permissions);
         $user = Auth::user();
 
-        // if($numberPermissions > 1){
         $Reprocesos = Reproceso::query();
-        // }else{
-        //     $Reprocesos = Reproceso::Where('operario_id',$user->id);
-        // }
 
         if ($request->has('search')) {
             $Reprocesos->where(function ($query) use ($request) {
@@ -78,7 +74,6 @@ class ReprocesosController extends Controller
             $page,
             ['path' => request()->url()]
         );
-        $centroSelect = Myhelp::NEW_turnInSelectID(Centrotrabajo::all(), 'centro','nombre');
 
         return Inertia::render('reproceso/Index', [
             'breadcrumbs'           => [['label' => __('app.label.reproceso'), 'href' => route('reproceso.index')]],
@@ -88,7 +83,7 @@ class ReprocesosController extends Controller
             'fromController'        => $fromController,
             'total'                 => $total,
             'numberPermissions'     => $numberPermissions,
-            'losSelect'             => $centroSelect,
+            'losSelect'             => [],//todo: quitar viejo
         ]);
     }
 
@@ -116,10 +111,10 @@ class ReprocesosController extends Controller
             $guardar['centro_id'] = null;
             $guardar['codigo'] = 10;
             $Reproceso = Reproceso::create($guardar);
-            foreach ($request->centro_id as $key => $value) {
-                if($value['value'] && $value['value'] != 0)
-                    $Reproceso->centroTrabajos()->attach($value['value']);
-            }
+//            foreach ($request->centro_id as $key => $value) {
+//                if($value['value'] && $value['value'] != 0)
+//                    $Reproceso->centroTrabajos()->attach($value['value']);
+//            }
             DB::commit();
             Myhelp::EscribirEnLog($this, 'STORE:Reprocesos', 'usuario id:' . $user->id . ' | ' . $user->name . ' guardado', false);
             return back()->with('success', __('app.label.created_successfully', ['name' => $Reproceso->name]));

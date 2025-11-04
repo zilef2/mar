@@ -27,10 +27,10 @@ const sidebarButtons = [ //SAME AS WEB.PHP
     'reporte',
 ];
 const sidebarButtoAdmin = [ //SAME AS WEB.PHP
-    // 'ordentrabajo',
+    // 'ordenproduccion',
     'centrotrabajo',
     'actividad',
-    'disponibilidad',
+    'paro',
     // 'material',
     // 'pieza',
     'reproceso',

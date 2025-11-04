@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\helpers\Myhelp;
 use App\Models\GuardarGoogleSheetsComercial;
-use App\Models\Ordentrabajo;
+use App\Models\ordenproduccion;
 use App\Models\Reporte;
 use App\Models\Role;
 use Carbon\Carbon;
@@ -153,7 +153,7 @@ class ReadGoogleSheets extends Controller {
 			
 			$superString = $valueCabeza[3] ?? '' . '-' . ($valueCabeza[4] ?? '') . '-' . ($valueCabeza[5] ?? '') . '-' . ($valueCabeza[6] ?? '') . '-' . ($valueCabeza[7] ?? '') . '-' . ($valueCabeza[8] ?? '') . '-' . ($valueCabeza[9] ?? '') . '-' . ($valueCabeza[10] ?? '') . '-' . ($valueCabeza[11] ?? '') . '-' . ($valueCabeza[12] ?? '') . '-' . ($valueCabeza[13] ?? '') . '-' . ($valueCabeza[13] ?? '') . '-' . ($valueCabeza[14] ?? '') . '-' . ($valueCabeza[15] ?? '') . '-' . ($valueCabeza[16] ?? '');
 			
-			Ordentrabajo::create([
+			ordenproduccion::create([
 				                     'codigo' => $Grupo,
 				                     'nombre' => $superString
 			                     ]);

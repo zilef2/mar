@@ -19,22 +19,17 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ReportesController extends Controller {
 	
-	// public $valuesGoogleCabeza, $valuesGoogleBody;
-	
 	public function index(Request $request): \Inertia\Response {
 		ini_set('max_execution_time', 600);//10mims
 		$permissions = Myhelp::EscribirEnLog($this, ' reportes');
 		$numberPermissions = Myhelp::getPermissionToNumber($permissions);
 		$user = Myhelp::AuthU();
 		
-//		$readGoogle = new ReadGoogleSheets();
-//		[$valuesGoogleCabeza, $valuesGoogleBody] = $readGoogle->GetValuesFromSheets();
-		//dd($valuesGoogleBody);
 		if ($numberPermissions > 1) {
 			$reportes = Reporte::query();
 		}
 		else {
-			$reportes = Reporte::Where('operario_id', $user->id);
+			$reportes = Reporte::Where('user_id', $user->id);
 		}
 		
 		$this->ZounaSearch($request, $reportes); //se hace get()
@@ -57,10 +52,8 @@ class ReportesController extends Controller {
 			'fromController'     => $fromController,
 			'total'              => $total,
 			'numberPermissions'  => $numberPermissions,
-			'empleados'       => $empleados,
+			'empleados'          => $empleados,
 			'losSelect'          => $this->SelectsMasivos() ?? [],
-			'valuesGoogleCabeza' => $valuesGoogleCabeza ?? [],
-			'valuesGoogleBody'   => $valuesGoogleBody ?? [],
 		]);
 	}
 	
@@ -80,10 +73,10 @@ class ReportesController extends Controller {
 			$tipoReporte = $request->search3['value'];
 			
 			if ($tipoReporte === 'soloreporte') {
-				$reportes->whereNull('disponibilidad_id')->whereNull('reproceso_id');
+				$reportes->whereNull('paro_id')->whereNull('reproceso_id');
 			}
-			elseif ($tipoReporte === 'solodisponibilidad') {
-				$reportes->whereNotNull('disponibilidad_id');
+			elseif ($tipoReporte === 'soloparo') {
+				$reportes->whereNotNull('paro_id');
 			}
 			elseif ($tipoReporte === 'soloreproceso') {
 				$reportes->whereNotNull('reproceso_id');
@@ -121,25 +114,12 @@ class ReportesController extends Controller {
 		
 		if ($request->has(['field', 'order'])) {
 			$reportes = $reportes->orderByRaw('ISNULL(hora_final) DESC')->orderbyDesc('fecha')->orderBy($request->field, $request->order);
-		}else {
+		}
+		else {
 			$reportes = $reportes->orderByRaw('ISNULL(hora_final) DESC')->orderbyDesc('fecha')->orderByDesc('updated_at');
 		}
 		
 		$reportes = $reportes->get();
-	}
-	
-	public function MapearClasePP(&$reportes, $numberPermissions, $valuesGoogleBody): void {
-		$reportes = $reportes->get()->map(function ($reporte) use ($numberPermissions, $valuesGoogleBody) {
-			// $reporte->ordentrabajo_s = $valuesGoogleBody->Where('Item_vue',$reporte->ordentrabajo_id)->first()->Item ?? '';
-			$reporte->actividad_s = $reporte->actividad()->first() !== null ? $reporte->actividad()->first()->nombre : '';
-			$reporte->centrotrabajo_s = $reporte->centrotrabajo()->first() !== null ? $reporte->centrotrabajo()->first()->nombre : '';
-			$reporte->operario_s = $reporte->operario()->first() !== null ? $reporte->operario()->first()->name : '';
-			
-			$reporte->disponibilidad_s = $reporte->disponibilidad()->first() !== null ? $reporte->disponibilidad()->first()->nombre : '';
-			$reporte->reproceso_s = $reporte->reproceso()->first() !== null ? $reporte->reproceso()->first()->nombre : '';
-			
-			return $reporte;
-		})->filter();
 	}
 	
 	public function SelectsMasivos(): array {
@@ -149,9 +129,9 @@ class ReportesController extends Controller {
 		/* 
 			0 => "actividad"
 			1 => "centrotrabajo"
-			2 => "disponibilidad"
+			2 => "paro"
 			3 => "material"
-			5 => "ordentrabajo"
+			5 => "ordenproduccion"
 			7 => "pieza"
 			8 => "reproceso"
 			4 => "operario"
@@ -178,6 +158,54 @@ class ReportesController extends Controller {
 		return $result;
 	}
 	
+	public function createdev(Request $request): \Inertia\Response {
+		$numberPermissions = Myhelp::getPermissionToNumber(Myhelp::EscribirEnLog($this, ' solo dev createdev'));
+		$user = Myhelp::AuthU();
+		
+		if ($numberPermissions > 1) {
+			$reportes = Reporte::query();
+		}
+		else {
+			$reportes = Reporte::Where('user_id', $user->id);
+		}
+		
+		$empleados = User::WhereHas('roles', function ($query) {
+			return $query->whereIn('name', ['supervisor', 'empleado']);
+		})->get();
+		$empleados = Myhelp::NEW_turnInSelectID($empleados, ' operario', 'name');
+		
+		$perPage = $request->has('perPage') ? $request->perPage : 50;
+		$total = $reportes->count();
+		$page = request('page', 1); // Current page number
+		$fromController = new LengthAwarePaginator($reportes->forPage($page, $perPage), $total, $perPage, $page, ['path' => request()->url()]);
+		
+		return Inertia::render('reporte/Index', [
+			'breadcrumbs'        => [['label' => __('app.label.reporte'), 'href' => route('reporte.index')]],
+			'title'              => __('app.label.reporte'),
+			'filters'            => $request->all(['search', 'field', 'order', 'soloTiEstimado', 'searchdia']),
+			'perPage'            => (int)$perPage,
+			'total'              => $total,
+			'numberPermissions'  => $numberPermissions,
+			'empleados'          => $empleados,
+			'losSelect'          => $this->SelectsMasivos() ?? [],
+		]);
+	}
+	
+	//todo: poner esto en la clase Reporte
+	public function MapearClasePP(&$reportes, $numberPermissions, $valuesGoogleBody): void {
+		$reportes = $reportes->get()->map(function ($reporte) use ($numberPermissions, $valuesGoogleBody) {
+			// $reporte->ordenproduccion_s = $valuesGoogleBody->Where('Item_vue',$reporte->ordenproduccion_id)->first()->Item ?? '';
+			$reporte->actividad_s = $reporte->actividad()->first() !== null ? $reporte->actividad()->first()->nombre : '';
+			$reporte->centrotrabajo_s = $reporte->centrotrabajo()->first() !== null ? $reporte->centrotrabajo()->first()->nombre : '';
+			$reporte->operario_s = $reporte->operario()->first() !== null ? $reporte->operario()->first()->name : '';
+			
+			$reporte->paro_s = $reporte->paro()->first() !== null ? $reporte->paro()->first()->nombre : '';
+			$reporte->reproceso_s = $reporte->reproceso()->first() !== null ? $reporte->reproceso()->first()->nombre : '';
+			
+			return $reporte;
+		})->filter();
+	}
+	
 	//fin index
 	
 	public function updatingDate($date) {
@@ -201,25 +229,25 @@ class ReportesController extends Controller {
 		
 		DB::beginTransaction();
 		try {
-			$ValueDisponibilidad = null;
-			if (isset($request->disponibilidad_id['value'])) { //listo(1a) disponibilidad
-				$ValueDisponibilidad = $request->disponibilidad_id['value'];
+			$Valueparo = null;
+			if (isset($request->paro_id['value'])) { //listo(1a) paro
+				$Valueparo = $request->paro_id['value'];
 			}
-			//todo: (1a) falta validar si es reproceso. | validar porque disponibilidades mandan OTitem
+			//todo: (1a) falta validar si es reproceso. | validar porque paroes mandan OTitem
 			$hoy = date('Y-m-d');
 			$tipoFin = $this->getLastReport($hoy, $userID); //BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
 			$tipoReport = $request->tipoReporte['value'];
 			$reporte = Reporte::create([
-				                           'fecha'            => $request->fecha,
-				                           'tipoReporte'      => $tipoReport,
-				                           'hora_inicial'     => $request->hora_inicial,
-				                           'hora_final'       => null,
-				                           'centrotrabajo_id' => $request->centrotrabajo_id['value'] ?? null,
-				                           'operario_id'       => $userID,
+				                           'fecha'             => $request->fecha,
+				                           'tipoReporte'       => $tipoReport,
+				                           'hora_inicial'      => $request->hora_inicial,
+				                           'hora_final'        => null,
+				                           'user_id'       => $userID,
 				                           'actividad_id'      => $request->actividad_id['value'] ?? null,
-				                           'disponibilidad_id' => $ValueDisponibilidad,
+				                           'paro_id' => $Valueparo,
 				                           'reproceso_id'      => ($request->reproceso_id['value']) ?? null,
-				                           'tipoFinalizacion'  => $tipoFin,  //BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
+				                           'tipoFinalizacion'  => $tipoFin,
+				                           //BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
 				                           'nombreTablero'     => $request->nombreTablero,
 				                           'OTItem'            => $request->OTItem,
 				                           'TiempoEstimado'    => $request->TiempoEstimado,
@@ -240,7 +268,7 @@ class ReportesController extends Controller {
 		$hoyDate = date_create($hoy);
 		date_sub($hoyDate, date_interval_create_from_date_string('1 days'));
 		$ayer = date_format($hoyDate, 'Y-m-d');
-		$MainQuery = Reporte::Where('operario_id', $userid);
+		$MainQuery = Reporte::Where('user_id', $userid);
 		
 		$NoTieneReportes = $MainQuery->count() == 0;
 		if ($NoTieneReportes) {
@@ -256,7 +284,7 @@ class ReportesController extends Controller {
 			$ultimoReporte = $MainQuery->Where('fecha', $ayer)->latest()->first();
 			$tipo = 1; //primera del dia
 			//            if ($ultimoReporte === null) //ayer
-			$ultimoReporte = Reporte::Where('operario_id', $userid)->latest()->first();
+			$ultimoReporte = Reporte::Where('user_id', $userid)->latest()->first();
 			
 			if ($ultimoReporte && $ultimoReporte->hora_final === null) {
 				$ultimoReporte->update([
@@ -298,8 +326,7 @@ class ReportesController extends Controller {
 					$actualizar_reporte['fecha'] = $request->fecha == '' ? null : $request->fecha;
 					$actualizar_reporte['hora_inicial'] = $request->hora_inicial == '' ? null : $request->hora_inicial;
 				}
-//				$actualizar_reporte['ordentrabajo_id'] = $request->ordentrabajo_id == null ? null : $orden->id;
-				$actualizar_reporte['centrotrabajo_id'] = $request->centrotrabajo_id == null ? null : $request->centrotrabajo_id;
+				//				$actualizar_reporte['ordenproduccion_id'] = $request->ordenproduccion_id == null ? null : $orden->id;
 				
 				if ($request->actividad_id && is_integer($request->actividad_id)) {
 					$actualizar_reporte['actividad_id'] = $request->actividad_id;
@@ -308,7 +335,7 @@ class ReportesController extends Controller {
 					$actualizar_reporte['actividad_id'] = $request->actividad_id['value'];
 				}
 				
-				$actualizar_reporte['disponibilidad_id'] = $request->disponibilidad_id == null ? null : $request->disponibilidad_id;
+				$actualizar_reporte['paro_id'] = $request->paro_id == null ? null : $request->paro_id;
 				$actualizar_reporte['reproceso_id'] = $request->reproceso_id == null ? null : $request->reproceso_id['value'];
 				
 				//tipoF no va

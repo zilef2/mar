@@ -10,7 +10,6 @@ use App\helpers\Myhelp;
 use App\helpers\HelpExcel;
 use App\Http\Requests\ActividadRequest;
 use App\Imports\PersonalImport;
-use App\Models\Centrotrabajo;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +30,7 @@ class ActividadsController extends Controller
 
     public function MapearClasePP(&$Actividads, $numberPermissions){
         $Actividads = $Actividads->get()->map(function ($Actividad) use ($numberPermissions) {
-            $Actividad->centros = implode(',', $Actividad->centroTrabajos->pluck('nombre')->toArray());
+//            $Actividad->centros = implode(',', $Actividad->centroTrabajos->pluck('nombre')->toArray());
             return $Actividad;
         })->filter();
     }
@@ -44,7 +43,7 @@ class ActividadsController extends Controller
         // if($numberPermissions > 1){
         $Actividads = Actividad::query();
         // }else{
-        //     $Actividads = Actividad::Where('operario_id',$user->id);
+        //     $Actividads = Actividad::Where('user_id',$user->id);
         // }
 
         if ($request->has('search')) {
@@ -73,7 +72,6 @@ class ActividadsController extends Controller
             $page,
             ['path' => request()->url()]
         );
-        $centroSelect = Myhelp::NEW_turnInSelectID(Centrotrabajo::all(), 'centro','nombre');
         return Inertia::render('actividad/Index', [
             'breadcrumbs'           => [['label' => __('app.label.Actividad'), 'href' => route('actividad.index')]],
             'title'                 => __('app.label.Actividad'),
@@ -82,7 +80,7 @@ class ActividadsController extends Controller
             'fromController'        => $fromController,
             'total'                 => $total,
             'numberPermissions'     => $numberPermissions,
-            'losSelect'             => $centroSelect,
+            'losSelect'             => [],//todo:viejo
 
             // 'losSelect'             => $losSelect ?? [],
         ]);
@@ -110,10 +108,6 @@ class ActividadsController extends Controller
             $guardar['codigo'] = 10;
             $guardar['centro_id'] = null;
             $Actividad = Actividad::create($guardar);
-            foreach ($request->centro_id as $key => $value) {
-                if($value['value'] && $value['value'] != 0)
-                    $Actividad->centroTrabajos()->attach($value['value']);
-            }
 
             DB::commit();
             Myhelp::EscribirEnLog($this, 'STORE:Actividads', 'usuario id:' . $user->id . ' | ' . $user->name . ' guardado', false);

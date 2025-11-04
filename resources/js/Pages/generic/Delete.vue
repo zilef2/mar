@@ -2,7 +2,7 @@
 import DangerButton from '@/Components/DangerButton.vue';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { useForm } from '@inertiajs/vue3';
+import {useForm} from '@inertiajs/vue3';
 
 const props = defineProps({
     show: Boolean,
@@ -15,7 +15,7 @@ const emit = defineEmits(["close"]);
 const form = useForm({});
 
 const destory = () => {
-    form.delete(route('ordentrabajo.destroy', props.generica?.id), {
+    form.delete(route('generic.destroy', props.generica?.id), {
         preserveScroll: true,
         onSuccess: () => {
             emit("close")

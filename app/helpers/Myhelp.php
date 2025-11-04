@@ -45,10 +45,10 @@ class Myhelp {
 			
 			'reporte',//core
 			
-			'ordentrabajo',
+			'ordenproduccion',
 			'actividad',
 			'centrotrabajo',
-			'disponibilidad',
+			'paro',
 			// 'material',
 			'pieza',
 			'reproceso',

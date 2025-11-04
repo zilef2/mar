@@ -20,8 +20,6 @@ const props = defineProps({
     generica: Object,
     losSelect: Object,
     numberPermissions: Number,
-    valuesGoogleCabeza: Object,
-    valuesGoogleBody: Object,
     empleados: Object,
 })
 
@@ -30,7 +28,7 @@ const emit = defineEmits(["close"]);
 const opcinesActividadOTros = [{title: 'Actividad', value: 0}, {
     title: 'Reproceso',
     value: 1
-}, {title: 'Disponibilidad(paro)', value: 2}];
+}, {title: 'paro(paro)', value: 2}];
 const arrayMostrarDelCodigo = ['Nombre Tablero', '% avance', 'OT+Item', 'Tiempo estimado'];
 const Cabezera = ['Nombre_tablero', 'avance'];
 
@@ -42,17 +40,15 @@ const data = reactive({
     // tipoReporte:{ title: 'Actividad', value: 0 },
     actividad_id: props.losSelect.actividad,
     centrotrabajo_id: props.losSelect.centrotrabajo,
-    disponibilidad_id: props.losSelect.disponibilidad,
-    ordentrabajo_id: props.losSelect.ordentrabajo,
+    paro_id: props.losSelect.paro,
+    ordenproduccion_id: props.losSelect.ordenproduccion,
     ordenTemporal: [],
     reproceso_id: props.losSelect.reproceso,
-    temp_disponibilidad_id: null,
+    temp_paro_id: null,
     temp_reproceso_id: null,
     temp_actividad_id: null,
     valorInactivo: 'NA',
-    cabeza: props.valuesGoogleCabeza,
-    nombresOT: Object.values(props.valuesGoogleBody),
-    ordentrabajo_ids: [],
+    ordenproduccion_ids: [],
     mensajeFalta: '',
     BanderaTipo: true,
     mensajeTiemposAuto: '',
@@ -60,10 +56,8 @@ const data = reactive({
     errorTranscurrido: '',
 })
 
-
-//very usefull
+//todo: eliminar nombresOT
 const justNames = [
-    // 'codigo',
     'tipoReporte',
     'fecha',
     'hora_inicial',
@@ -71,12 +65,12 @@ const justNames = [
     'tiempo_transcurrido',
     'actividad_id',
     'centrotrabajo_id',
-    'disponibilidad_id',
-    'operario_id',
-    'ordentrabajo_id',
+    'paro_id',
+    'user_id',
+    'ordenproduccion_id',
     'reproceso_id',
 
-    'ordentrabajo_ids',
+    'ordenproduccion_ids',
     'otitem',
     'user_id',
 
@@ -126,13 +120,13 @@ watchEffect(() => {
 function RecuperarForm() {
     form.centrotrabajo_id = {title: props.generica.centrotrabajo_s, value: props.generica.centrotrabajo_id}
 
-    if (form.ordentrabajo_ids?.value) {
-        form.nombreTablero = data.nombresOT[form.ordentrabajo_ids.value][Cabezera[0]];
-        form.OTItem = data.nombresOT[form.ordentrabajo_ids.value]['Item'];
+    if (form.ordenproduccion_ids?.value) {
+        form.nombreTablero = data.nombresOT[form.ordenproduccion_ids.value][Cabezera[0]];
+        form.OTItem = data.nombresOT[form.ordenproduccion_ids.value]['Item'];
 
         // let tempCentro = form.centrotrabajo_id?.value - 1;
         // console.log("=>(Edit.vue:131) tempCentro", tempCentro);
-        // form.TiempoEstimado = data.nombresOT[form.ordentrabajo_ids.value][tiemposEstimados[tempCentro]];
+        // form.TiempoEstimado = data.nombresOT[form.ordenproduccion_ids.value][tiemposEstimados[tempCentro]];
     }
     form.TiempoEstimado = props.generica.TiempoEstimado
     form.actividad_id = props.generica.actividad_id
@@ -142,14 +136,14 @@ function RecuperarForm() {
 }
 
 
-watch(() => form.ordentrabajo_ids, (newX) => {
+watch(() => form.ordenproduccion_ids, (newX) => {
     data.soloUnaVez = true
-    if (newX && form.tipoReporte.value !== 2 && form.ordentrabajo_ids) { //si no es una disponibilidad
+    if (newX && form.tipoReporte.value !== 2 && form.ordenproduccion_ids) { //si no es una paro
         data.tempCentro = form.centrotrabajo_id?.value - 1
-        form.TiempoEstimado = data.nombresOT[form.ordentrabajo_ids.value][tiemposEstimados[data.tempCentro]];
+        form.TiempoEstimado = data.nombresOT[form.ordenproduccion_ids.value][tiemposEstimados[data.tempCentro]];
     } else {
-        // form.ordentrabajo_id =
-        console.log(form.ordentrabajo_ids) //se pondra dos digitos del año seguido de 000
+        // form.ordenproduccion_id =
+        console.log(form.ordenproduccion_ids) //se pondra dos digitos del año seguido de 000
     }
 })
 watch(() => form.hora_inicial, (newX) => {
@@ -200,7 +194,7 @@ watch(() => props.show, () => {
 
         data.BanderaTipo = false
         form.tipoReporte = opcinesActividadOTros[props.generica?.tipoReporte]
-        data.ordentrabajo_ids = data.nombresOT.map((val, inde) => ({
+        data.ordenproduccion_ids = data.nombresOT.map((val, inde) => ({
             title: val.Item?.replace(/_/g, " "),
             value: inde,
         }))
@@ -209,15 +203,15 @@ watch(() => props.show, () => {
             valueID: val.id,
         }))
 
-        let posicionOrden = data.ordenTemporal.findIndex(obj => obj.valueID == props.generica?.ordentrabajo_id)
+        let posicionOrden = data.ordenTemporal.findIndex(obj => obj.valueID == props.generica?.ordenproduccion_id)
 
-        form.ordentrabajo_ids = data.ordentrabajo_ids[posicionOrden]
-        // form.ordentrabajo_id = data.ordentrabajo_ids[posicionOrden]['title']
+        form.ordenproduccion_ids = data.ordenproduccion_ids[posicionOrden]
+        // form.ordenproduccion_id = data.ordenproduccion_ids[posicionOrden]['title']
 
         form.centrotrabajo_id = data.centrotrabajo_id[props.generica?.centrotrabajo_id]
 
         form.actividad_id = data.actividad_id[props.generica?.actividad_id] ? data.actividad_id[props.generica?.actividad_id] : null
-        form.disponibilidad_id = data.disponibilidad_id[props.generica?.disponibilidad_id] ? data.disponibilidad_id[props.generica?.disponibilidad_id] : null
+        form.paro_id = data.paro_id[props.generica?.paro_id] ? data.paro_id[props.generica?.paro_id] : null
         form.reproceso_id = data.reproceso_id[props.generica?.reproceso_id] ? data.reproceso_id[props.generica?.reproceso_id] : null
 
         form.cantidad = props.generica?.cantidad
@@ -225,7 +219,7 @@ watch(() => props.show, () => {
         form.hora_inicial = props.generica?.hora_inicial
 
 
-        let posicionUser = props.empleados.findIndex(obj => obj.value == props.generica?.operario_id)
+        let posicionUser = props.empleados.findIndex(obj => obj.value == props.generica?.user_id)
         form.user_id = props.empleados[posicionUser]
 
         form.nombreTablero = props.generica?.nombreTablero
@@ -277,7 +271,7 @@ let ValidarCreateReporte = () => {
     const mensaje = ' es obligatorio'
     if (tipo == 0) {
         result = ValidarNotNull([
-            'ordentrabajo_ids',
+            'ordenproduccion_ids',
             'centrotrabajo_id',
             'actividad_id',
         ])
@@ -286,7 +280,7 @@ let ValidarCreateReporte = () => {
     if (tipo == 1) {
         result = ValidarNotNull([
             'centrotrabajo_id',
-            'ordentrabajo_ids',
+            'ordenproduccion_ids',
             'actividad_id',
             'reproceso_id',
         ])
@@ -295,16 +289,16 @@ let ValidarCreateReporte = () => {
     if (tipo == 2) {
         result = ValidarNotNull([
             'centrotrabajo_id',
-            'disponibilidad_id',
+            'paro_id',
         ])
-    } //disponibilidad
+    } //paro
 
     let objectMessages = {
-        'ordentrabajo_ids': 'Orden trabajo',
+        'ordenproduccion_ids': 'Orden trabajo',
         'actividad_id': 'Actividad',
         'reproceso_id': 'Reproceso',
         'centrotrabajo_id': 'Centro de trabajo',
-        'disponibilidad_id': 'Disponibilidad',
+        'paro_id': 'paro',
     }
     if (result != '') return objectMessages[result] + mensaje
     else return result
@@ -312,7 +306,7 @@ let ValidarCreateReporte = () => {
 
 const update = () => {
     if (data.mensajeFalta === '' && data.errorTranscurrido === '') {
-        form.ordentrabajo_id = form.ordentrabajo_ids
+        form.ordenproduccion_id = form.ordenproduccion_ids
         // data.mensajeFalta = ValidarCreateReporte();
         console.log("🧈 debu form.tipoReporte.value:", form.tipoReporte.value);
         data.mensajeFalta = ValidarCreateReporte();
@@ -333,9 +327,9 @@ const update = () => {
             form.reproceso_id = StringResultAny != '' ? StringResultAny : '';
         }
 
-        if (form.tipoReporte.value === 2) { //disponibilidad
-            StringResultAny = LookForValueInArray(props.losSelect.disponibilidad, form.disponibilidad_id)
-            form.disponibilidad_id = StringResultAny != '' ? StringResultAny : '';
+        if (form.tipoReporte.value === 2) { //paro
+            StringResultAny = LookForValueInArray(props.losSelect.paro, form.paro_id)
+            form.paro_id = StringResultAny != '' ? StringResultAny : '';
         }
 
 
@@ -405,24 +399,24 @@ const update = () => {
                         />
                     </div>
 
-                    <div id="Sordentrabajo" v-if="form.tipoReporte.value != 2" class="xl:col-span-2 col-span-1">
-                        <label name="ordentrabajo_ids"> Orden de trabajo </label>
-                        <v-select :options="data['ordentrabajo_ids']" label="title"
-                                  v-model="form['ordentrabajo_ids']"></v-select>
-                        <InputError class="mt-2" :message="form.errors['ordentrabajo_id']"/>
+                    <div id="Sordenproduccion" v-if="form.tipoReporte.value != 2" class="xl:col-span-2 col-span-1">
+                        <label name="ordenproduccion_ids"> Orden de trabajo </label>
+                        <v-select :options="data['ordenproduccion_ids']" label="title"
+                                  v-model="form['ordenproduccion_ids']"></v-select>
+                        <InputError class="mt-2" :message="form.errors['ordenproduccion_id']"/>
                     </div>
 
-                    <div v-if="form.ordentrabajo_ids && form.tipoReporte.value != 2"
+                    <div v-if="form.ordenproduccion_ids && form.tipoReporte.value != 2"
                          class="w-full lg:col-span-2 col-span-1">
                         <InputLabel for="index" :value="arrayMostrarDelCodigo[0]"/>
                         <TextInput id="index" type="text" disabled class="mt-1 block w-full bg-gray-200"
-                                   :value="data.nombresOT[form.ordentrabajo_ids.value][Cabezera[0]]"/>
+                                   :value="data.nombresOT[form.ordenproduccion_ids.value][Cabezera[0]]"/>
                     </div>
 
-                    <div v-if="form.ordentrabajo_ids && form.tipoReporte.value != 2" class="w-full col-span-1">
+                    <div v-if="form.ordenproduccion_ids && form.tipoReporte.value != 2" class="w-full col-span-1">
                         <InputLabel for="index" :value="arrayMostrarDelCodigo[1]"/>
                         <TextInput id="index" type="text" disabled class="mt-1 block w-full bg-gray-200"
-                                   :value="data.nombresOT[form.ordentrabajo_ids.value][Cabezera[1]]"/>
+                                   :value="data.nombresOT[form.ordenproduccion_ids.value][Cabezera[1]]"/>
                     </div>
 
                     <div id="Scentrotrabajo" class=" col-span-1">
@@ -434,7 +428,7 @@ const update = () => {
 
 
                     <!-- tiempo estimado -->
-                    <div v-if="form.ordentrabajo_ids && form.centrotrabajo_id && form.tipoReporte.value !== 2"
+                    <div v-if="form.ordenproduccion_ids && form.centrotrabajo_id && form.tipoReporte.value !== 2"
                          class=" col-span-1">
                         <InputLabel for="index" :value="arrayMostrarDelCodigo[3]"/>
                         <TextInput id="index" type="text" disabled class="mt-1 block w-full bg-gray-200"
@@ -455,11 +449,11 @@ const update = () => {
                                   v-model="form['reproceso_id']"></v-select>
                         <InputError class="mt-2" :message="form.errors['reproceso_id']"/>
                     </div>
-                    <div id="Sdisponibilidad" v-if="form.tipoReporte.value == 2" class="xl:col-span-1 col-span-1">
-                        <label name="disponibilidad_id"> Disponibilidad</label>
-                        <v-select :options="data['disponibilidad_id']" label="title" required
-                                  v-model="form['disponibilidad_id']"></v-select>
-                        <InputError class="mt-2" :message="form.errors['disponibilidad_id']"/>
+                    <div id="Sparo" v-if="form.tipoReporte.value == 2" class="xl:col-span-1 col-span-1">
+                        <label name="paro_id"> paro</label>
+                        <v-select :options="data['paro_id']" label="title" required
+                                  v-model="form['paro_id']"></v-select>
+                        <InputError class="mt-2" :message="form.errors['paro_id']"/>
                     </div>
                     <!-- termina -->
                 </div>

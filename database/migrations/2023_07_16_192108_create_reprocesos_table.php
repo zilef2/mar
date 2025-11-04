@@ -15,7 +15,7 @@ class CreateReprocesosTable extends Migration
         Schema::create('reprocesos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('codigo');
+            
             $table->timestamps();
         });
 
@@ -45,13 +45,13 @@ class CreateReprocesosTable extends Migration
                 ->references('id')
                 ->on('centrotrabajos')
                 ->onDelete('restrict'); //cascade| restrict | set null
-            $table->foreign('disponibilidad_id')
+            $table->foreign('paro_id')
                 ->references('id')
-                ->on('disponibilidads')
+                ->on('paros')
                 ->onDelete('restrict'); //cascade| restrict | set null
 
 
-            $table->foreign('operario_id')
+            $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('restrict'); //cascade| restrict | set null

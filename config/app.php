@@ -8,6 +8,8 @@ return [
     'debug' => (bool) env('APP_DEBUG', false),
     'url' => env('APP_URL', 'http://localhost'),
     'asset_url' => env('ASSET_URL'),
+    'sap_gen' => env('sap_gen', null),
+
 
     /*
     |--------------------------------------------------------------------------

@@ -20,18 +20,14 @@ class Reporte extends Model
         'hora_final',
         'tiempo_transcurrido',
         'actividad_id',
-        'centrotrabajo_id',
-        'ordentrabajo_id',
-
-        'disponibilidad_id',
         'reproceso_id',
 
-        'operario_id',
+        'user_id',
 
         // 'calendario_id',
         //19 sept2023
         'tipoFinalizacion', //BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
-        'tipoReporte', //acti, repro,disponibilidad
+        'tipoReporte', //acti, repro,paro
 
         //info de la orden de trabajo
         'nombreTablero',
@@ -42,14 +38,12 @@ class Reporte extends Model
     // public function reportes() { return $this->hasMany('App\Models\Reporte'); }
 
     public function actividad(): BelongsTo { return $this->BelongsTo(Actividad::class); }
-    public function centrotrabajo(): BelongsTo { return $this->BelongsTo(Centrotrabajo::class,'centrotrabajo_id'); }
-    // public function material(): BelongsTo { return $this->BelongsTo(Material::class, 'material_id'); }
-    public function ordentrabajo(): BelongsTo { return $this->BelongsTo(Ordentrabajo::class); }
-    public function operario(): BelongsTo { return $this->BelongsTo(User::class, 'operario_id'); }
+    public function ordenproduccion(): BelongsTo { return $this->BelongsTo(ordenproduccion::class); }
+    public function operario(): BelongsTo { return $this->BelongsTo(User::class, 'user_id'); }
 
     public function pieza(): BelongsTo { return $this->BelongsTo(Pieza::class); }
 
-    public function disponibilidad(): BelongsTo { return $this->BelongsTo(Disponibilidad::class,'disponibilidad_id'); }
+    public function paro(): BelongsTo { return $this->BelongsTo(paro::class,'paro_id'); }
     public function reproceso(): BelongsTo { return $this->BelongsTo(Reproceso::class); }
 
 

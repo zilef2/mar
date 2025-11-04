@@ -15,7 +15,7 @@ const emit = defineEmits(["close"]);
 const form = useForm({});
 
 const destory = () => {
-    form.delete(route('disponibilidad.destroy', props.generica?.id), {
+    form.delete(route('paro.destroy', props.generica?.id), {
         preserveScroll: true,
         onSuccess: () => {
             emit("close")
