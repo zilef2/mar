@@ -357,13 +357,13 @@ const update = () => {
                     <div v-if="props.numberPermissions > 8" id="opcinesActividadO"
                          class="xl:col-span-2 col-span-1">
                         <label name=""> Reportar en nombre de: </label>
-                        <v-select :options="props.empleados" disabled label="title"
-                                  v-model="form.user_id" class="bg-gray-500"></v-select>
+                        <vSelect :options="props.empleados" disabled label="title"
+                                  v-model="form.user_id" class="bg-gray-500"></vSelect>
                     </div>
                     <div id="opcinesActividadO" class="xl:col-span-2 col-span-1">
                         <label name=""> Tipo de reporte </label>
-                        <v-select :options="opcinesActividadOTros" label="title" disabled
-                                  v-model="form.tipoReporte"></v-select>
+                        <vSelect :options="opcinesActividadOTros" label="title" disabled
+                                  v-model="form.tipoReporte"></vSelect>
                     </div>
                     <!-- empieza -->
 
@@ -401,8 +401,8 @@ const update = () => {
 
                     <div id="Sordenproduccion" v-if="form.tipoReporte.value != 2" class="xl:col-span-2 col-span-1">
                         <label name="ordenproduccion_ids"> Orden de trabajo </label>
-                        <v-select :options="data['ordenproduccion_ids']" label="title"
-                                  v-model="form['ordenproduccion_ids']"></v-select>
+                        <vSelect :options="data['ordenproduccion_ids']" label="title"
+                                  v-model="form['ordenproduccion_ids']"></vSelect>
                         <InputError class="mt-2" :message="form.errors['ordenproduccion_id']"/>
                     </div>
 
@@ -421,8 +421,8 @@ const update = () => {
 
                     <div id="Scentrotrabajo" class=" col-span-1">
                         <label name="centrotrabajo_id"> Centro de trabajo </label>
-                        <v-select :options="data['centrotrabajo_id']" label="title"
-                                  v-model="form['centrotrabajo_id']"></v-select>
+                        <vSelect :options="data['centrotrabajo_id']" label="title"
+                                  v-model="form['centrotrabajo_id']"></vSelect>
                         <InputError class="mt-2" :message="form.errors['centrotrabajo_id']"/>
                     </div>
 
@@ -439,20 +439,20 @@ const update = () => {
                     <div id="Sactividad" v-if="form.tipoReporte.value == 0 || form.tipoReporte.value == 1"
                          class="xl:col-span-1 col-span-1">
                         <label name="label_actividad_id"> Actividad </label>
-                        <v-select :options="data['actividad_id']" label="title" required
-                                  v-model="form.actividad_id"></v-select>
+                        <vSelect :options="data['actividad_id']" label="title" required
+                                  v-model="form.actividad_id"></vSelect>
                         <InputError class="mt-2" :message="form.errors['actividad_id']"/>
                     </div>
                     <div id="Sreproceso" v-if="form.tipoReporte.value == 1" class="xl:col-span-1 col-span-1">
                         <label name="reproceso_id"> Reproceso</label>
-                        <v-select :options="data['reproceso_id']" label="title" required
-                                  v-model="form['reproceso_id']"></v-select>
+                        <vSelect :options="data['reproceso_id']" label="title" required
+                                  v-model="form['reproceso_id']"></vSelect>
                         <InputError class="mt-2" :message="form.errors['reproceso_id']"/>
                     </div>
                     <div id="Sparo" v-if="form.tipoReporte.value == 2" class="xl:col-span-1 col-span-1">
                         <label name="paro_id"> paro</label>
-                        <v-select :options="data['paro_id']" label="title" required
-                                  v-model="form['paro_id']"></v-select>
+                        <vSelect :options="data['paro_id']" label="title" required
+                                  v-model="form['paro_id']"></vSelect>
                         <InputError class="mt-2" :message="form.errors['paro_id']"/>
                     </div>
                     <!-- termina -->

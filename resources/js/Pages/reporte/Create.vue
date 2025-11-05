@@ -15,10 +15,6 @@ import Elselect from "@/Pages/reporte/elselect.vue";
 
 
 
-const Hardcoded = [
-    '23328-4'
-]
-
 const props = defineProps({
     show: Boolean,
     title: String,
@@ -294,31 +290,30 @@ const SendToBackend = () => {
 
 
 //very usefull
-const opcinesActividadOTros = [{title: 'Actividad', value: 0}, {
-    title: 'Reproceso',
-    value: 1
-}, {title: 'paro(paro)', value: 2}];
-const arrayMostrarDelCodigo = ['Nombre Tablero', '% avance', 'OT+Item', 'Tiempo estimado'];
-const Cabezera = ['Nombre_tablero', 'avance'];
+const opcinesActividadOTros = [
+    {title: 'Actividad', value: 0}, 
+    {title: 'Reproceso', value: 1},
+    {title: 'Paro', value: 2}
+];
 </script>
 
 <template>
     <!--    <meta http-equiv="refresh" content="120">-->
 
     <section class="space-y-6  dark:text-white">
-        <Modal :show="props.show" @close="emit('close')" :maxWidth="'4xl'">
+        <Modal :show="props.show" @close="emit('close')" :maxWidth="'6xl'">
             <form class="px-6 my-8" @submit.prevent="create">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-white">
                     {{ lang().label.add }} {{ props.title }}
                 </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                     <div v-if="props.numberPermissions > 1" id="opcinesActividadO" class="xl:col-span-2 col-span-1">
                         <label class=" dark:text-white" name=""> Reportar en nombre de:
                             <small>(Opcional) </small></label>
                         <vSelect :options="props.empleados" label="title" class="dark:bg-gray-400"
                                   v-model="form.user_id" append-to-body></vSelect>
                     </div>
-                    <div id="opcinesActividadO" class="xl:col-span-2 col-span-1 ">
+                    <div id="opcinesActividadO" class="xl:col-span-1 col-span-1 ">
                         <label class=" dark:text-white"> Tipo de reporte </label>
                         <vSelect :options="opcinesActividadOTros" label="title" class="dark:bg-gray-400"
                                   v-model="form.tipoReporte" append-to-body></vSelect>
@@ -342,32 +337,8 @@ const Cabezera = ['Nombre_tablero', 'avance'];
                         <InputError class="mt-2" :message="form.errors['hora_inicial']"/>
                     </div>
 
-                    <div id="Sordenproduccion" v-if="form.tipoReporte.value !== 2" class="xl:col-span-2 col-span-1">
-                        <label name="ordenproduccion_ids" class=" dark:text-white"> Orden de trabajo </label>
-                        <vSelect :options="data['ordenproduccion_ids']" label="title" class="dark:bg-gray-400"
-                                  v-model="form['ordenproduccion_ids']" append-to-body
-                        ></vSelect>
-                        <InputError class="mt-2" :message="form.errors['ordenproduccion_id']"/>
-                    </div>
-
-<!--todo: borrar ordenproduccion_ids-->
-
-                  
-
-
-                    <!-- tiempo estimado -->
-                    <div v-if="form.ordenproduccion_ids && form.centrotrabajo_id && form.tipoReporte.value !== 2" class=" col-span-1 dark:text-white">
-                        <InputLabel :for="index" :value="arrayMostrarDelCodigo[3]"/>
-                        <TextInput :id="index" type="text" disabled class="mt-1 h-[36px] block w-full bg-gray-200 dark:bg-gray-400 dark:text-white"
-                                   v-model="form.TiempoEstimado"
-                        />
-                    </div>
-                    
-                    asdasd{{props.centrotrabajo}} <br>
-                    
-                    <elselect name="centrotrabajo" :form="form" :data="data" />
-
-                   
+                    asdasdas {{props.ordenproduccion}}
+                    <elselect name="orden_produccion" :form="form" :data="data" />
 
                     <!-- eleccion -->
                     <div id="actividad" v-if="form.tipoReporte.value === 0 || form.tipoReporte.value === 1" class="xl:col-span-2 col-span-1">
@@ -385,7 +356,7 @@ const Cabezera = ['Nombre_tablero', 'avance'];
                         <InputError class="mt-2" :message="form.errors['reproceso_id']"/>
                     </div>
                     <div id="paro" v-if="form.tipoReporte.value === 2" class="xl:col-span-3  col-span-1">
-                        <label name="paro_id" class=" dark:text-white"> paro</label>
+                        <label name="paro_id" class=" dark:text-white"> Paro</label>
                         <vSelect :options="data['paro_id']" label="title" required append-to-body
                                   v-model="form['paro_id']" class="dark:bg-gray-400"
                         ></vSelect>

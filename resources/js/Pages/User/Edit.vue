@@ -111,8 +111,8 @@ const flow = ['year', 'month', 'calendar'];
                             <label name="labelSelectVue"> {{atributosform.label}} </label>
                             <small class="text-lg ml-1 font-bold"> {{ titulos[indice].required ? '*':'ㅤ' }} </small>
                           </div>
-                            <v-select :options="data[atributosform.idd]" label="title" class="text-lg h-8"
-                                v-model="form[atributosform.idd]"></v-select>
+                            <vSelect :options="data[atributosform.idd]" label="title" class="text-lg h-8"
+                                v-model="form[atributosform.idd]"></vSelect>
                             <InputError class="mt-2" :message="form.errors[atributosform.idd]" />
                         </div>
 

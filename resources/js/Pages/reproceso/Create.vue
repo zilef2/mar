@@ -58,15 +58,7 @@ props.titulos.forEach(names =>
 
 let validar = () => {
     try{
-        data.valido = true
-        console.log("🧈 debu form.centro_id:", form.centro_id);
-        form.centro_id.forEach(element => {
-            if(element.value === 0){
-                data.valido = false
-                console.log("🧈 debu valido:", data.valido);
-                throw new Error('BreakException');
-            }
-        });
+        if(form.nombre) data.valido = true
     } catch (e) {
         // if (e.message !== 'BreakException') throw e;
     }
@@ -95,24 +87,6 @@ watchEffect(() => {
     }
 })
 
-function nuevoHijo(){
-    data.centros.push(0)
-    form.centro_id.push(props.losSelect[0])
-}
-
-let menosHijo = () => {
-    data.centros.length = data.centros.length - 1
-    form.centro_id.length = form.centro_id.length - 1
-}
-
-
-// const roles = props.roles?.map(role => ({
-//     label: role.name.replace(/_/g, " "),
-//     value: (role.name)
-// }))
-
-//very usefull
-const sexos = [{ label: 'Masculino', value: 0 }, { label: 'Femenino', value: 1 }];
 </script>
 
 <template>
@@ -123,12 +97,12 @@ const sexos = [{ label: 'Masculino', value: 0 }, { label: 'Femenino', value: 1 }
                     {{ lang().label.add }} {{ props.title }}
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div v-for="(centro, index) in data.centros" id="SelectVue">
-                        <label name="labelSelectVue"> Centro de trabajo </label>
-                        <v-select :options="props.losSelect" label="title"
-                                  v-model="form.centro_id[index]"></v-select>
-                        <InputError class="mt-2" :message="form.errors.centro_id" />
-                    </div>
+<!--                    <div v-for="(centro, index) in data.centros" id="SelectVue">-->
+<!--                        <label name="labelSelectVue"> Centro de trabajo </label>-->
+<!--                        <vSelect :options="props.losSelect" label="title"-->
+<!--                                  v-model="form.centro_id[index]"></vSelect>-->
+<!--                        <InputError class="mt-2" :message="form.errors.centro_id" />-->
+<!--                    </div>-->
                     <div class="">
                         <InputLabel for="nombre" :value="lang().label.nombre" />
                         <TextInput id="nombre" type="text" class="mt-1 block w-full"
@@ -137,16 +111,16 @@ const sexos = [{ label: 'Masculino', value: 0 }, { label: 'Femenino', value: 1 }
                         <InputError class="mt-2" :message="form.errors['nombre']" />
                     </div>
                 </div>
-                <div class="flex my-5 gap-8">
-                    <PrimaryButton type="button" :disabled="form.processing" @click="nuevoHijo()"> Mas centros </PrimaryButton>
-                    <PrimaryButton type="button" :disabled="form.processing" @click="menosHijo()"> Menos centros </PrimaryButton>
-                </div>
+<!--                <div class="flex my-5 gap-8">-->
+<!--                    <PrimaryButton type="button" :disabled="form.processing" @click="nuevoHijo()"> Mas centros </PrimaryButton>-->
+<!--                    <PrimaryButton type="button" :disabled="form.processing" @click="menosHijo()"> Menos centros </PrimaryButton>-->
+<!--                </div>-->
                 <div class=" my-8 flex justify-end">
                     <SecondaryButton :disabled="form.processing" @click="emit('close')"> {{ lang().button.close }}
                     </SecondaryButton>
                     <PrimaryButton class="ml-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
                         @click="create">
-                        {{ lang().button.add }} {{ form.processing ? + '...' : '' }}
+                        {{ lang().button.add }} {{ form.processing ?  '...' : '' }}
                     </PrimaryButton>
                 </div>
             </form>

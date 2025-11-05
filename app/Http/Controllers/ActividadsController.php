@@ -38,13 +38,7 @@ class ActividadsController extends Controller
     public function index(Request $request) {
         $permissions = Myhelp::EscribirEnLog($this, $this->nombreClase);
         $numberPermissions = Myhelp::getPermissionToNumber($permissions);
-        $user = Auth::user();
-
-        // if($numberPermissions > 1){
         $Actividads = Actividad::query();
-        // }else{
-        //     $Actividads = Actividad::Where('user_id',$user->id);
-        // }
 
         if ($request->has('search')) {
             $Actividads->where(function ($query) use ($request) {
@@ -58,6 +52,7 @@ class ActividadsController extends Controller
         }else{
             $Actividads->orderByDesc('created_at');
         }
+		
         $this->MapearClasePP($Actividads, $numberPermissions);
 
         // $losSelect = $this->SelectsMasivos($numberPermissions, $atributos_id);
@@ -72,6 +67,7 @@ class ActividadsController extends Controller
             $page,
             ['path' => request()->url()]
         );
+		
         return Inertia::render('actividad/Index', [
             'breadcrumbs'           => [['label' => __('app.label.Actividad'), 'href' => route('actividad.index')]],
             'title'                 => __('app.label.Actividad'),
@@ -80,9 +76,7 @@ class ActividadsController extends Controller
             'fromController'        => $fromController,
             'total'                 => $total,
             'numberPermissions'     => $numberPermissions,
-            'losSelect'             => [],//todo:viejo
-
-            // 'losSelect'             => $losSelect ?? [],
+            'losSelect'             => [],
         ]);
     }
 
@@ -104,9 +98,9 @@ class ActividadsController extends Controller
             foreach ($this->thisAtributos as $value) {
                 $guardar[$value] = $request->$value;
             }
-            $guardar['tipo'] = $guardar['tipo']['value'];
-            $guardar['codigo'] = 10;
-            $guardar['centro_id'] = null;
+//            $guardar['tipo'] = $guardar['tipo']['value'];
+//            $guardar['codigo'] = 10;
+//            $guardar['centro_id'] = null;
             $Actividad = Actividad::create($guardar);
 
             DB::commit();

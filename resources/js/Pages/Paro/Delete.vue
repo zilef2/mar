@@ -2,23 +2,20 @@
 import DangerButton from '@/Components/DangerButton.vue';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { useForm } from '@inertiajs/vue3';
-import { watchEffect } from 'vue';
+import {useForm} from '@inertiajs/vue3';
 
 const props = defineProps({
     show: Boolean,
     title: String,
-    selectedId: Object,
+    Paroa: Object,
 })
 
 const emit = defineEmits(["close"]);
 
-const form = useForm({
-    id: []
-})
+const form = useForm({});
 
 const destory = () => {
-    form.post(route('user.destroy-bulk'), {
+    form.delete(route('Paro.destroy', props.Paroa?.id), {
         preserveScroll: true,
         onSuccess: () => {
             emit("close")
@@ -28,12 +25,6 @@ const destory = () => {
         onFinish: () => null,
     })
 }
-
-watchEffect(() => {
-    if (props.show) {
-        form.id = props.selectedId
-    }
-})
 
 </script>
 
@@ -45,14 +36,14 @@ watchEffect(() => {
                     {{ lang().label.delete }} {{ props.title }}
                 </h2>
                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    {{ lang().label.delete_confirm }} {{ props.selectedId?.length }} {{ props.title }}?
+                    {{ lang().label.delete_confirm }} <b>{{ props.Paroa?.name }}</b>?
                 </p>
                 <div class="mt-6 flex justify-end">
                     <SecondaryButton :disabled="form.processing" @click="emit('close')"> {{ lang().button.close }}
                     </SecondaryButton>
                     <DangerButton class="ml-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
                         @click="destory">
-                        {{ form.processing ? 'Delete...' : 'Delete' }}
+                        {{ form.processing ? lang().button.delete + '...' : lang().button.delete }}
                     </DangerButton>
                 </div>
             </form>

@@ -2,9 +2,10 @@
 
 return [
     'label' => [
+        //paros
+        'descripcion' => 'descripción',
         //actividad
         'identificacion' => 'Identificación',
-        //actividad
         'tipo' => 'tipo',
         'Tipo' => 'Tipo',
         'centros' => 'Centros',
@@ -13,10 +14,10 @@ return [
         'sheet' => 'Hojas de google',
 
         //clases simples
-        'ordenproduccion' => 'Orden de trabajo',
+        'ordenproduccion' => 'Orden de producción',
         'Actividad' => 'Actividad',
         'Centrotrabajo' => 'Centro de trabajo',
-        'paro' => 'paro',
+        'Paro' => 'Paro',
         'Material' => 'Material',
         'Pieza' => 'Pieza',
         'Reproceso' => 'Reproceso',
@@ -50,7 +51,6 @@ return [
         'centrotrabajo' => 'Centro de trabajo',
         'paro' => 'paro',
         'material' => 'Material',
-        'ordenproduccion' => 'Orden de trabajo',
         'calendario' => 'Calendario',
         'pieza' => 'Pieza',
         'reproceso' => 'Reproceso',
@@ -159,6 +159,7 @@ return [
     ],
     'button' => [
 
+        'new' => 'Nuevo',
         'subir' => 'Subir',
         'login' => 'Ingresar',
         'loading' => 'Cargando...',

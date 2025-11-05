@@ -90,8 +90,8 @@ const flow = ['year', 'month', 'calendar'];
                         <!-- si es foreign -->
                         <div v-if="atributosform.type =='foreign'" id="SelectVue">
                             <label name="labelSelectVue"> {{atributosform.label}} </label>
-                            <v-select :options="data[atributosform.idd]" label="title"
-                                v-model="form[atributosform.idd]"></v-select>
+                            <vSelect :options="data[atributosform.idd]" label="title"
+                                v-model="form[atributosform.idd]"></vSelect>
                             <InputError class="mt-2" :message="form.errors[atributosform.idd]" />
                         </div>
 

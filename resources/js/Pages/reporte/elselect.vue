@@ -11,12 +11,20 @@ const props = defineProps({
 });
 
 // key completo: ej. "centrotrabajo_id"
-const field = computed(() => `${props.name}_id`);
+const field = computed(() => {
+    // let thename = props.name.replace(/_/g, '') // reemplaza todos los _ por espacios
+    // return `${thename}_id`
+    return 'or'
+});
 
 // Capitaliza la primera letra para usar en el label
-const labelText = computed(() => 
-  props.name.charAt(0).toUpperCase() + props.name.slice(1).toLowerCase()
-);
+const labelText = computed(() => {
+  return props.name
+    .replace(/_/g, ' ')
+    .toLowerCase()
+    .replace(/\b\w/g, c => c.toUpperCase());
+});
+
 </script>
 
 <template>

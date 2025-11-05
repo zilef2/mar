@@ -31,7 +31,7 @@ class CreateReportesTable extends Migration
             $table->unsignedBigInteger('pieza_id')->nullable();
             $table->integer('cantidad')->nullable();
             
-            $table->unsignedBigInteger('paro_id')->nullable();
+//            $table->unsignedBigInteger('paro_id')->nullable();
             $table->unsignedBigInteger('reproceso_id')->nullable();
 
 			$table->integer('tipoFinalizacion')->default(1);

@@ -102,7 +102,7 @@ const sexos = [{ label: 'Masculino', value: 0 }, { label: 'Femenino', value: 1 }
 
 <template>
     <section class="space-y-6">
-        <Modal :show="props.show" @close="emit('close')" :maxWidth="'xl4'">
+        <Modal :show="props.show" @close="emit('close')" :maxWidth="'4xl'">
             <form class="p-6" @submit.prevent="create">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                     {{ lang().label.add }} {{ props.title }}
@@ -112,10 +112,10 @@ const sexos = [{ label: 'Masculino', value: 0 }, { label: 'Femenino', value: 1 }
 
                         <div v-if="atributosform.type === 'foreign'" id="SelectVue" class="">
                             <label name="labelSelectVue"> {{ atributosform.label }} </label>
-                            <v-select :options="props.losSelect[0]"
+                            <vSelect :options="props.losSelect[0]"
                                       v-model="form[atributosform.idd]"
                                       :reduce="element => element.value" label="name"
-                            ></v-select>
+                            ></vSelect>
                             <InputError class="mt-2" :message="form.errors[atributosform.idd]"/>
                         </div>
 
@@ -153,18 +153,3 @@ const sexos = [{ label: 'Masculino', value: 0 }, { label: 'Femenino', value: 1 }
     </section>
 </template>
 
-<style>
-textarea {
-    @apply px-3 py-2 border border-gray-300 rounded-md;
-}
-
-[name="labelSelectVue"],
-.muted {
-    color: #1b416699;
-}
-
-[name="labelSelectVue"] {
-    /* font-size: 22px; */
-    font-weight: 600;
-}
-</style>

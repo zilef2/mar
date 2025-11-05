@@ -13,7 +13,7 @@ import "vue-select/dist/vue-select.css";
 const props = defineProps({
     show: Boolean,
     title: String,
-    generica: Object,
+    Paroa: Object,
     titulos: Object, //parametros de la clase principal
     losSelect: Object,
 
@@ -48,19 +48,19 @@ props.titulos.forEach(names => {
 watchEffect(() => {
     if (props.show) {
         // data.justNames.forEach(element => {
-        //     form[element] =  props.generica[element]
+        //     form[element] =  props.Paroa[element]
         // });
         form.errors = {}
         props.titulos.forEach(names => {
-            form[names['order']] = props.generica[names['order']]
+            form[names['order']] = props.Paroa[names['order']]
         });
 
-        // form.codigo = props.generica?.codigo
+        // form.codigo = props.Paroa?.codigo
     }
 })
 
 const update = () => {
-    form.put(route('generic.update', props.generica?.id), {
+    form.put(route('Paro.update', props.Paroa?.id), {
         preserveScroll: true,
         onSuccess: () => {
             emit("close")
@@ -70,7 +70,6 @@ const update = () => {
         onFinish: () => null,
     })
 }
-// const sexos = [ { label: 'Masculino', value: 'Masculino' }, { label: 'Femenino', value: 'Femenino' } ];
 
 </script>
 
@@ -126,7 +125,7 @@ const update = () => {
                     </SecondaryButton>
                     <PrimaryButton class="ml-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
                                    @click="update">
-                        {{ form.processing ? lang().button.save + '...' : lang().button.save }}
+                        {{ form.processing  ? lang().button.save + '...' : lang().button.save }}
                     </PrimaryButton>
                 </div>
             </form>

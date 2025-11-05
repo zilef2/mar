@@ -96,7 +96,7 @@ const select = () => {
 const titulos = [
     // { order: 'codigo', label: 'codigo', type: 'text' },
     { order: 'nombre', label: 'nombre', type: 'text' },
-    { order: 'centros', label: 'centros', type: 'text' },
+    // { order: 'centros', label: 'centros', type: 'text' },
 ];
 
 </script>

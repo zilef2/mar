@@ -1,15 +1,13 @@
 <?php
 //esto es main
 use App\Http\Controllers\ParametrosController;
+use App\Http\Controllers\ParoController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ActividadsController;
-use App\Http\Controllers\CentrotrabajosController;
-use App\Http\Controllers\parosController;
 //use App\Http\Controllers\ordenproduccionsController;
-//use App\Http\Controllers\PiezasController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReadGoogleSheets;
 use App\Http\Controllers\ReprocesosController;
@@ -66,8 +64,7 @@ Route::middleware('auth', 'verified')->group(function () {
 
     Route::resource('/actividad', ActividadsController::class);
 
-    Route::resource('/centrotrabajo', CentrotrabajosController::class);
-    Route::resource('/paro', parosController::class);
+    Route::resource('/Paro', ParoController::class);
     Route::resource('/reproceso', ReprocesosController::class);
     Route::get('/gsheet', ReadGoogleSheets::class);
 

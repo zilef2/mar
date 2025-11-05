@@ -153,9 +153,9 @@ const tiposOptions = [
                     </div>
                     <div >
                         <InputLabel for="tipo" :value="lang().label.Tipo" />
-                        <v-select :options="tiposOptions" label="title"
+                        <vSelect :options="tiposOptions" label="title"
                                   class="mt-1 dark:bg-gray-500 rounded-lg dark:text-gray-600"
-                                  v-model="form.tipo"></v-select>
+                                  v-model="form.tipo"></vSelect>
                     </div>
 
                     <div v-for="(centro, index) in data.centros" id="SelectVue">
@@ -164,9 +164,9 @@ const tiposOptions = [
                             Centro de trabajo
                             <!--                            {{form.centro_id[index] ?? 'no'}}-->
                         </label>
-                        <v-select :options="props.losSelect" label="title"
+                        <vSelect :options="props.losSelect" label="title"
                                   class="dark:bg-gray-500 rounded-lg dark:text-gray-600"
-                                  v-model="form.centro_id[index]"></v-select>
+                                  v-model="form.centro_id[index]"></vSelect>
                         <InputError class="mt-2" :message="form.errors.centro_id" />
                     </div>
 

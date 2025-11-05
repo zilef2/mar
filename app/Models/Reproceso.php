@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Reproceso extends Model
 {
-    use HasFactory;
 
     protected $fillable = [
         'id',

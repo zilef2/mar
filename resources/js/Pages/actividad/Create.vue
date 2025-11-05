@@ -47,17 +47,11 @@ onMounted(() => { });
 let validar = () => {
     try{
         data.valido = true
-        if(!form.nombre || !form.tipo){
+        if(!form.nombre || !form.nombre){
             data.valido = false
             throw new Error('BreakException');
         }
 
-        // form.centro_id.forEach(element => {
-        //     if(element.value === 0){
-        //         data.valido = false
-        //         throw new Error('BreakException');
-        //     }
-        // });
     } catch (e) {
         data.valido = false
     }
@@ -85,30 +79,6 @@ watchEffect(() => {
     }
 })
 
-function nuevoHijo(){
-    data.centros.push(0)
-    form.centro_id.push(props.losSelect[0])
-}
-
-let menosHijo = () => {
-    data.centros.length = data.centros.length - 1
-    form.centro_id.length = form.centro_id.length - 1
-}
-
-const tiposOptions = [
-  {
-    title: "Seleccione un tipo",
-    value: 0
-  },
-  {
-    title: "TVA",
-    value: "TVA"
-  },
-  {
-    title: "TNVA",
-    value: "TNVA"
-  },
-];
 
 </script>
 
@@ -128,34 +98,36 @@ const tiposOptions = [
                                    :error="form.errors['nombre']" />
                         <InputError class="mt-2" :message="form.errors['nombre']" />
                       </div>
-                      <div>
-                        <InputLabel for="tipo" :value="lang().label.Tipo" />
-                        <v-select :options="tiposOptions" label="title"
-                                  class="dark:bg-gray-400 rounded-lg dark:text-white"
-                                  v-model="form.tipo"></v-select>
-                      </div>
-                        <div v-for="(centro, index) in data.centros" id="SelectVue">
-                            <label name="labelSelectVue" class="dark:text-white">
-                              Centro de trabajo </label>
-                            <v-select :options="props.losSelect" label="title"
-                                      class="dark:bg-gray-400 rounded-lg dark:text-white"
-                                v-model="form.centro_id[index]"></v-select>
-                            <InputError class="mt-2" :message="form.errors.centro_id" />
-                        </div>
+<!--                      <div>-->
+<!--                        <InputLabel for="tipo" :value="lang().label.Tipo" />-->
+<!--                        <vSelect :options="tiposOptions" label="title"-->
+<!--                                  class="dark:bg-gray-400 rounded-lg dark:text-white"-->
+<!--                                  v-model="form.tipo"></vSelect>-->
+<!--                      </div>-->
+<!--                        <div v-for="(centro, index) in data.centros" id="SelectVue">-->
+<!--                            <label name="labelSelectVue" class="dark:text-white">-->
+<!--                              Centro de trabajo </label>-->
+<!--                            <vSelect :options="props.losSelect" label="title"-->
+<!--                                      class="dark:bg-gray-400 rounded-lg dark:text-white"-->
+<!--                                v-model="form.centro_id[index]"></vSelect>-->
+<!--                            <InputError class="mt-2" :message="form.errors.centro_id" />-->
+<!--                        </div>-->
 
                     </div>
 
-                    <div class="flex my-5 gap-8">
-                        <PrimaryButton type="button" :disabled="form.processing" @click="nuevoHijo()"> Mas centros </PrimaryButton>
-                        <PrimaryButton type="button" :disabled="form.processing" @click="menosHijo()"> Menos centros </PrimaryButton>
-                    </div>
+<!--                    <div class="flex my-5 gap-8">-->
+<!--                        <PrimaryButton type="button" :disabled="form.processing" @click="nuevoHijo()"> Mas centros </PrimaryButton>-->
+<!--                        <PrimaryButton type="button" :disabled="form.processing" @click="menosHijo()"> Menos centros </PrimaryButton>-->
+<!--                    </div>-->
                 </div>
                 <div class="flex my-8 justify-end">
                     <p class="text-lg mx-8 text-red-500">{{ data.mensajeError }}</p>
                     <SecondaryButton :disabled="form.processing" @click="emit('close')"> {{ lang().button.close }} </SecondaryButton>
+                    
                     <PrimaryButton class="ml-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
                         @click="create">
-                        {{lang().button.add}} {{ form.processing ? + '...' : '' }}
+                        {{lang().button.add}} 
+                        {{ form.processing ?  '...' : ' ' }}
                     </PrimaryButton>
                 </div>
             </form>

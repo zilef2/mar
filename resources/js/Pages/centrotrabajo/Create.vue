@@ -104,8 +104,8 @@ const sexos = [{ label: 'Masculino', value: 0 }, { label: 'Femenino', value: 1 }
                         <!-- si es foreign -->
                         <div v-if="atributosform.type == 'id'" id="SelectVue">
                             <label name="labelSelectVue"> {{ atributosform.label }} </label>
-                            <v-select :options="data[atributosform.idd]" label="title"
-                                v-model="form[atributosform.idd]"></v-select>
+                            <vSelect :options="data[atributosform.idd]" label="title"
+                                v-model="form[atributosform.idd]"></vSelect>
                             <InputError class="mt-2" :message="form.errors[atributosform.idd]" />
 
                         </div>
@@ -136,7 +136,7 @@ const sexos = [{ label: 'Masculino', value: 0 }, { label: 'Femenino', value: 1 }
                     </SecondaryButton>
                     <PrimaryButton class="ml-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
                         @click="create">
-                        {{ lang().button.add }} {{ form.processing ? + '...' : '' }}
+                        {{ lang().button.add }} {{ form.processing ?  '...' : '' }}
                     </PrimaryButton>
                 </div>
             </form>

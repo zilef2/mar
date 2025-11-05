@@ -19,36 +19,16 @@ class CreateReprocesosTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('centrotrabajo_reproceso', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('reproceso_id');
-            $table->foreign('reproceso_id')
-                ->references('id')
-                ->on('reprocesos')
-                ->onDelete('restrict'); //restrict | set null
-            $table->unsignedBigInteger('centrotrabajo_id');
-            $table->foreign('centrotrabajo_id')
-                ->references('id')
-                ->on('centrotrabajos')
-                ->onDelete('restrict'); //restrict | set null  
-            $table->timestamps();
-        });
-
-
-
+		//pivot table
         Schema::table('reportes', function (Blueprint $table) {
             $table->foreign('actividad_id')
                 ->references('id')
                 ->on('actividads')
                 ->onDelete('restrict'); //cascade| restrict | set null
-            $table->foreign('centrotrabajo_id')
-                ->references('id')
-                ->on('centrotrabajos')
-                ->onDelete('restrict'); //cascade| restrict | set null
-            $table->foreign('paro_id')
-                ->references('id')
-                ->on('paros')
-                ->onDelete('restrict'); //cascade| restrict | set null
+//            $table->foreign('paro_id')
+//                ->references('id')
+//                ->on('paros')
+//                ->onDelete('restrict'); //cascade| restrict | set null
 
 
             $table->foreign('user_id')
@@ -67,8 +47,7 @@ class CreateReprocesosTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('reprocesos');
-        Schema::dropIfExists('centrotrabajo_reproceso');
-        Schema::dropIfExists('reportes');
+//        Schema::dropIfExists('reprocesos');
+//        Schema::dropIfExists('reportes');
     }
 }
