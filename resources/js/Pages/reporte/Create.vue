@@ -25,16 +25,14 @@ const props = defineProps({
     empleados: Object,
 })
 const emit = defineEmits(["close"]);
-
 const data = reactive({
     params: {
         pregunta: ''
     },
-    actividad_id: props.losSelect.actividad,
-    centrotrabajo_id: props.losSelect.centrotrabajo,
-    paro_id: props.losSelect.paro,
-    ordenproduccion_id: props.losSelect.ordenproduccion,
-    reproceso_id: props.losSelect.reproceso,
+    actividad_opciones: props.losSelect.actividad,
+    paro_opciones: props.losSelect.paro,
+    ordenproduccion_opciones: props.losSelect.ordenproduccion,
+    reproceso_opciones: props.losSelect.reproceso,
     /*
     fin de los select
      */
@@ -43,47 +41,29 @@ const data = reactive({
     temp_actividad_id: null,
     valorInactivo: 'NA',
     cabeza: props.valuesGoogleCabeza,
-    ordenproduccion_ids: [],
     mensajeFalta: '',
     BanderaTipo: true,
-    mensajeTiemposAuto: '',
-    soloUnaVez: true,
-    limiteMinimo: '',
     tempCentro: 0,
 })
 
 
 //very usefull
-const justNames = [
-    // 'codigo',
+const justNames = [ //useform fields
+    'user_id',
+    'actividad_id',
+    'reproceso_id',
+    'paro_id',
+    'ordenproduccion_id',
+    
     'tipoReporte',
     'fecha',
     'hora_inicial',
     'hora_final',
-    'actividad_id',
-    'centrotrabajo_id',
-    'paro_id',
-    'user_id',
-    'ordenproduccion_id',
-    'reproceso_id',
 
-    'ordenproduccion_ids',
-    'otitem',
-    'user_id',
-
-    'nombreTablero',
-    'OTItem',
     'TiempoEstimado',
 
 ];
 const form = useForm({...Object.fromEntries(justNames.map(field => [field, '']))});
-
-const CalcularHoraActual = () => {
-    let horaActual = new Date();
-    horaActual.setHours(horaActual.getHours() - 1);
-    let formatoHora = (valor) => (valor < 10 ? `0${valor}` : valor);
-    return `${formatoHora(horaActual.getHours())}:${formatoHora(horaActual.getMinutes())}`;
-}
 
 const disableContextMenu = (event) => {
     // Prevent the default context menu behavior
@@ -92,13 +72,8 @@ const disableContextMenu = (event) => {
 };
 
 onMounted(() => {
-    data.limiteMinimo = CalcularHoraActual()
-    setInterval(() => {
-        data.limiteMinimo = CalcularHoraActual()
-    }, 60000);
-
     if (props.numberPermissions > 9) {
-        setTimeout(() => ParaElSuper(), 1500)
+        setTimeout(() => ParaElSuper(), 500)
     }
 
     // document.body.addEventListener('contextmenu', this.disableContextMenu);
@@ -109,31 +84,8 @@ onBeforeUnmount(() => {
     // document.body.removeEventListener('contextmenu', this.disableContextMenu);
 })
 
-const tiemposEstimados = [
-    "Tiempo_estimado_corte",//but contador = 0
-    "Tiempo_estimado_doblez", //2
-    "Tiempo_estimado_soldadura",
-    "Tiempo_estimado_pulida",
-    "Tiempo_estimado_ensamble", //5
-    "Tiempo_estimado_cobre",
-    "Tiempo_estimado_cableado",//7
-    "Tiempo_estimado_Ing_mec",
-    "Tiempo_estimado_Ing_elec", //9
-    "Tiempo_estimado_FM", //10
-    "Tiempo_Amarillado", //11?
-    "Tiempo_pruebas", //12?
-];
-
-
+//called from onmounted
 function ParaElSuper() {
-    let elindex = data.ordenproduccion_ids.findIndex((ele) => {
-        return ele.title === Hardcoded[0];
-    });
-
-    form.ordenproduccion_ids = data.ordenproduccion_ids[elindex];
-    form.centrotrabajo_id = data.centrotrabajo_id[2];
-    form.actividad_id = data.actividad_id[2];
-    data.mensajeTiemposAuto = 'Super administrador';
 }
 
 
@@ -141,7 +93,10 @@ let ValidarNotNull = (campos) => {
     let sonObligatorios = '';
     try {
         campos.forEach((value) => {
-            if (typeof form[value] === 'undefined' || form[value] === null || form[value].value === null || form[value].length === 0) { //&& form[value] != ''
+            if (typeof form[value] === 'undefined' || form[value] === null || form[value].value === null || form[value].length === 0) {
+              console.log("🚀🚀ValidarNotNull ~ form[value]: ", form[value]);
+              console.log("🚀🚀ValidarNotNull ~ value: ", value);
+               //&& form[value] != ''
                 sonObligatorios = value
                 throw new Error('BreakException');
             }
@@ -158,27 +113,20 @@ let ValidarCreateReporte = () => {
     const mensaje = '. Campo obligatorio'
 
     let horaactual = new Date().getHours()
-    console.log(horaactual)
-    console.log('espacio\n')
-    console.log(form.hora_inicial)
-    console.log('espacio2\n')
     let minutosDif = DiferenciaMinutos(horaactual + ':00', form.hora_inicial)
-    console.log(minutosDif)
 
-    if (minutosDif > 0) return 'Ha pasado mucho tiempo!';
+    if (minutosDif > 0) return 'Ha pasado mucho tiempo! refresque la página';
 
     if (tipo === 0) {
         result = ValidarNotNull([
-            'ordenproduccion_ids',
-            'centrotrabajo_id',
+            'ordenproduccion_id',
             'actividad_id',
         ])
     } //acti
 
     if (tipo === 1) {
         result = ValidarNotNull([
-            'centrotrabajo_id',
-            'ordenproduccion_ids',
+            'ordenproduccion_id',
             'actividad_id',
             'reproceso_id',
         ])
@@ -186,17 +134,15 @@ let ValidarCreateReporte = () => {
 
     if (tipo === 2) {
         result = ValidarNotNull([
-            'centrotrabajo_id',
             'paro_id',
         ])
     } //paro
 
     let objectMessages = {
-        'ordenproduccion_ids': 'Orden trabajo',
+        'ordenproduccion_id': 'Orden de Produccion',
         'actividad_id': 'Actividad',
         'reproceso_id': 'Reproceso',
-        'centrotrabajo_id': 'Centro de trabajo',
-        'paro_id': 'paro',
+        'paro_id': 'Paro',
     }
     if (result !== '') return objectMessages[result] + mensaje
     else return result
@@ -230,47 +176,24 @@ watchEffect(() => {
 
 watch(() => form.tipoReporte, (newX) => {
     form.actividad_id = null
-    form.centrotrabajo_id = null
     form.paro_id = null
     form.user_id = null
     form.ordenproduccion_id = null
     form.reproceso_id = null
-    form.ordenproduccion_ids = null
+    form.ordenproduccion_id = null
     // tipoReporte
-    form.otitem = null
-    form.nombreTablero = null
-    form.OTItem = null
     form.TiempoEstimado = null
 })
 
-watch(() => form.ordenproduccion_ids, (newX) => {
-    data.soloUnaVez = true
-})
-
-watch(() => form.centrotrabajo_id, (newCentro) => { //bookmark: el watcher mas modificado
-    if (newCentro && typeof newCentro.value !== 'undefined') {
-        let actividadesDelCentro = 'centrotrabajo' + newCentro.title
-        data.actividad_id = props.losSelect[actividadesDelCentro]
-
-        if (form.tipoReporte.value !== 2 && form.ordenproduccion_ids) { //si no es una paro
-
-            
-        } else {
-            console.log(form.ordenproduccion_ids) //nuevo requerimiento 2dic2023: se pondra dos digitos del año seguido de 000
-        }
-    }
-    form.actividad_id = {title: 'Seleccione actividad', value: null}
-})
 // <!--</editor-fold>-->
 
 
 // <!--<editor-fold desc="SendToBackend">-->
-    const create = () => {
-    form.ordenproduccion_id = form.ordenproduccion_ids
+const create = () => {
     data.mensajeFalta = ValidarCreateReporte();
     form.hora_inicial = formatTime()
     if (data.mensajeFalta === '') {
-        setTimeout(SendToBackend(), 500);
+        setTimeout(SendToBackend(), 200);
     }
 
 }
@@ -327,7 +250,6 @@ const opcinesActividadOTros = [
                                    :error="form.errors['fecha']"/>
                         <InputError class="mt-2" :message="form.errors['fecha']"/>
                     </div>
-                    <!--                        :value="lang().label['hora inicial'] + ', min: '+data.limiteMinimo" />-->
                     <div class=" dark:text-white col-span-1">
                         <InputLabel for="hora_inicial"
                                     :value="lang().label['hora inicial']"/>
@@ -337,17 +259,12 @@ const opcinesActividadOTros = [
                         <InputError class="mt-2" :message="form.errors['hora_inicial']"/>
                     </div>
 
-                    asdasdas {{props.ordenproduccion}}
-                    <elselect name="orden_produccion" :form="form" :data="data" />
+                    
+                    <elselect name="ordenproduccion" :form="form" :data="data" :nombreatipico="'Orden de produccion (OP)'" />
+                    <elselect name="actividad" :form="form" :data="data" />
 
-                    <!-- eleccion -->
-                    <div id="actividad" v-if="form.tipoReporte.value === 0 || form.tipoReporte.value === 1" class="xl:col-span-2 col-span-1">
-                        <label name="actividad_id" class=" dark:text-white"> Actividad </label>
-                        <vSelect :options="data['actividad_id']" label="title" required
-                                  v-model="form['actividad_id']" class="dark:bg-gray-400" append-to-body
-                        ></vSelect>
-                        <InputError class="mt-2" :message="form.errors['actividad_id']"/>
-                    </div>
+                    
+<!--                    tiporeporte = 1 es un reproceso-->
                     <div id="reproceso" v-if="form.tipoReporte.value === 1" class="xl:col-span-2 col-span-1">
                         <label name="reproceso_id" class=" dark:text-white"> Reproceso</label>
                         <vSelect :options="data['reproceso_id']" label="title" required append-to-body
@@ -369,9 +286,6 @@ const opcinesActividadOTros = [
                 <div class=" mb-8 mt-[160px] flex justify-end">
                     <h2 v-if="data.mensajeFalta !== ''" class="mx-12 px-8 text-lg font-medium text-red-600 bg-red-50 dark:text-white dark:bg-gray-800">
                         {{ data.mensajeFalta }}
-                    </h2>
-                    <h2 v-if="data.mensajeTiemposAuto !== ''" class="mx-12 px-8 text-lg font-medium text-gray-800 dark:text-white dark:bg-gray-800">
-                        {{ data.mensajeTiemposAuto }}
                     </h2>
 
                     <SecondaryButton :disabled="form.processing" @click="emit('close')"> {{ lang().button.close }}

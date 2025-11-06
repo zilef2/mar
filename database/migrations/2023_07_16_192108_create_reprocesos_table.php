@@ -19,30 +19,6 @@ class CreateReprocesosTable extends Migration
             $table->timestamps();
         });
 
-		//pivot table
-        Schema::table('reportes', function (Blueprint $table) {
-            $table->foreign('actividad_id')
-                ->references('id')
-                ->on('actividads')
-                ->onDelete('restrict'); //cascade| restrict | set null
-//            $table->foreign('paro_id')
-//                ->references('id')
-//                ->on('paros')
-//                ->onDelete('restrict'); //cascade| restrict | set null
-
-
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('restrict'); //cascade| restrict | set null
-            
-            
-            $table->foreign('reproceso_id')
-                ->references('id')
-                ->on('reprocesos')
-                ->onDelete('restrict'); //cascade| restrict | set null
-            //restrict or cascade
-        });
     }
 
     public function down()
@@ -51,3 +27,7 @@ class CreateReprocesosTable extends Migration
 //        Schema::dropIfExists('reportes');
     }
 }
+
+/*
+ *
+ */

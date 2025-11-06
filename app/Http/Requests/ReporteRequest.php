@@ -26,15 +26,10 @@ class ReporteRequest extends FormRequest
         $reporteId = $this->route('reporte') ?? null;
         return
         [
-			// 'nombre' => 'required',
             // 'codigo' => 'required|unique:reportes,codigo,'.$reporteId,
             'fecha' => 'required',
             'hora_inicial' => 'required',
             'hora_final' => 'nullable',
-            
-            // 'material_id' => 'required',
-            // 'pieza_id' => 'nullable',
-            // 'cantidad' => 'nullable',
             
             'actividad_id' => 'nullable',
             'reproceso_id' => 'nullable',

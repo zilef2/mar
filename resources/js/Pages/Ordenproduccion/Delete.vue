@@ -2,12 +2,12 @@
 import DangerButton from '@/Components/DangerButton.vue';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { useForm } from '@inertiajs/vue3';
+import {useForm} from '@inertiajs/vue3';
 
 const props = defineProps({
     show: Boolean,
     title: String,
-    generica: Object,
+    Ordenproducciona: Object,
 })
 
 const emit = defineEmits(["close"]);
@@ -15,7 +15,7 @@ const emit = defineEmits(["close"]);
 const form = useForm({});
 
 const destory = () => {
-    form.delete(route('centrotrabajo.destroy', props.generica?.id), {
+    form.delete(route('Ordenproduccion.destroy', props.Ordenproducciona?.id), {
         preserveScroll: true,
         onSuccess: () => {
             emit("close")
@@ -36,7 +36,7 @@ const destory = () => {
                     {{ lang().label.delete }} {{ props.title }}
                 </h2>
                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    {{ lang().label.delete_confirm }} <b>{{ props.generica?.name }}</b>?
+                    {{ lang().label.delete_confirm }} <b>{{ props.Ordenproducciona?.name }}</b>?
                 </p>
                 <div class="mt-6 flex justify-end">
                     <SecondaryButton :disabled="form.processing" @click="emit('close')"> {{ lang().button.close }}

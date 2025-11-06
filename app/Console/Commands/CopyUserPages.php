@@ -11,6 +11,10 @@ use Illuminate\Support\Str;
 
 /*
 php artisan make:command copy:u
+	//aquipues
+	//aquipuesSide
+php artisan optimize:clear ; php artisan ziggy:generate resources/js/ziggy.js ; npm run dev
+
 */
 
 class CopyUserPages extends Command {
@@ -42,6 +46,7 @@ class CopyUserPages extends Command {
 	public function aagenerateAttributes(): array {
 		//string text number dinero date datetime boolean foreign json
 		return [
+			'nombre'         => 'string',
 			'descripcion'    => 'string',
 			'cantidad_horas' => 'number',
 			
@@ -65,28 +70,35 @@ class CopyUserPages extends Command {
 			$modelName = $this->ask('¿Cuál es el nombre del modelo? Recuerde revisar los atributos.');
 			if (!$modelName || $modelName == '') {
 				$this->info('Sin modelo');
-				$this->error('Fallo en la linea: ' . __LINE__);
+				$this->error('Fallo copyu en la linea: ' . __LINE__);
 				
 				return 0;
 			}
 			$modelName = ucfirst($modelName);
 			
+			$this->info(Artisan::call('optimize'));
+			$this->info(Artisan::call('optimize:clear'));
+			
 			$progressBar = $this->output->createProgressBar(10);
 			$progressBar->start();
 			
 			//'generic',
-			$this->MetodologiaInicial($modelName,  null,$progressBar);
+			if($this->MetodologiaInicial($modelName,  null,$progressBar)) {;
+				$this->info('MetodologiaInicial' . self::MSJ_EXITO);
+			}
+			else {
+				$this->error('MetodologiaInicial ' . self::MSJ_FALLO . ' Fallo copyu MAIN en la linea: ' . __LINE__);
+				
+				return 0;
+			}
 			$progressBar->advance();
+			
 			
 			$this->AddAttributesVue($modelName);
 			$progressBar->advance();
 			
-			$this->info(Artisan::call('optimize'));
-			$this->info(Artisan::call('optimize:clear'));
-			$progressBar->advance();//5
-			
 			$this->Paso2($modelName, $submetodo); //web, language, sidebar , fillable , migrations
-			$progressBar->advance();//6
+			$progressBar->advance();//5
 			
 			$this->Paso3($modelName);
 			$progressBar->advance();
@@ -114,9 +126,17 @@ class CopyUserPages extends Command {
 	 */
 	public function MetodologiaInicial(string $modelName, mixed $depende, $progressBar): int {
 		$this->warn("Empezando make:model");
+		$genericWord = 'generic';
+		
 		try {
-			$this->verificarQueEstamosEnElEntornoCorrecto();
-			$progressBar->advance();//1
+			$verificadoEntorno = $this->verificarQueEstamosEnElEntornoCorrecto();
+			
+			if($verificadoEntorno) $progressBar->advance();//1
+			else {
+				$this->error('verificarQueEstamosEnElEntornoCorrecto fallo, revise los permisos de escritura' . ' Fallo copyu en la linea: ' . __LINE__);
+				
+				return 0;
+			}
 			
 			Artisan::call('make:model', ['name' => $modelName, '--all' => true]);
 		} catch (Exception $e) {
@@ -144,16 +164,16 @@ class CopyUserPages extends Command {
 			return 0;
 		}
 		
-		if ($this->ValidatePages($modelName)) {
+		if ($this->ValidatePagesGeneric($genericWord)) {
 			$this->info('Validacion de controller y pages exitosa');
 		}
 		else {
-			$this->error('Validacion de paginas fallo, revise los archivos de plantilla' . ' Fallo en la linea: ' . __LINE__);
+			$this->error('Validacion de paginas fallo, revise los archivos de plantilla' 
+			             . ' Fallo MetodologiaInicial en la linea: ' . __LINE__);
 			
 			return 0;
 		}
 		
-		$genericWord = 'generic';
 		$RealizoVueConExito = $this->MakeVuePages($genericWord, $modelName);
 		$mensaje = $RealizoVueConExito ? 
 			self::getMessage('generando') . ' Vuejs' . self::MSJ_EXITO :
@@ -174,20 +194,22 @@ class CopyUserPages extends Command {
 			);
 			return 1;
 		}else{
-			$this->error('problema con controller o vuejs' . ' Fallo en la linea: ' . __LINE__);
+			$this->error('problema con controller o vuejs' . ' Fallo MetodologiaInicial en la linea: ' . __LINE__);
 			
 			return 0;
 		}
 		
 	}
 	
-	private function ValidatePages($modelName): bool {
+	public function ValidatePagesGeneric($genericwrd): bool {
 		//validaciones del controlador
 		$ObjetoEnMira = 'Controller.php';
 		$RutaDelArchivo = 'app/Http/Controllers/';
-		$controllerExiste = $this->ExisteOno($RutaDelArchivo, $modelName, $ObjetoEnMira);
-		if (!$controllerExiste) {
-			$this->error('Fallo en la linea: ' . __LINE__);
+		$ruta = $RutaDelArchivo. 'generic'. $ObjetoEnMira;
+		$existe = file_exists(base_path($ruta));
+		
+		if (!$existe) {
+			$this->error('Fallo ValidatePags Controllers, en la linea: ' . __LINE__);
 			
 			return false;
 		}
@@ -195,9 +217,11 @@ class CopyUserPages extends Command {
 		//validaciones del frontend vuejs
 		$ObjetoEnMira = '';
 		$RutaDelArchivo = 'resources/js/Pages/';
-		$vueExiste = $this->ExisteOno($RutaDelArchivo, $modelName, $ObjetoEnMira);
-		if (!$vueExiste) {
-			$this->error('Fallo en la linea: ' . __LINE__);
+		$ruta = $RutaDelArchivo. 'generic'. $ObjetoEnMira;
+		$existe = file_exists(base_path($ruta));
+		
+		if (!$existe) {
+			$this->error('Fallo ValidatePags resources, en la linea: ' . __LINE__);
 			
 			return false;
 		}
@@ -205,31 +229,21 @@ class CopyUserPages extends Command {
 		return true;
 	}
 	
-	private function ExisteOno($primeraParte, $plantillaActual, $ObjetoEnMira): bool {
-		$sourcePath = base_path($primeraParte . $plantillaActual . $ObjetoEnMira);
-		
-		if (!File::exists($sourcePath)) {
-			$this->error("El $ObjetoEnMira de origen '$sourcePath' no existe." . ' Fallo en la linea: ' . __LINE__);
-			
-			return false;
-		}
-		
-		return true;
-	}
+
 	
-	private function MakeVuePages($plantillaActual, $modelName): bool {
+	public function MakeVuePages($plantillaActual, $modelName): bool {
 		$sourcePath = base_path('resources/js/Pages/' . $plantillaActual);
 		$destinationPath = base_path("resources/js/Pages/$modelName");
 		
 		// Add this validation
 		if (!File::exists($sourcePath)) {
-			$this->error("La carpeta de origen '$plantillaActual' no existe." . ' Fallo en la linea: ' . __LINE__);
+			$this->error("La carpeta de origen '$plantillaActual' no existe." . ' Fallo copyu en la linea: ' . __LINE__);
 			
 			return false;
 		}
 		if (File::exists($destinationPath)) {
 			$this->warn("La carpeta de destino '$modelName' ya existe.");
-			$this->error('Fallo en la linea: ' . __LINE__);
+			$this->error('Fallo copyu en la linea: ' . __LINE__);
 			
 			return false;
 		}
@@ -242,7 +256,7 @@ class CopyUserPages extends Command {
 		$folderMayus = ucfirst($modelName);
 		$sourcePath = base_path('app/Http/Controllers/' . $plantillaActual . 'Controller.php');
 		if (!File::exists($sourcePath)) {
-			$this->error("El controlador de origen '$sourcePath' no existe." . ' Fallo en la linea: ' . __LINE__);
+			$this->error("El controlador de origen '$sourcePath' no existe." . ' Fallo copyu en la linea: ' . __LINE__);
 			
 			return false;
 		}
@@ -251,7 +265,7 @@ class CopyUserPages extends Command {
 		
 		if (File::exists($destinationPath)) {
 			$this->warn("La carpeta de destino '$destinationPath' ya existe.");
-			$this->error('Fallo en la linea: ' . __LINE__);
+			$this->error('Fallo copyu en la linea: ' . __LINE__);
 			
 			return false;
 		}
@@ -295,7 +309,7 @@ class CopyUserPages extends Command {
 		$vueFilePath = resource_path("js/Pages/$modelName/Index.vue");
 		
 		if (!File::exists($vueFilePath)) {
-			$this->error('El archivo Index.vue no existe.' . ' Fallo en la linea: ' . __LINE__);
+			$this->error('El archivo Index.vue no existe.' . ' Fallo copyu en la linea: ' . __LINE__);
 			
 			return 0;
 		}
@@ -320,7 +334,7 @@ class CopyUserPages extends Command {
 			$this->info('Archivo Index.vue actualizado correctamente.');
 		}
 		else {
-			$this->error('No se pudo actualizar Index.vue.' . ' Fallo en la linea: ' . __LINE__);
+			$this->error('No se pudo actualizar Index.vue.' . ' Fallo copyu en la linea: ' . __LINE__);
 			
 			return 0;
 		}
@@ -337,13 +351,13 @@ class CopyUserPages extends Command {
 			$this->contadorMetodos ++; //1
 		}
 		else {
-			$this->error('DoWebphp ' . self::MSJ_FALLO . ' Fallo en la linea: ' . __LINE__);
+			$this->error('DoWebphp ' . self::MSJ_FALLO . ' Fallo copyu en la linea: ' . __LINE__);
 			
 			return 0;
 		}
 		
 		if ($finalfunctions->L2_LenguajeInsert($modelName, $submetodo,$this) === 0) {
-			$this->error('Fallo en la linea: ' . __LINE__);
+			$this->error('Fallo copyu en la linea: ' . __LINE__);
 			
 			return 0;
 		}
@@ -354,7 +368,7 @@ class CopyUserPages extends Command {
 			$this->contadorMetodos ++;//3
 		}
 		else {
-			$this->error('DoSideBar ' . self::MSJ_FALLO . ' Fallo en la linea: ' . __LINE__);
+			$this->error('DoSideBar ' . self::MSJ_FALLO . ' Fallo copyu en la linea: ' . __LINE__);
 			
 			return 0;
 		}
@@ -428,7 +442,7 @@ class CopyUserPages extends Command {
 		
 		// Verificar si el modelo existe
 		if (!File::exists($modelPath)) {
-			$this->error("El modelo $modelName no existe." . ' Fallo en la linea: ' . __LINE__);
+			$this->error("El modelo $modelName no existe." . ' Fallo copyu en la linea: ' . __LINE__);
 			
 			return 0;
 		}
@@ -474,7 +488,7 @@ class CopyUserPages extends Command {
 		$migrationFile = collect(glob(database_path('migrations/*.php')))->first(fn($file) => str_contains($file, 'create_' . Str::snake(Str::plural($modelName)) . '_table'));
 		
 		if (!$migrationFile) {
-			$this->error("No se encontró la migración para $modelName" . ' Fallo en la linea: ' . __LINE__);
+			$this->error("No se encontró la migración para $modelName" . ' Fallo copyu en la linea: ' . __LINE__);
 			
 			return 0;
 		}
@@ -569,7 +583,7 @@ class CopyUserPages extends Command {
 			$this->info("Comando 'generate:fillable' ejecutado con éxito.");
 		}
 		else {
-			$this->error("El comando 'generate:fillable' falló." . ' Fallo en la linea: ' . __LINE__);
+			$this->error("El comando 'generate:fillable' falló." . ' Fallo copyu en la linea: ' . __LINE__);
 		}
 		
 		return $result;
@@ -579,7 +593,7 @@ class CopyUserPages extends Command {
 	 * @return void
 	 * @throws \Exception
 	 */
-	public function verificarQueEstamosEnElEntornoCorrecto(): void {
+	public function verificarQueEstamosEnElEntornoCorrecto(): int {
 		// Verificar que estamos en el entorno correcto
 		if (!app()->runningInConsole()) {
 			// Forzar entorno de consola
@@ -596,10 +610,13 @@ class CopyUserPages extends Command {
 		];
 		
 		foreach ($paths as $path) {
+			$this->info("Verificando permisos de escritura en: {$path}");
 			if (!is_writable($path)) {
-				throw new \Exception("Directorio no escribible: {$path}");
+				$this->error("Directorio no escribible: {$path}");
+				return 0;
 			}
 		}
+		return 1;
 	}
 	
 }

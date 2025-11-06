@@ -1,28 +1,26 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import {Head, router, usePage} from '@inertiajs/vue3';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
 import TextInput from '@/Components/TextInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SelectInput from '@/Components/SelectInput.vue';
-import { reactive, watch} from 'vue';
+import {reactive, watch} from 'vue';
 
 import DangerButton from '@/Components/DangerButton.vue';
 import pkg from 'lodash';
-import { router, usePage} from '@inertiajs/vue3';
 
 import Pagination from '@/Components/Pagination.vue';
-import { ChevronUpDownIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/solid';
+import {ChevronUpDownIcon, PencilIcon, TrashIcon} from '@heroicons/vue/24/solid';
 // import { CursorArrowRippleIcon, ChevronUpDownIcon,QuestionMarkCircleIcon, EyeIcon, PencilIcon, TrashIcon, UserGroupIcon } from '@heroicons/vue/24/solid';
-
-import Create from '@/Pages/centrotrabajo/Create.vue';
-import Edit from '@/Pages/centrotrabajo/Edit.vue';
-import Delete from '@/Pages/centrotrabajo/Delete.vue';
+import Create from '@/Pages/Ordenproduccion/Create.vue';
+import Edit from '@/Pages/Ordenproduccion/Edit.vue';
+import Delete from '@/Pages/Ordenproduccion/Delete.vue';
 
 import Checkbox from '@/Components/Checkbox.vue';
 import InfoButton from '@/Components/InfoButton.vue';
 
-import { formatDate, number_format } from '@/global.ts';
+import {formatDate, number_format} from '@/global.ts';
 
 const { _, debounce, pickBy } = pkg
 const props = defineProps({
@@ -35,17 +33,20 @@ const props = defineProps({
     title: String,
 
     numberPermissions: Number,
-    Flash: String,
+    losSelect:Object,//normally used by headlessui
 })
 
 const data = reactive({
     params: {
         search: props.filters.search,
+      // search2: props.filters.search2,
+      //   search3: props.filters.search3,
+      //   search4: props.filters.search4,
         field: props.filters.field,
         order: props.filters.order,
         perPage: props.perPage,
     },
-    generico: null,
+    Ordenproducciono: null,
     selectedId: [],
     multipleSelect: false,
     createOpen: false,
@@ -55,6 +56,7 @@ const data = reactive({
     dataSet: usePage().props.app.perpage,
 })
 
+// <!--<editor-fold desc="order, watchclone, select">-->
 const order = (field) => {
     data.params.field = field
     data.params.order = data.params.order === "asc" ? "desc" : "asc"
@@ -62,7 +64,7 @@ const order = (field) => {
 
 watch(() => _.cloneDeep(data.params), debounce(() => {
     let params = pickBy(data.params)
-    router.get(route("centrotrabajo.index"), params, {
+    router.get(route("Ordenproduccion.index"), params, {
         replace: true,
         preserveState: true,
         preserveScroll: true,
@@ -73,28 +75,25 @@ const selectAll = (event) => {
     if (event.target.checked === false) {
         data.selectedId = []
     } else {
-        props.centrotrabajos?.data.forEach((centrotrabajo) => {
-            data.selectedId.push(centrotrabajo.id)
+        props.fromController?.data.forEach((Ordenproduccion) => {
+            data.selectedId.push(Ordenproduccion.id)
         })
     }
 }
-const select = () => {
-    if (props.centrotrabajos?.data.length == data.selectedId.length) {
-        data.multipleSelect = true
-    } else {
-        data.multipleSelect = false
-    }
-}
+const select = () => data.multipleSelect = props.fromController?.data.length === data.selectedId.length;
+
+// <!--</editor-fold>-->
 
 
 // const form = useForm({ })
 // watchEffect(() => { })
 
 
-// text // number // dinero // date // datetime // foreign
+// text - string // number // dinero // date // datetime // foreign
 const titulos = [
-    // { order: 'codigo', label: 'codigo', type: 'text' },
-    { order: 'nombre', label: 'nombre', type: 'text' },
+    { order: 'nombre', label: 'nombre', type: 'string' },
+    { order: 'descripcion', label: 'descripcion', type: 'string' },
+    // { order: 'cantidad_horas', label: 'cantidad_horas', type: 'number' },
 ];
 
 </script>
@@ -103,24 +102,26 @@ const titulos = [
     <Head :title="props.title" />
 
     <AuthenticatedLayout>
-        <Breadcrumb :title="title" :breadcrumbs="breadcrumbs" />
+        <Breadcrumb :title="title" :breadcrumbs="breadcrumbs" class="capitalize text-xl font-bold"/>
         <div class="space-y-4">
             <!-- {{ props.fromController.data[2] }} -->
             <div class="px-4 sm:px-0">
                 <div class="rounded-lg overflow-hidden w-fit">
-                    <PrimaryButton v-if="can(['isSuper'])" class="rounded-none" @click="data.createOpen = true">
-                        {{ lang().button.add }}
+                    <PrimaryButton class="rounded-none" @click="data.createOpen = true"
+                        v-if="can(['isAdmin','create Ordenproduccion'])">
+                        {{ lang().button.new }}
                     </PrimaryButton>
-                    <Create v-if="can(['isSuper'])" :numberPermissions="props.numberPermissions"
+
+                    <Create v-if="can(['isAdmin','create Ordenproduccion'])" :numberPermissions="props.numberPermissions"
                         :titulos="titulos" :show="data.createOpen" @close="data.createOpen = false" :title="props.title"
                         :losSelect=props.losSelect />
 
-                    <Edit v-if="can(['isSuper'])" :titulos="titulos"
+                    <Edit v-if="can(['isAdmin','update Ordenproduccion'])" :titulos="titulos"
                         :numberPermissions="props.numberPermissions" :show="data.editOpen" @close="data.editOpen = false"
-                        :generica="data.generico" :title="props.title" :losSelect=props.losSelect />
+                        :Ordenproducciona="data.Ordenproducciono" :title="props.title" :losSelect=props.losSelect />
 
-                    <Delete v-if="can(['delete centrotrabajo'])" :numberPermissions="props.numberPermissions"
-                        :show="data.deleteOpen" @close="data.deleteOpen = false" :generica="data.generico"
+                    <Delete v-if="can(['isAdmin','delete Ordenproduccion'])" :numberPermissions="props.numberPermissions"
+                        :show="data.deleteOpen" @close="data.deleteOpen = false" :Ordenproducciona="data.Ordenproducciono"
                         :title="props.title" />
                 </div>
             </div>
@@ -129,7 +130,7 @@ const titulos = [
                     <div class="flex space-x-2">
                         <SelectInput v-model="data.params.perPage" :dataSet="data.dataSet" />
                         <!-- <DangerButton @click="data.deleteBulkOpen = true"
-                            v-show="data.selectedId.length != 0 && can(['delete centrotrabajo'])" class="px-3 py-1.5"
+                            v-show="data.selectedId.length != 0 && can(['isAdmin',delete Ordenproduccion'])" class="px-3 py-1.5"
                             v-tooltip="lang().tooltip.delete_selected">
                             <TrashIcon class="w-5 h-5" />
                         </DangerButton> -->
@@ -163,25 +164,25 @@ const titulos = [
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(clasegenerica, indexu) in props.fromController.data" :key="indexu"
+                            <tr v-for="(claseFromController, indexu) in props.fromController.data" :key="indexu"
                                 class="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-200/30 hover:dark:bg-gray-900/20">
 
                                 <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center">
                                     <input
-                                        class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-primary dark:text-primary shadow-sm focus:ring-primary/80 dark:focus:ring-primary dark:focus:ring-offset-gray-800 dark:checked:bg-blue-600 dark:checked:border-primary"
-                                        type="checkbox" @change="select" :value="clasegenerica.id"
+                                        class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-primary dark:text-primary shadow-sm focus:ring-primary/80 dark:focus:ring-primary dark:focus:ring-offset-gray-800 dark:checked:bg-primary dark:checked:border-primary"
+                                        type="checkbox" @change="select" :value="claseFromController.id"
                                         v-model="data.selectedId" />
                                 </td>
                                 <td v-if="numberPermissions > 1" class="whitespace-nowrap py-4 w-12 px-2 sm:py-3">
                                     <div class="flex justify-center items-center">
                                         <div class="rounded-md overflow-hidden">
-                                            <InfoButton v-show="can(['isSuper'])" type="button"
-                                                @click="(data.editOpen = true), (data.generico = clasegenerica)"
+                                            <InfoButton v-show="can(['isAdmin','update Ordenproduccion'])" type="button"
+                                                @click="(data.editOpen = true), (data.Ordenproducciono = claseFromController)"
                                                 class="px-2 py-1.5 rounded-none" v-tooltip="lang().tooltip.edit">
                                                 <PencilIcon class="w-4 h-4" />
                                             </InfoButton>
-                                            <DangerButton v-show="can(['isSuper'])" type="button"
-                                                @click="(data.deleteOpen = true), (data.generico = clasegenerica)"
+                                            <DangerButton v-show="can(['isAdmin','delete Ordenproduccion'])" type="button"
+                                                @click="(data.deleteOpen = true), (data.Ordenproducciono = claseFromController)"
                                                 class="px-2 py-1.5 rounded-none" v-tooltip="lang().tooltip.delete">
                                                 <TrashIcon class="w-4 h-4" />
                                             </DangerButton>
@@ -190,17 +191,14 @@ const titulos = [
                                 </td>
                                 <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center">{{ ++indexu }}</td>
                                 <td v-for="titulo in titulos" class="whitespace-nowrap py-4 px-2 sm:py-3">
-                                    <span v-if="titulo['type'] == 'text'"> {{ clasegenerica[titulo['order']] }} </span>
-                                    <span v-if="titulo['type'] == 'number'"> {{
-                                            number_format(clasegenerica[titulo['order']], 0, false)
-                                        }} </span>
-                                    <span v-if="titulo['type'] == 'dinero'"> {{
-                                        number_format(clasegenerica[titulo['order']], 0, true) }} </span>
-                                    <span v-if="titulo['type'] == 'date'"> {{
-                                        formatDate(clasegenerica[titulo['order']], false) }} </span>
-                                    <span v-if="titulo['type'] == 'datetime'"> {{
-                                        formatDate(clasegenerica[titulo['order']], true) }} </span>
-                                    <span v-if="titulo['type'] == 'foreign'"> {{ clasegenerica[titulo['nameid']] }} </span>
+                                    <span v-if="titulo['type'] === 'text' || titulo['type'] === 'string'"> {{ claseFromController[titulo['order']] }} </span>
+                                    <span v-if="titulo['type'] === 'number'"> {{ number_format(claseFromController[titulo['order']], 0, false) }} </span>
+                                    <span v-if="titulo['type'] === 'dinero'"> {{ number_format(claseFromController[titulo['order']], 0, true) }} </span>
+                                    <span v-if="titulo['type'] === 'date'"> {{ formatDate(claseFromController[titulo['order']], false) }} </span>
+                                    <span v-if="titulo['type'] === 'datetime'"> {{ formatDate(claseFromController[titulo['order']], true) }} </span>
+                                     <span v-if="titulo['type'] === 'foreign'">
+                                        {{ claseFromController?.[titulo?.['nameid']] ?? '' }}
+                                    </span>
                                 </td>
 
                             </tr>

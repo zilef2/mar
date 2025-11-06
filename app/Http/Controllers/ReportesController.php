@@ -20,7 +20,6 @@ use Maatwebsite\Excel\Facades\Excel;
 class ReportesController extends Controller {
 	
 	public function index(Request $request): \Inertia\Response {
-		ini_set('max_execution_time', 600);//10mims
 		$permissions = Myhelp::EscribirEnLog($this, ' reportes');
 		$numberPermissions = Myhelp::getPermissionToNumber($permissions);
 		$user = Myhelp::AuthU();
@@ -45,15 +44,15 @@ class ReportesController extends Controller {
 		$fromController = new LengthAwarePaginator($reportes->forPage($page, $perPage), $total, $perPage, $page, ['path' => request()->url()]);
 		
 		return Inertia::render('reporte/Index', [
-			'breadcrumbs'        => [['label' => __('app.label.reporte'), 'href' => route('reporte.index')]],
-			'title'              => __('app.label.reporte'),
-			'filters'            => $request->all(['search', 'field', 'order', 'soloTiEstimado', 'searchdia']),
-			'perPage'            => (int)$perPage,
-			'fromController'     => $fromController,
-			'total'              => $total,
-			'numberPermissions'  => $numberPermissions,
-			'empleados'          => $empleados,
-			'losSelect'          => $this->SelectsMasivos() ?? [],
+			'breadcrumbs'       => [['label' => __('app.label.reporte'), 'href' => route('reporte.index')]],
+			'title'             => __('app.label.reporte'),
+			'filters'           => $request->all(['search', 'field', 'order', 'soloTiEstimado', 'searchdia']),
+			'perPage'           => (int)$perPage,
+			'fromController'    => $fromController,
+			'total'             => $total,
+			'numberPermissions' => $numberPermissions,
+			'empleados'         => $empleados,
+			'losSelect'         => $this->SelectsMasivos() ?? [],
 		]);
 	}
 	
@@ -122,7 +121,7 @@ class ReportesController extends Controller {
 		$reportes = $reportes->get();
 	}
 	
-	public function SelectsMasivos(): array {
+	public function SelectsMasivos(): array { //aproved
 		$reporteTemp = new Reporte();
 		$atributos_id = $reporteTemp->getFillable();
 		$result = [];
@@ -139,20 +138,16 @@ class ReportesController extends Controller {
 		$atributos_solo_id = Myhelp::filtrar_solo_id($atributos_id);
 		foreach ($atributos_solo_id as $key => $value) {
 			
-			if ($value === 'operario' || $value === 'calendario') {
-				continue;
-			}
-			
 			$modelInstance = resolve('App\\Models\\' . ucfirst($value));
-			$ultima = $modelInstance::All();
-			$result[$value] = Myhelp::NEW_turnInSelectID($ultima, ' ');
+			$todosResultados = $modelInstance::All();
+			$result[$value] = Myhelp::NEW_turnInSelectID($todosResultados, ' ');
 			
-			if ($value === 'centrotrabajo') {//filtrar las actividades que pertenecen al ct
-				foreach ($ultima as $key2 => $val) {
-					$actis = $val->Actividads;
-					$result[$value . $val->nombre] = Myhelp::NEW_turnInSelectID($actis, ' ');
-				}
-			}
+			//			if ($value === 'centrotrabajo') {
+			//				foreach ($todosResultados as $key2 => $val) {
+			//					$actis = $val->Actividads;
+			//					$result[$value . $val->nombre] = Myhelp::NEW_turnInSelectID($actis, ' ');
+			//				}
+			//			}
 		}
 		
 		return $result;
@@ -180,18 +175,18 @@ class ReportesController extends Controller {
 		$fromController = new LengthAwarePaginator($reportes->forPage($page, $perPage), $total, $perPage, $page, ['path' => request()->url()]);
 		
 		return Inertia::render('reporte/Index', [
-			'breadcrumbs'        => [['label' => __('app.label.reporte'), 'href' => route('reporte.index')]],
-			'title'              => __('app.label.reporte'),
-			'filters'            => $request->all(['search', 'field', 'order', 'soloTiEstimado', 'searchdia']),
-			'perPage'            => (int)$perPage,
-			'total'              => $total,
-			'numberPermissions'  => $numberPermissions,
-			'empleados'          => $empleados,
-			'losSelect'          => $this->SelectsMasivos() ?? [],
+			'breadcrumbs'       => [['label' => __('app.label.reporte'), 'href' => route('reporte.index')]],
+			'title'             => __('app.label.reporte'),
+			'filters'           => $request->all(['search', 'field', 'order', 'soloTiEstimado', 'searchdia']),
+			'perPage'           => (int)$perPage,
+			'total'             => $total,
+			'numberPermissions' => $numberPermissions,
+			'empleados'         => $empleados,
+			'losSelect'         => $this->SelectsMasivos() ?? [],
 		]);
 	}
 	
-	//todo: poner esto en la clase Reporte
+	//todo: poner esto en modelo Reporte
 	public function MapearClasePP(&$reportes, $numberPermissions, $valuesGoogleBody): void {
 		$reportes = $reportes->get()->map(function ($reporte) use ($numberPermissions, $valuesGoogleBody) {
 			// $reporte->ordenproduccion_s = $valuesGoogleBody->Where('Item_vue',$reporte->ordenproduccion_id)->first()->Item ?? '';
@@ -218,8 +213,8 @@ class ReportesController extends Controller {
 	
 	public function store(ReporteRequest $request) {
 		
-		$user = Myhelp::AuthU();
 		$numberPermissions = Myhelp::getPermissionToNumber(Myhelp::EscribirEnLog($this, 'STORE:reportes'));
+		$user = Myhelp::AuthU();
 		if ($numberPermissions > 1) {
 			$userID = $request->user_id ? $request->user_id['value'] : $user->id;
 		}
@@ -238,19 +233,16 @@ class ReportesController extends Controller {
 			$tipoFin = $this->getLastReport($hoy, $userID); //BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
 			$tipoReport = $request->tipoReporte['value'];
 			$reporte = Reporte::create([
-				                           'fecha'             => $request->fecha,
-				                           'tipoReporte'       => $tipoReport,
-				                           'hora_inicial'      => $request->hora_inicial,
-				                           'hora_final'        => null,
-				                           'user_id'       => $userID,
-				                           'actividad_id'      => $request->actividad_id['value'] ?? null,
-				                           'paro_id' => $Valueparo,
-				                           'reproceso_id'      => ($request->reproceso_id['value']) ?? null,
-				                           'tipoFinalizacion'  => $tipoFin,
-				                           //BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
-				                           'nombreTablero'     => $request->nombreTablero,
-				                           'OTItem'            => $request->OTItem,
-				                           'TiempoEstimado'    => $request->TiempoEstimado,
+				                           'fecha'            => $request->fecha,
+				                           'tipoReporte'      => $tipoReport,
+				                           'hora_inicial'     => $request->hora_inicial,
+				                           'hora_final'       => null,
+				                           'user_id'          => $userID,
+				                           'actividad_id'     => $request->actividad_id['value'] ?? null,
+				                           'paro_id'          => $Valueparo,
+				                           'reproceso_id'     => ($request->reproceso_id['value']) ?? null,
+				                           'tipoFinalizacion' => $tipoFin,//BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
+				                           'TiempoEstimado'   => $request->TiempoEstimado,
 			                           ]);
 			DB::commit();
 			Myhelp::EscribirEnLog($this, 'STORE:reportes', 'usuario id:' . $user->id . ' | ' . $user->name . ' ha guardado el reporte ' . $reporte->id, false);

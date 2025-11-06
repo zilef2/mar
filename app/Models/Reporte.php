@@ -14,22 +14,19 @@ class Reporte extends Model
 
 
     protected $fillable = [
+        'user_id',
+        'actividad_id',
+        'reproceso_id',
+        'paro_id',
+        'ordenproduccion_id',
+	    
         'id',
         'fecha',
         'hora_inicial',
         'hora_final',
         'tiempo_transcurrido',
-        'actividad_id',
-        'reproceso_id',
-
-        'user_id',
-
-        // 'calendario_id',
-        //19 sept2023
         'tipoFinalizacion', //BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
         'tipoReporte', //acti, repro,paro
-
-        //info de la orden de trabajo
         'nombreTablero',
         'OTItem',
         'TiempoEstimado',

@@ -3,6 +3,11 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+
+
 class FinalFunctions {
 	
 	const string MSJ_EXITO = ' fue realizada con exito ';
@@ -37,7 +42,7 @@ class FinalFunctions {
 	DoFillable
 	updateMigration
 	 */
-	public function DoWebphp($resource,$commandInstance): int {
+	public function DoWebphp($resource, $commandInstance): int {
 		$directory = 'routes';
 		$files = glob($directory . '/*.php');
 		
@@ -55,14 +60,14 @@ class FinalFunctions {
 				//                $content2 = preg_replace($pattern, "$0$insertable", $content);
 				file_put_contents($file, $content2);
 				if ($content == $content2) {
-					$this->info("Routes Actualizado: $file\n");
+					$commandInstance->info("Routes Actualizado: $file\n");
 				}
 				else {
-					$this->info("Routes sin cambios: $file\n");
+					$commandInstance->info("Routes sin cambios: $file\n");
 				}
 			}
 			else {
-				$this->error("No existe aquipues en: $file\n");
+				$commandInstance->error("No existe aquipues en: $file\n");
 				$contadorVerificador = 0;
 				break;
 			}
@@ -71,18 +76,18 @@ class FinalFunctions {
 		return $contadorVerificador;
 	}
 	
-	public function L2_LenguajeInsert($modelName, &$submetodo,$commandInstance): int {
-		if ($this->DoAppLenguaje($modelName,$commandInstance)) {
+	public function L2_LenguajeInsert($modelName, &$submetodo, $commandInstance): int {
+		if ($this->DoAppLenguaje($modelName, $commandInstance)) {
 			$submetodo['Lenguaje'] = 0;
 			$commandInstance->info('DoAppLenguaje' . self::MSJ_EXITO);
 			$commandInstance->contadorMetodos ++;
 			
 			foreach ($commandInstance->aagenerateAttributes() as $key => $generateAttribute) {
-				$this->DoAppLenguaje($key,$commandInstance);
+				$this->DoAppLenguaje($key, $commandInstance);
 				$submetodo['Lenguaje'] ++;
 			}
 			foreach ($commandInstance->generateForeign() as $generateAttribute) {
-				$commandInstance->DoAppLenguaje($generateAttribute, $commandInstance,'mochar_id');
+				$commandInstance->DoAppLenguaje($generateAttribute, $commandInstance, 'mochar_id');
 				$submetodo['Lenguaje'] ++;
 			}
 			
@@ -103,7 +108,7 @@ class FinalFunctions {
 	 * REAL
 	 */
 	//REAL FINAL FUNCTION
-	private function DoAppLenguaje($resource, $commandInstance,$mochar = 'no' ): int {
+	private function DoAppLenguaje($resource, $commandInstance, $mochar = 'no'): int {
 		$directory = 'lang/es/app.php';
 		$files = glob($directory);
 		
@@ -140,5 +145,6 @@ class FinalFunctions {
 		return $contadorVerificador;
 		
 	}
+	
 	
 }

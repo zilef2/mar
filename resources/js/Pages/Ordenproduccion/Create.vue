@@ -5,32 +5,44 @@ import Modal from '@/Components/Modal.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { useForm } from '@inertiajs/vue3';
-import { watchEffect, reactive, onMounted } from 'vue';
-import vSelect from "vue-select"; import "vue-select/dist/vue-select.css";
+import {useForm} from '@inertiajs/vue3';
+import {onMounted, reactive, watchEffect} from 'vue';
+import '@vuepic/vue-datepicker/dist/main.css'
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 
-import VueDatePicker from '@vuepic/vue-datepicker';
+// --------------------------- ** -------------------------
 
 const props = defineProps({
     show: Boolean,
     title: String,
-    generica: Object,
+    roles: Object,
     titulos: Object, //parametros de la clase principal
-
+    losSelect:Object,
+    numberPermissions: Number,
 })
-
 const emit = defineEmits(["close"]);
+
 const data = reactive({
+    params: {
+        pregunta: ''
+    },
 })
 
 //very usefull
-const justNames = props.titulos.map(names => names['order'] )
+let justNames = props.titulos.map(names =>{
+    if(names['order'] !== 'noquiero' 
+        // &&
+        // names['order'] !== 'noquiero1'
+        )
+        return names['order']
+})
 const form = useForm({ ...Object.fromEntries(justNames.map(field => [field, ''])) });
 onMounted(() => {
-    if(props.numberPermissions > 8){
+    if(props.numberPermissions > 9){
 
-        // const valueRAn = Math.floor(Math.random() * (9 - 0))
-        form.nombre = 'admin orden trabajo '+ (valueRAn);
+        const valueRAn = Math.floor(Math.random() * (9) + 1)
+        form.nombre = 'nombre genenerico '+ (valueRAn);
         form.codigo = (valueRAn);
         // form.hora_inicial = '0'+valueRAn+':00'//temp
         // form.fecha = '2023-06-01'
@@ -39,59 +51,76 @@ onMounted(() => {
 });
 
 const printForm =[];
-props.titulos.forEach(names => {
+props.titulos.forEach(names =>{
+ if(names['order'] !== 'noquiero'
+     // && names['order'] !== 'noquiero1'
+ )   
     printForm.push ({
         idd: names['order'], label: names['label'], type: names['type']
-        , value: form[names['order']]
     })
 });
 
+function ValidarVacios(){
+    let result = true
+    printForm.forEach(element => {
+        if(!form[element.idd]){
+            console.log("=>(Create.vue:70) falta esto papa element.idd", element.idd);
+            result = false
+            return result
+        }
+    });
+    return result
+}
+
+const create = () => {
+    if(ValidarVacios()){
+        // console.log("🧈 debu pieza_id:", form.pieza_id);
+        form.post(route('Ordenproduccion.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                emit("close")
+                form.reset()
+            },
+            onError: () => null,
+            onFinish: () => null,
+        })
+    }else{
+        console.log('Hay campos vacios')
+    }
+}
+
 watchEffect(() => {
     if (props.show) {
-        // data.justNames.forEach(element => {
-        //     form[element] =  props.generica[element]
-        // });
         form.errors = {}
-        props.titulos.forEach(names => {
-            form[names['order']] = props.generica[names['order']]
-        });
-        
-        // form.codigo = props.generica?.codigo
     }
 })
 
-const update = () => {
-    form.put(route('centrotrabajo.update', props.generica?.id), {
-        preserveScroll: true,
-        onSuccess: () => {
-            emit("close")
-            form.reset()
-        },
-        onError: () => null,
-        onFinish: () => null,
-    })
-}
-// const sexos = [ { label: 'Masculino', value: 'Masculino' }, { label: 'Femenino', value: 'Femenino' } ];
 
+//very usefull
+const sexos = [{ label: 'Masculino', value: 0 }, { label: 'Femenino', value: 1 }];
 </script>
 
 <template>
     <section class="space-y-6">
-        <Modal :show="props.show" @close="emit('close')">
+        <Modal :show="props.show" @close="emit('close')" :maxWidth="'4xl'">
             <form class="p-6" @submit.prevent="create">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    {{ lang().label.edit }} {{ props.title }}
+                    {{ lang().label.add }} {{ props.title }}
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
                     <div v-for="(atributosform, indice) in printForm" :key="indice">
-                        <div v-if="atributosform.type === 'id'" id="SelectVue">
+
+                        <div v-if="atributosform.type === 'foreign'" id="SelectVue" class="">
                             <label name="labelSelectVue"> {{ atributosform.label }} </label>
-                            <vSelect :options="data[atributosform.idd]" label="title" v-model="form[atributosform.idd]"
-                                :value="data[atributosform.idd][props.generica.centrotrabajo_id]"></vSelect>
-                            <InputError class="mt-2" :message="form.errors[atributosform.idd]" />
+                            <vSelect :options="props.losSelect[0]"
+                                      v-model="form[atributosform.idd]"
+                                      :reduce="element => element.value" label="name"
+                            ></vSelect>
+                            <InputError class="mt-2" :message="form.errors[atributosform.idd]"/>
                         </div>
 
+
+                        <!-- tiempo -->
                         <div v-else-if="atributosform.type === 'time'" id="SelectVue">
                             <InputLabel :for="atributosform.label" :value="lang().label[atributosform.label]" />
                             <TextInput :id="atributosform.idd" :type="atributosform.type" class="mt-1 block w-full"
@@ -99,6 +128,9 @@ const update = () => {
                                 :error="form.errors[atributosform.idd]" step="3600" />
                             <InputError class="mt-2" :message="form.errors[atributosform.idd]" />
                         </div>
+
+
+                        <!-- normal -->
                         <div v-else class="">
                             <InputLabel :for="atributosform.label" :value="lang().label[atributosform.label]" />
                             <TextInput :id="atributosform.idd" :type="atributosform.type" class="mt-1 block w-full"
@@ -107,14 +139,13 @@ const update = () => {
                             <InputError class="mt-2" :message="form.errors[atributosform.idd]" />
                         </div>
                     </div>
-
                 </div>
                 <div class=" my-8 flex justify-end">
                     <SecondaryButton :disabled="form.processing" @click="emit('close')"> {{ lang().button.close }}
                     </SecondaryButton>
                     <PrimaryButton class="ml-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
-                        @click="update">
-                        {{ form.processing ? lang().button.save + '...' : lang().button.save }}
+                        @click="create">
+                        {{ lang().button.add }} {{ form.processing ? '...' : '' }}
                     </PrimaryButton>
                 </div>
             </form>
@@ -122,11 +153,3 @@ const update = () => {
     </section>
 </template>
 
-<style>
-@reference "../../../css/app.css";
-
-@reference "../../../css/app.css";
-textarea {
-    @apply px-3 py-2 border border-gray-300 rounded-md;
-}
-</style>

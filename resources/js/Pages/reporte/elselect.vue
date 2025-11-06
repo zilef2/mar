@@ -8,17 +8,23 @@ const props = defineProps({
   name: { type: String, required: true }, // Ej: "centrotrabajo" o "ciudad"
   form: { type: Object, required: true },
   data: { type: Object, required: true },
+  nombreatipico: { type: String, required: false },
 });
 
 // key completo: ej. "centrotrabajo_id"
 const field = computed(() => {
-    // let thename = props.name.replace(/_/g, '') // reemplaza todos los _ por espacios
-    // return `${thename}_id`
-    return 'or'
+    let thename = props.name.replace(/_/g, '') // quita todos los _
+    return `${thename}_opciones`
+});
+const fieldID = computed(() => {
+    let thename = props.name.replace(/_/g, '') // quita todos los _
+    return `${thename}_id`
 });
 
 // Capitaliza la primera letra para usar en el label
 const labelText = computed(() => {
+    if(props.nombreatipico)return props.nombreatipico
+    
   return props.name
     .replace(/_/g, ' ')
     .toLowerCase()
@@ -35,7 +41,7 @@ const labelText = computed(() => {
       :options="data[field]"
       label="title"
       class="dark:bg-gray-400"
-      v-model="form[field]"
+      v-model="form[fieldID]"
       append-to-body
     />
 

@@ -1,5 +1,6 @@
 <?php
 //esto es main
+use App\Http\Controllers\OrdenproduccionController;
 use App\Http\Controllers\ParametrosController;
 use App\Http\Controllers\ParoController;
 use App\Http\Controllers\PermissionController;
@@ -68,12 +69,13 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::resource('/reproceso', ReprocesosController::class);
     Route::get('/gsheet', ReadGoogleSheets::class);
 
+    Route::resource('/Ordenproduccion', OrdenproduccionController::class);
+	//aquipues
 
     //# EXCEL
-    Route::get('/IMI', [UserController::class,'todaBD'])->name('IMIdb');
+    Route::get('/IML', [UserController::class,'todaBD'])->name('IMIdb');
 });
 
-// ultimo comit 25sept
 
 require __DIR__ . '/auth.php';
 

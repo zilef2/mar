@@ -14,7 +14,9 @@ return [
         'sheet' => 'Hojas de google',
 
         //clases simples
+        'cantidad_horas' => 'Cantidad (horas)',
         'ordenproduccion' => 'Orden de producción',
+        'Ordenproduccion' => 'Orden de producción',
         'Actividad' => 'Actividad',
         'Centrotrabajo' => 'Centro de trabajo',
         'Paro' => 'Paro',
