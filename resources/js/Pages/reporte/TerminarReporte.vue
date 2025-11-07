@@ -72,11 +72,11 @@ const update = () => {
 
                     <div v-for="(atributosform, indice) in printForm" :key="indice">
 
-                        <div v-if="atributosform.type =='time'" id="SelectVue">
-                            <InputLabel class="text-center"
+                        <div v-if="atributosform.type === 'time'" id="SelectVue">
+                            <InputLabel class="text-center mr-8"
                                 :for="atributosform.label" :value="lang().label[atributosform.label]" />
                             <TextInput
-                                :id="atributosform.idd" :type="atributosform.type" class="mt-1 pl-4 ml-7 block w-full text-xl text-center"
+                                :id="atributosform.idd" :type="atributosform.type" class="px-auto w-full text-xl text-center"
                                 v-model="form[atributosform.idd]" required :placeholder="atributosform.label"
                                 :error="form.errors[atributosform.idd]" disabled
                                 step="3600"

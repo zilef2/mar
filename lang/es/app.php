@@ -36,6 +36,9 @@ return [
 
 
         //reporte
+        'Orden' => 'Orden de producción',
+        'trabajador' => 'Trabajador',
+        'actividad' => 'Actividad',
         'Tiempo Transcurrido' => 'Tiempo Transcurrido',
         'tiempo_transcurrido' => 'Tiempo Transcurrido',
         'TiempoTranscurrido' => 'Tiempo Transcurrido',
@@ -49,7 +52,6 @@ return [
         'hora inicial' => 'Hora inicial',
         'hora final' => 'Hora final',
         'hora_final' => 'Hora final',
-        'actividad' => 'Actividad',
         'centrotrabajo' => 'Centro de trabajo',
         'paro' => 'paro',
         'material' => 'Material',

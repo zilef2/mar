@@ -132,7 +132,7 @@ function RecuperarForm() {
     form.actividad_id = props.generica.actividad_id
     form.hora_final = props.generica.hora_final
     form.actividad_id = {title: props.generica.actividad_s, value: props.generica.actividad_id}
-    form.user_id = {title: props.generica.operario_s, value: props.generica.user_id}
+    form.user_id = {title: props.generica.trabajador_s, value: props.generica.user_id}
 }
 
 

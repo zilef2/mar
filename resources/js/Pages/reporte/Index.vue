@@ -71,7 +71,6 @@ const data = reactive({
         searchdia: props.filters.searchdia,
         soloTiEstimado: props.filters.soloTiEstimado,
         ultimosmeses: props.filters.ultimosmeses,
-        FiltroCentro: props.filters.FiltroCentro,
     },
     generico: null,
     selectedId: [],
@@ -121,13 +120,12 @@ const select = () => {
     data.multipleSelect = props.reportes?.data.length === data.selectedId.length;
 }
 // const form = useForm({ })
-watchEffect(() => {
-})
+watchEffect(() => {})
 
 // text // number // dinero // date // datetime // foreign // decimal
 const titulos = [
     {order: 'fecha', label: 'fecha', type: 'date', CanOrder: true},
-    {order: 'user_id', label: 'operario', type: 'foreign', nameid: 'operario_s', CanOrder: true},
+    {order: 'userino', label: 'trabajador', type: 'foreign', nameid: 'userino', CanOrder: true},
     {order: 'hora_inicial', label: 'hora inicial', type: 'time', CanOrder: true},
     {order: 'hora_final', label: 'hora final', type: 'time', CanOrder: true},
     {
@@ -137,9 +135,8 @@ const titulos = [
         nameid: 'tiempo_transcurrido',
         CanOrder: true
     },
-    {order: 'actividad_id', label: 'actividad', type: 'foreign', nameid: 'actividad_s', CanOrder: true},
-    {order: 'centrotrabajo_id', label: 'centrotrabajo', type: 'foreign', nameid: 'centrotrabajo_s', CanOrder: true},
-    {order: 'OTItem', label: 'ordenproduccion', type: 'text', CanOrder: false},
+    {order: 'actividad_id', label: 'actividad', type: 'foreign', nameid: 'actividadsini', CanOrder: true},
+    {order: 'Orden', label: 'Orden', type: 'text', CanOrder: false},
     {order: 'TiempoEstimado', label: 'TiempoEstimado', type: 'text', CanOrder: true},
     {order: 'paro_id', label: 'paro', type: 'foreign', nameid: 'paro_s', CanOrder: true},
     {order: 'reproceso_id', label: 'reproceso', type: 'foreign', nameid: 'reproceso_s', CanOrder: true},
@@ -147,7 +144,7 @@ const titulos = [
 
 const tipoReporte = [
     {value: 'soloreporte', title: 'Reportes'},
-    {value: 'soloparo', title: 'paroes'},
+    {value: 'soloparo', title: 'Paros'},
     {value: 'soloreproceso', title: 'Reprocesos'},
 ]
 const mostrarTiempoTranscurrido = (raw) => {
@@ -165,7 +162,7 @@ const mostrarTiempoTranscurrido = (raw) => {
 <template>
     <!--    <Head :title="props.title" />-->
 
-<!--    <TripleSelect></TripleSelect>-->
+    <!--    <TripleSelect></TripleSelect>-->
     <AuthenticatedLayout>
         <!--        <Breadcrumb :title="title" :breadcrumbs="breadcrumbs" />-->
         <div class="space-y-4">
@@ -178,13 +175,13 @@ const mostrarTiempoTranscurrido = (raw) => {
                             :empleados=props.empleados
                     />
 
-<!--                    <Edit v-if="can(['update reporte']) && numberPermissions > 1"-->
-<!--                          :numberPermissions="props.numberPermissions"-->
-<!--                          :show="data.editOpen"-->
-<!--                          @close="data.editOpen = false" :generica="data.generico" :title="props.title"-->
-<!--                          :losSelect=props.losSelect-->
-<!--                          :empleados=props.empleados-->
-<!--                    />-->
+                    <!--                    <Edit v-if="can(['update reporte']) && numberPermissions > 1"-->
+                    <!--                          :numberPermissions="props.numberPermissions"-->
+                    <!--                          :show="data.editOpen"-->
+                    <!--                          @close="data.editOpen = false" :generica="data.generico" :title="props.title"-->
+                    <!--                          :losSelect=props.losSelect-->
+                    <!--                          :empleados=props.empleados-->
+                    <!--                    />-->
 
                     <TerminarReporte v-if="can(['read reporte'])" :numberPermissions="props.numberPermissions"
                                      :show="data.TerminarOpen"
@@ -234,13 +231,6 @@ const mostrarTiempoTranscurrido = (raw) => {
 
                         <!-- filtros -->
                         <div class="flex flex-wrap gap-3 mb-3 items-end">
-                            <div class="w-40">
-                                <label class="block text-sm dark:text-white">Centro de trabajo</label>
-                                <vSelect :options="props.losSelect.centrotrabajo" label="title"
-                                         class="dark:bg-gray-400"
-                                         append-to-body
-                                         v-model="data.params.FiltroCentro"></vSelect>
-                            </div>
 
                             <div v-if="numberPermissions > 1" class="w-64">
                                 <label class="block text-sm dark:text-white">Trabajador</label>
@@ -258,9 +248,9 @@ const mostrarTiempoTranscurrido = (raw) => {
                                          v-model="data.params.search3"></vSelect>
                             </div>
 
-                            <div v-if="numberPermissions > 1" class="w-32">
-                                <input type="text" v-model="data.params.search4" placeholder="OT"
-                                       class="w-full rounded-md border-gray-300 dark:bg-gray-400"/>
+                            <div v-if="numberPermissions > 1" class="w-48">
+                                <input type="text" v-model="data.params.search4" placeholder="OP"
+                                       class="w-full h-9 rounded-md border-[1px] px-2 border-gray-400 dark:bg-white"/>
                             </div>
                         </div>
                     </div>
@@ -293,70 +283,73 @@ const mostrarTiempoTranscurrido = (raw) => {
                             </th>
                         </tr>
                         </thead>
-                        <!-- {{ props.fromController.data[0] }} -->
+                        <!--                        {{ props.fromController.data[0] }}-->
+                        <!--                        {{ data.hayCongelado }}-->
                         <tbody v-if="data.hayCongelado !== 0" v-sticky="{ zIndex: 100 }"
                                class="w-full bg-white border border-blue-500 inamovible">
-                        <tr class="dark:bg-gray-900/50 text-left">
-                            <th class="px-2 py-4"></th>
-                            <th class="px-2 py-4"></th>
-
-                            <th class="px-2 py-4 text-center">
-                                <PrimaryButton @click="data.hayCongelado = 0"
-                                               v-show="data.hayCongelado && can(['delete reporte'])"
-                                               class="px-3 py-1.5"
-                                               v-tooltip="'Descongelar'">
-                                    <ArrowTrendingDownIcon class="w-5 h-5"/>
-                                </PrimaryButton>
-                            </th>
-                            <th v-for="titulo in titulos" class="px-2 py-4 cursor-pointer">
-                                <div class="flex justify-between items-center">
-                                    <p class="w-20 text-sm">{{ lang().label[titulo['label']] }}</p>
-                                </div>
-                            </th>
-                        </tr>
-                        <tr>
-                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
-                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
-                            <td class="whitespace-nowrap py-4 px-2 sm:py-3"></td>
-                            <td v-for="titulo in titulos" class="whitespace-nowrap py-4 px-2 sm:py-3">
-                                    <span v-if="titulo['type'] === 'text'"> {{
-                                            props.fromController.data[0][titulo['order']]
+                            <tr class="dark:bg-gray-900/50 text-left">
+                                <th class="px-2 py-4"></th>
+                                <th class="px-2 py-4"></th>
+    
+                                <th class="px-2 py-4 text-center">
+                                    <PrimaryButton @click="data.hayCongelado = 0"
+                                                   v-show="data.hayCongelado && can(['delete reporte'])"
+                                                   class="px-3 py-1.5"
+                                                   v-tooltip="'Descongelar'">
+                                        <ArrowTrendingDownIcon class="w-5 h-5"/>
+                                    </PrimaryButton>
+                                </th>
+                                <th v-for="titulo in titulos" class="px-2 py-4 cursor-pointer">
+                                    <div class="flex justify-between items-center">
+                                        <p class="w-20 text-sm">{{ lang().label[titulo['label']] }}</p>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
+                                <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
+                                <td class="whitespace-nowrap py-4 px-2 sm:py-3"></td>
+                                <td v-for="titulo in titulos" class="whitespace-nowrap py-4 px-2 sm:py-3">
+                                        <span v-if="titulo['type'] === 'text'"> {{
+                                                props.fromController.data[0][titulo['order']]
+                                            }} </span>
+                                    <span v-if="titulo['type'] === 'time'"> {{
+                                            TimeTo12Format(props.fromController.data[0][titulo['order']])
                                         }} </span>
-                                <span v-if="titulo['type'] === 'time'"> {{
-                                        TimeTo12Format(props.fromController.data[0][titulo['order']])
-                                    }} </span>
-                                <span v-if="titulo['type'] === 'number'"> {{
-                                        number_format(props.fromController.data[0][titulo['order']], 0, false)
-                                    }} </span>
-
-                                <span v-if="titulo['type'] === 'dinero'"> {{
-                                        number_format(props.fromController.data[0][titulo['order']], 0, true)
-                                    }} </span>
-                                <span v-if="titulo['type'] === 'date'"> {{
-                                        formatDate(props.fromController.data[0][titulo['order']], '')
-                                    }} </span>
-                                <span v-if="titulo['type'] === 'datetime'"> {{
-                                        formatDate(props.fromController.data[0][titulo['order']], 'conLaHora')
-                                    }} </span>
-                                <span v-if="titulo['type'] === 'foreign'"> {{
-                                        props.fromController.data[0][titulo['nameid']]
-                                    }} </span>
-                                <span
-                                    v-if="titulo['order'] === 'hora_final' && props.fromController.data[0][titulo['order']] == null">-</span>
-                                asdasdasd {{ props.fromController.data[0][titulo['order']] > 60 }}
-
-                                <span
-                                    v-if="titulo['type'] === 'decimal' && titulo['order'] === 'tiempo_transcurrido'"> 
-                                        {{
-                                        props.fromController.data[0][titulo['order']] > 60 ?
-                                            number_format((props.fromController.data[0][titulo['order']] * 60), 3, false) + 'mins'
-                                            : number_format((props.fromController.data[0][titulo['order']]), 3, false)
-                                    }} </span>
-                                <span v-else-if="titulo['type'] === 'decimal'"> {{
-                                        number_format(props.fromController.data[0][titulo['order']], 3, false)
-                                    }} </span>
-                            </td>
-                        </tr>
+                                    <span v-if="titulo['type'] === 'number'"> {{
+                                            number_format(props.fromController.data[0][titulo['order']], 0, false)
+                                        }} </span>
+    
+                                    <span v-if="titulo['type'] === 'dinero'"> {{
+                                            number_format(props.fromController.data[0][titulo['order']], 0, true)
+                                        }} </span>
+                                    <span v-if="titulo['type'] === 'date'"> {{
+                                            formatDate(props.fromController.data[0][titulo['order']], '')
+                                        }} </span>
+                                    <span v-if="titulo['type'] === 'datetime'"> {{
+                                            formatDate(props.fromController.data[0][titulo['order']], 'conLaHora')
+                                        }} </span>
+                                    <span v-if="titulo['type'] === 'foreign'"> {{
+                                            props.fromController.data[0][titulo['nameid']]
+                                        }} </span>
+                                    <span
+                                        v-if="titulo['order'] === 'hora_final' && props.fromController.data[0][titulo['order']] == null">-</span>
+                                    asdasdasd {{ props.fromController.data[0][titulo['order']] > 60 }}
+    
+                                    <span
+                                        v-if="titulo['type'] === 'decimal' && titulo['order'] === 'tiempo_transcurrido'"> 
+                                            {{
+                                            props.fromController.data[0][titulo['order']] > 60 ?
+                                                number_format((props.fromController.data[0][titulo['order']] * 60), 3, false) + 'mins'
+                                                : number_format((props.fromController.data[0][titulo['order']]), 3, false)
+                                        }} </span>
+                                    <span v-else-if="titulo['type'] === 'decimal'"> {{
+                                            number_format(props.fromController.data[0][titulo['order']], 3, false)
+                                        }} </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody>
                         <tr v-for="(clasegenerica, indexu) in props.fromController.data" :key="indexu"
                             class="hover:dark:bg-gray-900/20">
                             <td v-if="props.numberPermissions > 1"
@@ -412,7 +405,7 @@ const mostrarTiempoTranscurrido = (raw) => {
                                     }} </span>
                                 <span v-if="titulo['type'] === 'foreign'"> {{ clasegenerica[titulo['nameid']] }} </span>
                                 <span v-if="titulo['order'] === 'hora_final' && clasegenerica[titulo['order']] == null">
-                                    <ClockWorking/>
+                                    <ClockWorking class="w-full"/>
                                 </span>
 
                                 <span v-if="titulo['type'] === 'decimal' && titulo['order'] === 'tiempo_transcurrido'">
@@ -426,23 +419,29 @@ const mostrarTiempoTranscurrido = (raw) => {
                         </tr>
 
                         <!-- totales -->
-                        <!-- <tr>
-                            <td class="whitespace-nowrap py-4 w-12 px-2 sm:py-3 text-center"> </td>
-                            <td class="whitespace-nowrap py-4 w-12 px-2 sm:py-3 text-center"> </td>
-                            <td v-if="numberPermissions > 1" class="whitespace-nowrap py-4 w-12 px-2 sm:py-3 text-center"> </td>
-                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"> </td>
-                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 font-extrabold text-center"> Hora inicial Promedio: </td>
+                        <tr>
+                            <td class="whitespace-nowrap py-4 w-12 px-2 sm:py-3 text-center"></td>
+                            <td class="whitespace-nowrap py-4 w-12 px-2 sm:py-3 text-center"></td>
+                            <td v-if="numberPermissions > 1"
+                                class="whitespace-nowrap py-4 w-12 px-2 sm:py-3 text-center"></td>
+                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
+                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 font-extrabold text-center"> Hora inicial
+                                Promedio:
+                            </td>
                             <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center">
                                 {{ CalcularAvg(props.fromController.data, 'hora_inicial', true) }}
                             </td>
-                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"> </td>
-                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"> </td>
-                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"> </td>
-                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 font-extrabold text-center"> Tiempo Estimado Promedio: </td>
+                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
+                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
+                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
+                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
+                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 font-extrabold text-center"> Tiempo Estimado
+                                Promedio:
+                            </td>
                             <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center">
                                 {{ CalcularAvg(props.fromController.data, 'TiempoEstimado') }}
                             </td>
-                        </tr> -->
+                        </tr>
                         </tbody>
                     </table>
                     <h2 v-else class="text-center text-xl my-8">Sin Registros</h2>

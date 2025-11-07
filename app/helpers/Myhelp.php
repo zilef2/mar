@@ -52,7 +52,7 @@ class Myhelp {
 			// 'material',
 			'pieza',
 			'reproceso',
-			// 'operario',
+			// 'trabajador',
 		];
 		
 		

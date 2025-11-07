@@ -36,7 +36,7 @@ class ReportesController extends Controller {
 		$empleados = User::WhereHas('roles', function ($query) {
 			return $query->whereIn('name', ['supervisor', 'empleado']);
 		})->get();
-		$empleados = Myhelp::NEW_turnInSelectID($empleados, ' operario', 'name');
+		$empleados = Myhelp::NEW_turnInSelectID($empleados, ' trabajador', 'name');
 		
 		$perPage = $request->has('perPage') ? $request->perPage : 50;
 		$total = $reportes->count();
@@ -63,7 +63,7 @@ class ReportesController extends Controller {
 		
 		if ($request->has('search2')) {
 			$nombre = $request->search2['title'];
-			$reportes = $reportes->WhereHas('operario', function ($query) use ($nombre) {
+			$reportes = $reportes->WhereHas('trabajador', function ($query) use ($nombre) {
 				return $query->Where('name', 'like', '%' . $nombre . '%');
 			});
 		}
@@ -82,8 +82,10 @@ class ReportesController extends Controller {
 			}
 		}
 		if ($request->has('search4')) {
-			$nombreot = $request->search4;
-			$reportes = $reportes->Where('OTItem', 'like', '%' . $nombreot . '%');
+			$nombreop = $request->search4;
+			$reportes = $reportes->WhereHas('ordenproduccion', function($query) use ($nombreop) {
+				return $query->Where('nombre', 'like', '%' . $nombreop . '%');
+			});
 		}
 		
 		if ($request->has('searchDate')) {
@@ -102,11 +104,10 @@ class ReportesController extends Controller {
 			if ($reportes->count() > 1000) {
 				$BusquedaMenorAMil = Carbon::now()->firstOfMonth()->format('Y-m-d');
 				$reportes = $reportes->whereBetween('fecha', [$BusquedaMenorAMil, now()]);
+				
 				if ($reportes->count() > 2000) {
 					$BusquedaMenorAMil = Carbon::now()->firstOfMonth()->addDays(10)->format('Y-m-d');
 					$reportes = $reportes->whereBetween('fecha', [$BusquedaMenorAMil, now()]);
-					//                    $reportes = Cache::remember('users', 600, function ()use ($BusquedaMenorAMil,$reportes) {return $reportes->whereBetween('fecha', [$BusquedaMenorAMil, now()]);});
-					//$value = Cache::pull('key');
 				}
 			}
 		}
@@ -133,7 +134,7 @@ class ReportesController extends Controller {
 			5 => "ordenproduccion"
 			7 => "pieza"
 			8 => "reproceso"
-			4 => "operario"
+			4 => "trabajador"
 		*/
 		$atributos_solo_id = Myhelp::filtrar_solo_id($atributos_id);
 		foreach ($atributos_solo_id as $key => $value) {
@@ -167,7 +168,7 @@ class ReportesController extends Controller {
 		$empleados = User::WhereHas('roles', function ($query) {
 			return $query->whereIn('name', ['supervisor', 'empleado']);
 		})->get();
-		$empleados = Myhelp::NEW_turnInSelectID($empleados, ' operario', 'name');
+		$empleados = Myhelp::NEW_turnInSelectID($empleados, ' trabajador', 'name');
 		
 		$perPage = $request->has('perPage') ? $request->perPage : 50;
 		$total = $reportes->count();
@@ -192,7 +193,7 @@ class ReportesController extends Controller {
 			// $reporte->ordenproduccion_s = $valuesGoogleBody->Where('Item_vue',$reporte->ordenproduccion_id)->first()->Item ?? '';
 			$reporte->actividad_s = $reporte->actividad()->first() !== null ? $reporte->actividad()->first()->nombre : '';
 			$reporte->centrotrabajo_s = $reporte->centrotrabajo()->first() !== null ? $reporte->centrotrabajo()->first()->nombre : '';
-			$reporte->operario_s = $reporte->operario()->first() !== null ? $reporte->operario()->first()->name : '';
+			$reporte->trabajador_s = $reporte->trabajador()->first() !== null ? $reporte->trabajador()->first()->name : '';
 			
 			$reporte->paro_s = $reporte->paro()->first() !== null ? $reporte->paro()->first()->nombre : '';
 			$reporte->reproceso_s = $reporte->reproceso()->first() !== null ? $reporte->reproceso()->first()->nombre : '';
@@ -228,10 +229,10 @@ class ReportesController extends Controller {
 			if (isset($request->paro_id['value'])) { //listo(1a) paro
 				$Valueparo = $request->paro_id['value'];
 			}
-			//todo: (1a) falta validar si es reproceso. | validar porque paroes mandan OTitem
 			$hoy = date('Y-m-d');
 			$tipoFin = $this->getLastReport($hoy, $userID); //BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
 			$tipoReport = $request->tipoReporte['value'];
+			
 			$reporte = Reporte::create([
 				                           'fecha'            => $request->fecha,
 				                           'tipoReporte'      => $tipoReport,
@@ -241,6 +242,7 @@ class ReportesController extends Controller {
 				                           'actividad_id'     => $request->actividad_id['value'] ?? null,
 				                           'paro_id'          => $Valueparo,
 				                           'reproceso_id'     => ($request->reproceso_id['value']) ?? null,
+				                           'ordenproduccion_id'     => ($request->ordenproduccion_id['value']) ?? null,
 				                           'tipoFinalizacion' => $tipoFin,//BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
 				                           'TiempoEstimado'   => $request->TiempoEstimado,
 			                           ]);

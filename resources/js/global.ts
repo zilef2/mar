@@ -199,6 +199,7 @@ export function CalcularAvg(TheArray, NameValue = '', isTime = false) {
     if (NameValue === '') {
         TheArray.forEach((value, index, array) => {
             sum += parseFloat(value);
+        console.log("🚀🚀CalcularAvg ~ sum: ", sum);
         })
     } else {
         if (isTime) { //time like: 14:18
@@ -207,16 +208,31 @@ export function CalcularAvg(TheArray, NameValue = '', isTime = false) {
                 let justHour = value[NameValue].split(':')[0];
                 justHour = parseInt(justHour);
                 sum += justHour;
+                console.log("🚀🚀CalcularAvg ~ sum: ", sum);
             })
         } else {
             TheArray.forEach((value, index, array) => {
-                let val = value[NameValue].replace(',', '.')
-                sum += parseFloat(val);
+                if(value[NameValue]){
+                    let val = value[NameValue].replace(',', '.')
+                    sum += parseFloat(val);
+                }
             })
         }
     }
-    let NewSum = sum / TheArray.length
-    const result = number_format(NewSum, 1, false);
+    let NewSum : number = sum / TheArray.length
+    let result
+    if(isTime){
+        
+        if( NewSum > 12){
+            
+            NewSum -= 12
+        }
+        result = number_format(NewSum, 0, false);
+    }else{
+        
+        result = number_format(NewSum, 1, false);
+    }
+    console.log("🚀🚀CalcularAvg ~ result: ", result);
     return result;
 }
 
