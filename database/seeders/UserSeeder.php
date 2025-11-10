@@ -37,50 +37,39 @@ class UserSeeder extends Seeder {
 		if (!$genPa) {
 			dd($genPa . ' | no env, even with comands');
 		}
-		
 		$metdoo1 = $genPa . 'super+-*' . $genPa;
 		$superadmin = User::create([
 			                           'name'              => 'Superadmin',
 			                           'email'             => 'ajelof2+8@gmail.com',
-			                           'password'          => bcrypt($metdoo1), //   1_IML_2super+-*1_IML_2
-			                           'email_verified_at' => date('Y-m-d H:i'), //
+			                           'password'          => bcrypt($metdoo1.'1'),
+			                           'email_verified_at' => date('Y-m-d H:i'),
 			                           'identificacion'    => '135791113',
 			                           'celular'           => '123456789'
 		                           ]);
 		$superadmin->assignRole('superadmin');
 		
 		$nombresGenericos = [
-			'Ashly_maria'   => 777117711,
-			'Teresa_yadiza' => 1234567890,
+			'PersonaPruebas'   => 777117711,
 		];
 		
-		$rolesUser = [
-			'administrativo',
-			'empleado',
-		];
 		
-		foreach ($rolesUser as $rol) {
 			foreach ($nombresGenericos as $key => $value) {
 				$yearRandom = (rand(22, 49));
-				$nombresRandom = (rand(1, count($rolesUser)));
-				$anios = Carbon::now()->subYears($yearRandom)->format('Y-m-d H:i');
+				$sexrandom = rand(0, 1);
+				$nombresRandom = (rand(1, count($nombresGenericos)));
 				$unUsuario = User::create([
-					                          'name'              => substr($key, $nombresRandom) . ' el ' . $rol,
-					                          'email'             => $key . '@' . $rol . $key . '.com',
-					                          'password'          => bcrypt($genPa . ' _ ' . $rol), //1234_modnom _ Empleado
+					                          'name'              => substr($key, $nombresRandom) . ' el ' . 'empleado',
+					                          'email'             => $key . '@' . 'empleado' . $key . '.com',
+					                          'password'          => bcrypt($genPa . ' _ ' . 'empleado'), //1_IML_2 _ empleado
 					                          'email_verified_at' => date('Y-m-d H:i'),
-					                          
 					                          'identificacion' => $value,
-					                          'celular'        => ((int)$value) * 2,
-					                          
-					                          //					                          'fecha_nacimiento'              => 'masculino',
-					                          'sexo'           => 'masculino',
+					                          'celular'        => ($value) * 2,
+					                          'sexo'           => $sexos[$sexrandom],
 					                          'salario'        => 1432000,
-					                          'cargo'          => 'cargo ejemplo',
-					                          'area'           => 'area ejemplo',
+					                          'cargo'          => 'Cargo ejemplo',
+					                          'area'           => 'Area ejemplo',
 				                          ]);
-				$unUsuario->assignRole($rol);
-			}
+				$unUsuario->assignRole('empleado');
 		}
 		
 	}

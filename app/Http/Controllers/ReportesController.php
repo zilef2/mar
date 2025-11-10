@@ -94,12 +94,6 @@ class ReportesController extends Controller {
 		if ($request->has('soloTiEstimado')) {
 			$reportes = $reportes->WhereNotnull('TiempoEstimado');
 		}
-		if ($request->has('FiltroCentro')) {
-			$FiltroCentro = $request->FiltroCentro['value'];
-			$reportes = $reportes->WhereHas('centrotrabajo', function ($query) use ($FiltroCentro) {
-				return $query->Where('id', $FiltroCentro);
-			});
-		}
 		if (!$request->has('ultimosmeses')) {
 			if ($reportes->count() > 1000) {
 				$BusquedaMenorAMil = Carbon::now()->firstOfMonth()->format('Y-m-d');
@@ -188,19 +182,19 @@ class ReportesController extends Controller {
 	}
 	
 	//todo: poner esto en modelo Reporte
-	public function MapearClasePP(&$reportes, $numberPermissions, $valuesGoogleBody): void {
-		$reportes = $reportes->get()->map(function ($reporte) use ($numberPermissions, $valuesGoogleBody) {
-			// $reporte->ordenproduccion_s = $valuesGoogleBody->Where('Item_vue',$reporte->ordenproduccion_id)->first()->Item ?? '';
-			$reporte->actividad_s = $reporte->actividad()->first() !== null ? $reporte->actividad()->first()->nombre : '';
-			$reporte->centrotrabajo_s = $reporte->centrotrabajo()->first() !== null ? $reporte->centrotrabajo()->first()->nombre : '';
-			$reporte->trabajador_s = $reporte->trabajador()->first() !== null ? $reporte->trabajador()->first()->name : '';
-			
-			$reporte->paro_s = $reporte->paro()->first() !== null ? $reporte->paro()->first()->nombre : '';
-			$reporte->reproceso_s = $reporte->reproceso()->first() !== null ? $reporte->reproceso()->first()->nombre : '';
-			
-			return $reporte;
-		})->filter();
-	}
+//	public function MapearClasePP(&$reportes, $numberPermissions, $valuesGoogleBody): void {
+//		$reportes = $reportes->get()->map(function ($reporte) use ($numberPermissions, $valuesGoogleBody) {
+//			// $reporte->ordenproduccion_s = $valuesGoogleBody->Where('Item_vue',$reporte->ordenproduccion_id)->first()->Item ?? '';
+//			$reporte->actividad_s = $reporte->actividad()->first() !== null ? $reporte->actividad()->first()->nombre : '';
+//			$reporte->centrotrabajo_s = $reporte->centrotrabajo()->first() !== null ? $reporte->centrotrabajo()->first()->nombre : '';
+//			$reporte->trabajador_s = $reporte->trabajador()->first() !== null ? $reporte->trabajador()->first()->name : '';
+//			
+//			$reporte->paro_s = $reporte->paro()->first() !== null ? $reporte->paro()->first()->nombre : '';
+//			$reporte->reproceso_s = $reporte->reproceso()->first() !== null ? $reporte->reproceso()->first()->nombre : '';
+//			
+//			return $reporte;
+//		})->filter();
+//	}
 	
 	//fin index
 	
@@ -243,8 +237,7 @@ class ReportesController extends Controller {
 				                           'paro_id'          => $Valueparo,
 				                           'reproceso_id'     => ($request->reproceso_id['value']) ?? null,
 				                           'ordenproduccion_id'     => ($request->ordenproduccion_id['value']) ?? null,
-				                           'tipoFinalizacion' => $tipoFin,//BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
-				                           'TiempoEstimado'   => $request->TiempoEstimado,
+				                           'tipoFinalizacion' => $tipoFin, //BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
 			                           ]);
 			DB::commit();
 			Myhelp::EscribirEnLog($this, 'STORE:reportes', 'usuario id:' . $user->id . ' | ' . $user->name . ' ha guardado el reporte ' . $reporte->id, false);
@@ -258,6 +251,10 @@ class ReportesController extends Controller {
 		}
 	}
 	
+	/*
+	 * BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
+	 * Cuando se reporta y hay un reporte sin hora final, se cierra ese reporte
+	 */
 	private function getLastReport($hoy, $userid) {
 		$hoyDate = date_create($hoy);
 		date_sub($hoyDate, date_interval_create_from_date_string('1 days'));
@@ -269,21 +266,16 @@ class ReportesController extends Controller {
 			return 1;
 		} //primera vez de su vida
 		
-		$ultimoReporte = $MainQuery
-			->Where('fecha', $hoy)->latest()->first()
-		;//busca el ultimo reporte de hoy
+		//busca el ultimo reporte de hoy
+		$ultimoReporte = $MainQuery->Where('fecha', $hoy)->latest()->first();
 		
 		if ($ultimoReporte === null) { //hoy
 			
-			$ultimoReporte = $MainQuery->Where('fecha', $ayer)->latest()->first();
 			$tipo = 1; //primera del dia
-			//            if ($ultimoReporte === null) //ayer
 			$ultimoReporte = Reporte::Where('user_id', $userid)->latest()->first();
 			
 			if ($ultimoReporte && $ultimoReporte->hora_final === null) {
-				$ultimoReporte->update([
-					                       'hora_final' => Carbon::now()
-				                       ]);
+				$ultimoReporte->update(['hora_final' => Carbon::now()]);
 				$ultimoReporte->HorFinal();
 			}
 			else {
@@ -346,7 +338,7 @@ class ReportesController extends Controller {
 				else {
 					$actualizar_reporte['hora_inicial'] = $request->hora_inicial ?? null;
 					$actualizar_reporte['hora_final'] = $request->hora_final ?? null;
-					$actualizar_reporte['tiempo_transcurrido'] = $request->tiempo_transcurrido ?? null;
+//					$actualizar_reporte['tiempo_transcurrido'] = $request->tiempo_transcurrido ?? null;
 					$actualizar_reporte['fecha'] = $request->fecha ?? null;
 				}
 			}

@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
-class LanguageCopyU extends Command
+class LanguageCopyUCommand extends Command
 {
     protected $signature = 'lang:u {Combinaciones}';
     protected $description = 'Genera las combinaciones posibles y las inserta en es_appphp';

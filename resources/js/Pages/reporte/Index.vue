@@ -86,11 +86,31 @@ const data = reactive({
     //v-sticky
     hayCongelado: 0,
 })
+// text // number // dinero // date // datetime // foreign // decimal
+let titulos = [
+    {order: 'fecha', label: 'fecha', type: 'date', CanOrder: true},
+    {order: 'userino', label: 'trabajador', type: 'foreign', nameid: 'userino', CanOrder: true},
+    {order: 'hora_inicial', label: 'hora inicial', type: 'time', CanOrder: true},
+    {order: 'hora_final', label: 'hora final', type: 'time', CanOrder: true},
+    {
+        order: 'tiempo_transcurrido',
+        label: 'Tiempo Transcurrido',
+        type: 'decimal',
+        nameid: 'tiempo_transcurrido',
+        CanOrder: true
+    },
+    {order: 'actividad_id', label: 'actividad', type: 'foreign', nameid: 'actividadsini', CanOrder: true},
+    {order: 'Orden', label: 'Orden', type: 'text', CanOrder: false},
+    {order: 'TiempoEstimado', label: 'TiempoEstimado', type: 'text', CanOrder: true},
+    {order: 'paro_id', label: 'paro', type: 'foreign', nameid: 'paro_s', CanOrder: true},
+    {order: 'reproceso_id', label: 'reproceso', type: 'foreign', nameid: 'reproceso_s', CanOrder: true},
+];
+onMounted(()=>{
+    if(props.numberPermissions < 2){
+        titulos = titulos.filter(t => t.order !== 'TiempoEstimado');
 
-// onMounted(()=>{
-//     if(props.filters.ultimosmeses == null)
-//         data.param.ultimosmeses = true
-// })
+    }
+})
 const order = (field, CanOrder) => {
     if (CanOrder) {
         data.params.field = field
@@ -122,25 +142,8 @@ const select = () => {
 // const form = useForm({ })
 watchEffect(() => {})
 
-// text // number // dinero // date // datetime // foreign // decimal
-const titulos = [
-    {order: 'fecha', label: 'fecha', type: 'date', CanOrder: true},
-    {order: 'userino', label: 'trabajador', type: 'foreign', nameid: 'userino', CanOrder: true},
-    {order: 'hora_inicial', label: 'hora inicial', type: 'time', CanOrder: true},
-    {order: 'hora_final', label: 'hora final', type: 'time', CanOrder: true},
-    {
-        order: 'tiempo_transcurrido',
-        label: 'Tiempo Transcurrido',
-        type: 'decimal',
-        nameid: 'tiempo_transcurrido',
-        CanOrder: true
-    },
-    {order: 'actividad_id', label: 'actividad', type: 'foreign', nameid: 'actividadsini', CanOrder: true},
-    {order: 'Orden', label: 'Orden', type: 'text', CanOrder: false},
-    {order: 'TiempoEstimado', label: 'TiempoEstimado', type: 'text', CanOrder: true},
-    {order: 'paro_id', label: 'paro', type: 'foreign', nameid: 'paro_s', CanOrder: true},
-    {order: 'reproceso_id', label: 'reproceso', type: 'foreign', nameid: 'reproceso_s', CanOrder: true},
-];
+
+
 
 const tipoReporte = [
     {value: 'soloreporte', title: 'Reportes'},
@@ -405,7 +408,7 @@ const mostrarTiempoTranscurrido = (raw) => {
                                     }} </span>
                                 <span v-if="titulo['type'] === 'foreign'"> {{ clasegenerica[titulo['nameid']] }} </span>
                                 <span v-if="titulo['order'] === 'hora_final' && clasegenerica[titulo['order']] == null">
-                                    <ClockWorking class="w-full"/>
+                                    <ClockWorking class=""/>
                                 </span>
 
                                 <span v-if="titulo['type'] === 'decimal' && titulo['order'] === 'tiempo_transcurrido'">
@@ -422,12 +425,9 @@ const mostrarTiempoTranscurrido = (raw) => {
                         <tr>
                             <td class="whitespace-nowrap py-4 w-12 px-2 sm:py-3 text-center"></td>
                             <td class="whitespace-nowrap py-4 w-12 px-2 sm:py-3 text-center"></td>
-                            <td v-if="numberPermissions > 1"
-                                class="whitespace-nowrap py-4 w-12 px-2 sm:py-3 text-center"></td>
+                            <td v-if="numberPermissions > 1" class="whitespace-nowrap py-4 w-12 px-2 sm:py-3 text-center"></td>
                             <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
-                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 font-extrabold text-center"> Hora inicial
-                                Promedio:
-                            </td>
+                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 font-extrabold text-center"> Hora inicial Promedio:</td>
                             <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center">
                                 {{ CalcularAvg(props.fromController.data, 'hora_inicial', true) }}
                             </td>
@@ -435,11 +435,11 @@ const mostrarTiempoTranscurrido = (raw) => {
                             <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
                             <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
                             <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
-                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 font-extrabold text-center"> Tiempo Estimado
-                                Promedio:
+                            <td class="whitespace-nowrap py-4 px-2 sm:py-3 font-extrabold text-center"> 
+                                <p v-if="props.numberPermissions > 1" class="">Tiempo Estimado Promedio:</p>
                             </td>
                             <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center">
-                                {{ CalcularAvg(props.fromController.data, 'TiempoEstimado') }}
+                                <p v-if="props.numberPermissions > 1" class="">{{ CalcularAvg(props.fromController.data, 'TiempoEstimado') }}</p>
                             </td>
                         </tr>
                         </tbody>

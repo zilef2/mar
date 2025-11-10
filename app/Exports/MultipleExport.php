@@ -33,30 +33,25 @@ class MultipleExport implements WithMultipleSheets,ShouldAutoSize
     protected function listarModelos()
     {
         $directorioModelos = app_path('Models'); // Ruta al directorio de modelos
-
         // Obtener todos los archivos en el directorio de modelos
         $archivos = File::files($directorioModelos);
 
         $ListaNegra = [
-//            "GuardarGoogleSheetsComercial",
             "Parametro",
             "Permission",
-            "Pieza",
             "Role",
-            "ordenproduccion",
         ];
 
         // Filtrar los nombres de clase que sean modelos
         $nombresModelos = collect($archivos)
             ->map(function ($archivo) use ($ListaNegra) {
-
                 $nombre = pathinfo($archivo, PATHINFO_FILENAME);
+				
                 if(!in_array($nombre,$ListaNegra)) return $nombre;
+				
             })->filter();
-//            ->filter(function ($clase) {
-//                return class_exists($clase) && is_subclass_of($clase, 'Illuminate\Database\Eloquent\Model');
-//            });
 
+		
         return $nombresModelos;
     }
 }

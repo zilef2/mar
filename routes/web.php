@@ -8,29 +8,15 @@ use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ActividadsController;
-//use App\Http\Controllers\ordenproduccionsController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ReadGoogleSheets;
 use App\Http\Controllers\ReprocesosController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
 Route::get('/', function () { return redirect('/login'); });
 Route::get('/dashboard', [UserController::class, 'Dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/RRepor', [UserController::class, 'RRepor'])->middleware(['auth', 'verified'])->name('RRepor');
-Route::get('/ActualizaGoogleManual', [ReadGoogleSheets::class, 'ActualizaGoogleManual'])->middleware(['auth', 'verified'])->name('ActualizaGoogleManual');
-Route::get('/OnlyViewNecesitaActualizaF', [ReadGoogleSheets::class, 'OnlyViewNecesitaActualizaF'])->middleware(['auth', 'verified'])->name('OnlyViewNecesitaActualizaF');
-Route::get('/mochar', [ReadGoogleSheets::class, 'mochar'])->name('mochar'); //sin ejemplos papa
-Route::get('/mochar2', [ReadGoogleSheets::class, 'mochar2'])->name('mochar2'); //sin ejemplos papa
 
 Route::get('/setLang/{locale}', function ($locale) {
     Session::put('locale', $locale);
@@ -45,8 +31,6 @@ Route::middleware('auth', 'verified')->group(function () {
     //# user
     Route::resource('/user', UserController::class)->except('create', 'show', 'edit');
     Route::post('/user/destroy-bulk', [UserController::class, 'destroyBulk'])->name('user.destroy-bulk');
-    // Route::get('/subirexceles', [UserController::class, 'subirexceles'])->name('subirexceles');
-
 
     Route::resource('/role', RoleController::class)->except('create', 'show', 'edit');
     Route::post('/role/destroy-bulk', [RoleController::class, 'destroyBulk'])->name('role.destroy-bulk');
@@ -67,13 +51,12 @@ Route::middleware('auth', 'verified')->group(function () {
 
     Route::resource('/Paro', ParoController::class);
     Route::resource('/reproceso', ReprocesosController::class);
-    Route::get('/gsheet', ReadGoogleSheets::class);
 
     Route::resource('/Ordenproduccion', OrdenproduccionController::class);
 	//aquipues
 
     //# EXCEL
-    Route::get('/IML', [UserController::class,'todaBD'])->name('IMIdb');
+    Route::get('/IMI', [UserController::class,'todaBD'])->name('IMIdb');
 });
 
 
@@ -121,5 +104,4 @@ Route::get('/test-email', function () {
         return 'Error al enviar el correo: ' . $e->getMessage();
     }
 });
-
 //</editor-fold>

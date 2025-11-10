@@ -31,6 +31,7 @@ class ActividadsController extends Controller
     public function MapearClasePP(&$Actividads, $numberPermissions){
         $Actividads = $Actividads->get()->map(function ($Actividad) use ($numberPermissions) {
 //            $Actividad->centros = implode(',', $Actividad->centroTrabajos->pluck('nombre')->toArray());
+	        //todo: esta funcion no hace nada, hay que pasarla al modelo actividad
             return $Actividad;
         })->filter();
     }
@@ -118,8 +119,6 @@ class ActividadsController extends Controller
 
 
     public function update(ActividadRequest $request, $id) {
-        $user = Auth::User();
-
         Myhelp::EscribirEnLog($this, 'UPGRADE:Actividads', '', false);
         DB::beginTransaction();
         try {
@@ -136,12 +135,12 @@ class ActividadsController extends Controller
                 $guardar['tipo'] = $guardar['tipo']['value'];
             }
 
-            foreach ($request->centro_id as $centro) {
-                if($centro['value'] && $centro['value'] != 0){
-                    $vectorCentros[] = $centro['value'];
-                }
-            }
-            $Actividad->centroTrabajos()->sync($vectorCentros);
+//            foreach ($request->centro_id as $centro) {
+//                if($centro['value'] && $centro['value'] != 0){
+//                    $vectorCentros[] = $centro['value'];
+//                }
+//            }
+//            $Actividad->centroTrabajos()->sync($vectorCentros);
 
             $Actividad->update($guardar);
 

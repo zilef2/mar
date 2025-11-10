@@ -63,11 +63,10 @@ class Reporte extends Model {
 		if ($this->hora_final) {
 			$horaFinal = Carbon::parse($this->hora_final);
 			$horaInicial = Carbon::parse($this->hora_inicial);
-			$tiemtras = number_format($horaFinal->diffInSeconds($horaInicial) / 3600, 3);
-			$repor = [
-				'tiempo_transcurrido' => $tiemtras
-			];
-			$this->update($repor);
+		
+			$this->update(['tiempo_transcurrido' => 
+				               (double)number_format($horaInicial->diffInSeconds($horaFinal) / 3600, 3)
+			              ]);
 		}
 	}
 	

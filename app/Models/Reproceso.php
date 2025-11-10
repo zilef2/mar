@@ -11,10 +11,8 @@ class Reproceso extends Model
 
     protected $fillable = [
         'id',
-//        'codigo',
         'nombre',
     ];
 
-    public function centroTrabajos(): BelongsToMany { return $this->BelongsToMany(Centrotrabajo::class); }
 
 }

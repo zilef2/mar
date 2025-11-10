@@ -17,6 +17,7 @@ class CreateActividadsTable extends Migration
             $table->id();
 			$table->string('nombre');
 			$table->string('codigo')->nullable();
+			$table->double('TiempoEstimado')->nullable();
 
             // $table->unsignedBigInteger('centrotrabajo_id');
             // $table->foreign('centrotrabajo_id')

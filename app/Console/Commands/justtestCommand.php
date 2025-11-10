@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
-class justtest extends Command {
+class justtestCommand extends Command {
 	
 	use Constants;
 	

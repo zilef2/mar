@@ -11,7 +11,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 {
     /** @use HasFactory<\Database\Factories\ParoFactory> */
     use HasFactory;
-    protected $fillable = ['descripcion', 'cantidad_horas'];
+    protected $fillable = [
+		'id',
+		'descripcion',
+	    'cantidad_horas'
+    ];
 
 
     public static function getFillableWithTypes()

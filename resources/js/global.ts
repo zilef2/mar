@@ -42,7 +42,6 @@ export function LookForValueInArray(arrayOfObjects: Object[], searchValue): Stri
     if (typeof searchValue == 'string') {
         for (const obj of arrayOfObjects) {
             if (obj['title'] === searchValue) {
-                console.log("🧈 " + obj['value'] + " searchValue:", searchValue);
                 foundObject = obj['value'];
                 break;
             }
@@ -75,9 +74,6 @@ export function DiferenciaMinutos(hora1: string, hora2: string): number {
     const time1: number = date1.getTime();
 
     const time2: number = date2.getTime();
-    console.log(time1)
-    console.log('lostimes')
-    console.log(time2)
 
     // Obtener la diferencia en milisegundos y convertirla a minutos
     const diferenciaMs: number = (time1 - time2);
@@ -199,7 +195,6 @@ export function CalcularAvg(TheArray, NameValue = '', isTime = false) {
     if (NameValue === '') {
         TheArray.forEach((value, index, array) => {
             sum += parseFloat(value);
-        console.log("🚀🚀CalcularAvg ~ sum: ", sum);
         })
     } else {
         if (isTime) { //time like: 14:18
@@ -208,7 +203,6 @@ export function CalcularAvg(TheArray, NameValue = '', isTime = false) {
                 let justHour = value[NameValue].split(':')[0];
                 justHour = parseInt(justHour);
                 sum += justHour;
-                console.log("🚀🚀CalcularAvg ~ sum: ", sum);
             })
         } else {
             TheArray.forEach((value, index, array) => {
@@ -232,7 +226,6 @@ export function CalcularAvg(TheArray, NameValue = '', isTime = false) {
         
         result = number_format(NewSum, 1, false);
     }
-    console.log("🚀🚀CalcularAvg ~ result: ", result);
     return result;
 }
 

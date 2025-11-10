@@ -36,7 +36,7 @@ class PermissionSeeder extends Seeder
 			'user',
 	        'reporte',
 	        
-	        'Centrotrabajo',
+//	        'Centrotrabajo',
 	        'Ordenproduccion',
 	        'Paro',
 	        //esto se define el 31octubre2025

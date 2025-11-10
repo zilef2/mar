@@ -2,8 +2,8 @@
 </script>
 
 <template>
-   <!-- From Uiverse.io by chase2k25 --> 
-<div class="page-background w-10">
+      <div class="inline-flex items-center justify-center w-[120px] h-[120px] overflow-hidden">
+
   <div class="clock-container">
     <div class="clock-face">
       <div class="marker marker-1"><div class="marker-dot"></div></div>
@@ -38,7 +38,7 @@
       <div class="center-pin"></div>
     </div>
   </div>
-</div>
+  </div>
 
 </template>
 
@@ -47,24 +47,25 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 1%;
-  height: 1%;
-  background: #ffffff;
+  width: 100%;
+  height: 100%;
+  background: #e0e5ec;
+  font-family: "Helvetica Neue", "Arial", sans-serif;
 }
 
 .clock-container {
-  max-width: 30px;
-  max-height: 30px;
+  max-width: 333px;
+  max-height: 444px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .clock-face {
-  width: 30px;
-  height: 30px;
+  width: 300px;
+  height: 300px;
   background-color: #e0e5ec;
-  border-radius: 220%;
+  border-radius: 50%;
   box-shadow:
     12px 12px 24px #a3b1c6,
     -12px -12px 24px #ffffff;
@@ -77,10 +78,10 @@
 .clock-face::before {
   content: "";
   position: absolute;
-  width: 9%;
-  height: 9%;
+  width: 92%;
+  height: 92%;
   background-color: transparent;
-  border-radius: 5%;
+  border-radius: 50%;
   box-shadow:
     inset 8px 8px 16px #a3b1c6,
     inset -8px -8px 16px #ffffff;
@@ -88,8 +89,8 @@
 
 .marker {
   position: absolute;
-  width: 40%;
-  height: 40%;
+  width: 100%;
+  height: 100%;
   z-index: 1;
 }
 
@@ -162,12 +163,12 @@
 
 .number {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: 100%;
+  height: 100%;
   text-align: center;
-  font-size: 0px;
-  font-weight: 0;
-  color: transparent;
+  font-size: 24px;
+  font-weight: 600;
+  color: #b8c1d1;
   text-shadow:
     1px 1px 1px #ffffff,
     -1px -1px 1px #a3b1c6;
@@ -269,8 +270,8 @@
 }
 
 .hour-hand {
-  width: 4px;
-  height: 20px;
+  width: 8px;
+  height: 50px;
   background: #4a5463;
   transform: translateX(-50%) rotate(105.5deg);
   animation: rotate-hours 43200s linear infinite;
@@ -280,7 +281,7 @@
 
 .minute-hand {
   width: 6px;
-  height: 30px;
+  height: 80px;
   background: #7a8a9e;
   transform: translateX(-50%) rotate(186deg);
   animation: rotate-minutes 3600s linear infinite;
@@ -290,7 +291,7 @@
 
 .second-hand {
   width: 3px;
-  height: 30px;
+  height: 100px;
   background: #e65e5e;
   transform: translateX(-50%) rotate(0deg);
   animation: rotate-seconds 60s steps(60, end) infinite;
@@ -348,6 +349,12 @@
     transform: translateX(-50%) rotate(465.5deg);
   }
 }
+
+.clock-container {
+  transform: scale(0.25);
+  transform-origin: center center;
+}
+
 
 
 </style>

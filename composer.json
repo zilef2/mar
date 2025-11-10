@@ -23,7 +23,8 @@
         "spatie/laravel-data": "^4.18",
         "spatie/laravel-permission": "^6.22",
         "spatie/laravel-validation-rules": "^3.4",
-        "tightenco/ziggy": "^2.4"
+        "tightenco/ziggy": "^2.4",
+      "ext-zip": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
