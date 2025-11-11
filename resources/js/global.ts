@@ -190,6 +190,7 @@ export function TransformTdate(dateString) {
 
 // MATH  functions
 export function CalcularAvg(TheArray, NameValue = '', isTime = false) {
+    if(!TheArray) return 0
     let sum: number
     sum = 0
     if (NameValue === '') {
@@ -198,38 +199,41 @@ export function CalcularAvg(TheArray, NameValue = '', isTime = false) {
         })
     } else {
         if (isTime) { //time like: 14:18
-
             TheArray.forEach((value, index, array) => {
-                let justHour = value[NameValue].split(':')[0];
-                justHour = parseInt(justHour);
+                console.log("🚀🚀CalcularAvg ~ value[NameValue]: ", value[NameValue]);
+                let justHour:number = 0
+                if(value[NameValue]){
+                    justHour = parseInt(value[NameValue].split(':')[0])
+                }
                 sum += justHour;
+                console.log("🚀🚀CalcularAvg ~ sum: ", sum);
             })
         } else {
             TheArray.forEach((value, index, array) => {
                 if(value[NameValue]){
-                    let val = value[NameValue].replace(',', '.')
-                    sum += parseFloat(val);
+                    console.log("🚀🚀CalcularAvg ~ value[NameValue]: ", value[NameValue]);
+                    // let val = value[NameValue].replace(',', '.')
+                    console.log("🚀🚀CalcularAvg ~ value: ", value);
+                    // sum += parseFloat(val);
                 }
             })
         }
     }
     let NewSum : number = sum / TheArray.length
-    let result
+    let result : string
     if(isTime){
-        
         if( NewSum > 12){
-            
             NewSum -= 12
         }
-        result = number_format(NewSum, 0, false);
+        result = zilef_number_format(NewSum, 0, false);
     }else{
         
-        result = number_format(NewSum, 1, false);
+        result = zilef_number_format(NewSum, 1, false);
     }
     return result;
 }
 
-export function number_format(amount, decimals, isPesos: boolean) {
+export function zilef_number_format(amount: any, decimals = 0, isPesos: boolean = false) {
     amount += '';
     amount = parseFloat(amount.replace(/[^0-9\.]/g, ''));
     decimals = decimals || 0;

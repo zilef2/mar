@@ -15,20 +15,13 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-		$modelosIniciales = [
-			'Centrotrabajo',
-			'reporte',
-		];
         $superadmin = Role::create(['name' => 'superadmin']);
-        $superadmin->givePermissionTo([
-            'isSuper',
-            'isAdmin',
-			'issupervisor',
-			'isrevisor',
-            'isadministrativo',
-			'isempleado',
-        ]);
+	    $superadmin->givePermissionTo(['isSuper', 'isAdmin']);
+        $admin = Role::create(['name'=> 'Admin' ]);
+//		unset($vectorCRUD[3]);
 		
+        $admin->givePermissionTo(['isAdmin']);
+	   
         $vectorCRUD = [
 			'create', 'update','read','delete'
         ];
@@ -37,22 +30,26 @@ class RoleSeeder extends Seeder
 			'user',
 			'role',
 			'permission',
-			'reporte','Centrotrabajo','parametros'
+	        
+			'reporte','Ordenproduccion','parametros'
         ];
 		
-        foreach ($vectorCRUD as $value) { foreach ($vectorModelo as $model) { $superadmin->givePermissionTo([ $value.' '.$model ]); } }
+        foreach ($vectorCRUD as $value) { foreach ($vectorModelo as $model) {
+			$superadmin->givePermissionTo([ $value.' '.$model ]); 
+		}}
 
-        $admin = Role::create(['name'=> 'Admin' ]);
-		unset($vectorCRUD[3]);
-		
-        $admin->givePermissionTo([
-            'isAdmin',
-            'isadministrativo',
-			'issupervisor',
-			'isrevisor',
-			'isempleado',
-        ]);
+
         foreach ($vectorCRUD as $value) { foreach ($vectorModelo as $model) { $admin->givePermissionTo([ $value.' '.$model ]); } }
+		
+		
+        //is todos
+		$theBasePermissions = config('app.theBasePermissions');
+	    foreach ($theBasePermissions as $index => $the_base_permission) {
+		    
+		    $superadmin->givePermissionTo('is'.$the_base_permission); //super => isempleado, etc
+		    $admin->givePermissionTo('is'.$the_base_permission);
+		}
+		 
         //no more admins
 
 	    
@@ -84,31 +81,8 @@ class RoleSeeder extends Seeder
             'read reporte',
             'delete reporte',
 
-            //#Centrotrabajo
-            'update Centrotrabajo',
-            'read Centrotrabajo',
-
             //#parametros
             'read parametros',
-        ]);
-        $supervisor = Role::create(['name' => 'supervisor']);
-        $supervisor->givePermissionTo([
-            'issupervisor',
-
-            //#user
-            'read user',
-            // 'create user',
-            // 'read role',
-
-            //#reporte
-            'read reporte',
-            'create reporte',
-            'update reporte',
-            'delete reporte',
-
-            //#Centrotrabajo
-            'update Centrotrabajo',
-            'read Centrotrabajo',
         ]);
 
 

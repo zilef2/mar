@@ -38,6 +38,11 @@ const goto = (link) => {
 
 watchEffect(() => {
     data.params.search = props.filters?.search
+    data.params.search2 = props.filters?.search2
+    data.params.search3 = props.filters?.search3
+    data.params.search4 = props.filters?.search4
+    data.params.search5 = props.filters?.search5
+    data.params.search6 = props.filters?.search6
     data.params.field = props.filters?.field
     data.params.order = props.filters?.order
     data.params.perPage = props.filters?.perPage

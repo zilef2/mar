@@ -18,7 +18,7 @@ import DeleteBulk from '@/Pages/User/DeleteBulk.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import { router, usePage, useForm, Link } from '@inertiajs/vue3';
 
-import { number_format, formatDate, CalcularEdad, CalcularSexo } from '@/global.ts';
+import { zilef_number_format, formatDate, CalcularEdad, CalcularSexo } from '@/global.ts';
 import Modal from "@/Components/Modal.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 

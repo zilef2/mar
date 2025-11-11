@@ -16,6 +16,8 @@ class Reporte extends Model {
 		'Orden',
 		'userino',
 		'actividadsini',
+		'parou',
+		'reprocesou',
 	];
 	protected $fillable = [
 		'user_id',
@@ -35,16 +37,17 @@ class Reporte extends Model {
 		'TiempoEstimado',
 	];
 	
-	public function getOrdenAttribute(): string {
-		return $this->ordenproduccion ? $this->ordenproduccion->nombre : '';
-	}
+	public function getOrdenAttribute(): string {return $this->ordenproduccion ? $this->ordenproduccion->nombre : ''; }
 	
-	public function getuserinoAttribute(): string {
-		return $this->trabajador ? $this->trabajador->name : '';
-	}
+	public function getuserinoAttribute(): string {return $this->trabajador ? $this->trabajador->name : ''; }
 	
-	public function getactividadsiniAttribute(): string {
-		return $this->actividad ? $this->actividad->nombre : '';
+	public function getactividadsiniAttribute(): string {return $this->actividad ? $this->actividad->nombre : ''; }
+	
+	public function getparouAttribute(): string {
+		return $this->paro ? $this->paro->descripcion : ''; 
+	}
+	public function getreprocesouAttribute(): string {
+		return $this->reproceso ? $this->reproceso->nombre : ''; 
 	}
 	
 	// public function reportes() { return $this->hasMany('App\Models\Reporte'); }

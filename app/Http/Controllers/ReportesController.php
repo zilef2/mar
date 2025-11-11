@@ -13,42 +13,35 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Inertia\Response;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ReportesController extends Controller {
 	
-	public function index(Request $request): \Inertia\Response {
+	public function index(Request $request): Response {
 		$permissions = Myhelp::EscribirEnLog($this, ' reportes');
 		$numberPermissions = Myhelp::getPermissionToNumber($permissions);
-		$user = Myhelp::AuthU();
 		
-		if ($numberPermissions > 1) {
-			$reportes = Reporte::query();
-		}
-		else {
-			$reportes = Reporte::Where('user_id', $user->id);
-		}
+		$perPage = $request->has('perPage') ? $request->perPage : 50;
 		
-		$this->ZounaSearch($request, $reportes); //se hace get()
+		$reportes = $this->ZounaSearch($request,$perPage,$numberPermissions); //se hace get()
 		
 		$empleados = User::WhereHas('roles', function ($query) {
 			return $query->whereIn('name', ['supervisor', 'empleado']);
 		})->get();
 		$empleados = Myhelp::NEW_turnInSelectID($empleados, ' trabajador', 'name');
 		
-		$perPage = $request->has('perPage') ? $request->perPage : 50;
 		$total = $reportes->count();
-		$page = request('page', 1); // Current page number
-		$fromController = new LengthAwarePaginator($reportes->forPage($page, $perPage), $total, $perPage, $page, ['path' => request()->url()]);
 		
 		return Inertia::render('reporte/Index', [
 			'breadcrumbs'       => [['label' => __('app.label.reporte'), 'href' => route('reporte.index')]],
 			'title'             => __('app.label.reporte'),
 			'filters'           => $request->all(['search', 'field', 'order', 'soloTiEstimado', 'searchdia']),
 			'perPage'           => (int)$perPage,
-			'fromController'    => $fromController,
+			'fromController'    => $reportes,
 			'total'             => $total,
 			'numberPermissions' => $numberPermissions,
 			'empleados'         => $empleados,
@@ -56,7 +49,21 @@ class ReportesController extends Controller {
 		]);
 	}
 	
-	public function ZounaSearch($request, &$reportes): void {
+	public function ZounaSearch($request,$perPage,$numberPermissions) {
+//		$page = (int)(request('page', 1)); // Current page number
+		
+		if ($numberPermissions > 1) {
+			$reportes = Reporte::query();
+		}
+		else {
+			$authid = Myhelp::AuthU()->id;
+			$reportes = Reporte::Where('user_id', $authid);
+		}
+		
+		//->when($request->search, fn($q) => $q->where('campo', 'like', "%{$request->search}%"))
+		
+		
+		
 		if ($request->has('searchdia')) {
 			$reportes = $reportes->WhereDay('fecha', $request->searchdia);
 		}
@@ -113,7 +120,22 @@ class ReportesController extends Controller {
 			$reportes = $reportes->orderByRaw('ISNULL(hora_final) DESC')->orderbyDesc('fecha')->orderByDesc('updated_at');
 		}
 		
+		
+		
+		$page = (int) $request->get('page', 1);
+		$perPage = (int) $request->get('perPage', 50);
+		
 		$reportes = $reportes->get();
+		$reportesPaginados = $reportes->slice(($page - 1) * $perPage, $perPage)->values();
+		
+		return new LengthAwarePaginator(
+		    $reportesPaginados,
+		    $reportes->count(),
+		    $perPage,
+		    $page,
+		    ['path' => $request->url(), 'query' => $request->query()]
+		);
+//		return $reportes->get();
 	}
 	
 	public function SelectsMasivos(): array { //aproved
@@ -148,7 +170,7 @@ class ReportesController extends Controller {
 		return $result;
 	}
 	
-	public function createdev(Request $request): \Inertia\Response {
+	public function createdev(Request $request): Response {
 		$numberPermissions = Myhelp::getPermissionToNumber(Myhelp::EscribirEnLog($this, ' solo dev createdev'));
 		$user = Myhelp::AuthU();
 		

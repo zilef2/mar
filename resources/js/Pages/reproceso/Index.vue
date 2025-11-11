@@ -22,7 +22,7 @@ import Delete from '@/Pages/reproceso/Delete.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import InfoButton from '@/Components/InfoButton.vue';
 
-import { PrimerasPalabras, vectorSelect, formatDate, CalcularAvg, number_format } from '@/global.ts';
+import { PrimerasPalabras, vectorSelect, formatDate, CalcularAvg, zilef_number_format } from '@/global.ts';
 
 const { _, debounce, pickBy } = pkg
 const props = defineProps({
@@ -195,9 +195,11 @@ const titulos = [
                                 <td v-for="titulo in titulos" class="whitespace-nowrap py-4 px-2 sm:py-3">
                                     <span v-if="titulo['type'] == 'text'"> {{ clasegenerica[titulo['order']] }} </span>
                                     <span v-if="titulo['type'] == 'number'"> {{
-                                        number_format(clasegenerica[titulo['order']], 0, false) }} </span>
+                                            zilef_number_format(clasegenerica[titulo['order']], 0, false)
+                                        }} </span>
                                     <span v-if="titulo['type'] == 'dinero'"> {{
-                                        number_format(clasegenerica[titulo['order']], 0, true) }} </span>
+                                            zilef_number_format(clasegenerica[titulo['order']], 0, true)
+                                        }} </span>
                                     <span v-if="titulo['type'] == 'date'"> {{
                                         formatDate(clasegenerica[titulo['order']], false) }} </span>
                                     <span v-if="titulo['type'] == 'datetime'"> {{

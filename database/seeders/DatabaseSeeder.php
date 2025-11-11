@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-        \App\Models\Permission::create(['name' => 'isIngeniero']);
 		
 		$this->call([
 			            PermissionSeeder::class,
@@ -26,7 +25,7 @@ class DatabaseSeeder extends Seeder {
 			            OrdenproduccionSeeder::class,
 		            ]);
 		
-		\App\Models\User::factory(5)->create();
-		\App\Models\User::factory()->create(['name'  => 'Test User', 'email' => 'test@example.com',]);
+		\App\Models\User::factory(2)->create();
+		\App\Models\Reporte::factory(102)->create();
 	}
 }

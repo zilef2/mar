@@ -27,48 +27,13 @@ class Myhelp {
 	}
 	
 	//JUST THIS PROJECT
-	public static function CargosYModelos() {
-		//otros cargos NO_ADMIN
-		$nombresDeCargos = [
-			'empleado',
-			'supervisor',
-		];
-		$isSome = [];
-		foreach ($nombresDeCargos as $key => $value) {
-			$isSome[] = 'is' . $value;
-		}
-		//arrrays for easyway
-		$Models = [
-			'role',
-			'permission',
-			'user',
-			
-			'reporte',//core
-			
-			'ordenproduccion',
-			'actividad',
-			'centrotrabajo',
-			'paro',
-			// 'material',
-			'pieza',
-			'reproceso',
-			// 'trabajador',
-		];
-		
-		
-		return [
-			'nombresDeCargos' => $nombresDeCargos,
-			'Models'          => $Models,
-			'isSome'          => $isSome,
-		];
-	}
 	
 	public static function getPermissionToNumber($permissions) {
 		
 		if ($permissions === 'empleado') {
 			return 1;
 		}
-		if ($permissions === 'supervisor') {
+		if ($permissions === 'administrativo') {
 			return 2;
 		}
 		if ($permissions === 'admin') {

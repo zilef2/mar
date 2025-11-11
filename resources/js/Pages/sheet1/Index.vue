@@ -18,7 +18,7 @@ import { CheckBadgeIcon, ChevronUpDownIcon, PencilIcon, TrashIcon } from '@heroi
 import Checkbox from '@/Components/Checkbox.vue';
 import { router, usePage, useForm, Link } from '@inertiajs/vue3';
 
-import { IsDate_GOES_formatDate, number_format, formatDate, CalcularEdad, CalcularSexo } from '@/global.ts';
+import { IsDate_GOES_formatDate, zilef_number_format, formatDate, CalcularEdad, CalcularSexo } from '@/global.ts';
 
 const { _, debounce, pickBy } = pkg
 const props = defineProps({

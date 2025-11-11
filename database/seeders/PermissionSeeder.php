@@ -12,13 +12,11 @@ class PermissionSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
-    {
-		$theBasePermissions = [
-			'administrativo', //this is very important!!!
-			'revisor',
-			'empleado',
-		];
+    public function run() {
+	     //'empleado',
+        //'administrativo',
+		$theBasePermissions = config('app.theBasePermissions');
+		
         Permission::create(['name' => 'isSuper']);
         Permission::create(['name' => 'isAdmin']);
 		
@@ -35,7 +33,6 @@ class PermissionSeeder extends Seeder
 			'user',
 	        'reporte',
 	        
-//	        'Centrotrabajo',
 	        'Ordenproduccion',
 	        'Paro',
 	        //esto se define el 31octubre2025

@@ -74,7 +74,7 @@ class UserSeeder extends Seeder {
 		User::create([
 			             'name'           => 'Carlos mario Restrepo',
 			             'email'          => 'cmrb1509@gmail.com',
-			             'password'       => bcrypt('empleado'),
+			             'password'       => bcrypt('0804'),
 			             'identificacion' => 1,
 			             'celular'        => 1,
 			             'sexo'           => 'Masculino',
@@ -82,6 +82,7 @@ class UserSeeder extends Seeder {
 			             'cargo'          => 'Cargo ejemplo',
 			             'area'           => 'Area ejemplo',
 		             ])->assignRole('administrativo');
+		
 		User::create([
 			             'name'           => 'Laura Pineda Valencia',
 			             'email'          => 'gerencia@imlelectrica.com',
