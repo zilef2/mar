@@ -36,14 +36,8 @@ const data = reactive({
     /*
     fin de los select
      */
-    temp_paro_id: null,
-    temp_reproceso_id: null,
-    temp_actividad_id: null,
-    valorInactivo: 'NA',
-    cabeza: props.valuesGoogleCabeza,
     mensajeFalta: '',
     BanderaTipo: true,
-    tempCentro: 0,
 })
 
 
@@ -263,18 +257,19 @@ const opcinesActividadOTros = [
                     <elselect name="ordenproduccion" :form="form" :data="data" :nombreatipico="'Orden de produccion (OP)'" />
                     <elselect name="actividad" :form="form" :data="data" />
 
-                    
 <!--                    tiporeporte = 1 es un reproceso-->
                     <div id="reproceso" v-if="form.tipoReporte.value === 1" class="xl:col-span-2 col-span-1">
                         <label name="reproceso_id" class=" dark:text-white"> Reproceso</label>
-                        <vSelect :options="data['reproceso_id']" label="title" required append-to-body
+                        <vSelect :options="data['reproceso_opciones']" label="title" required append-to-body
                                   v-model="form['reproceso_id']" class="dark:bg-gray-400"
                         ></vSelect>
-                        <InputError class="mt-2" :message="form.errors['reproceso_id']"/>
+                        <InputError class="mt-2" :message="form.errors['reproceso_opciones']"/>
                     </div>
+                    
+<!--                    tiporeporte = 1 es un paro-->
                     <div id="paro" v-if="form.tipoReporte.value === 2" class="xl:col-span-3  col-span-1">
                         <label name="paro_id" class=" dark:text-white"> Paro</label>
-                        <vSelect :options="data['paro_id']" label="title" required append-to-body
+                        <vSelect :options="data['paro_opciones']" label="title" required append-to-body
                                   v-model="form['paro_id']" class="dark:bg-gray-400"
                         ></vSelect>
                         <InputError class="mt-2" :message="form.errors['paro_id']"/>

@@ -15,8 +15,7 @@ class PermissionSeeder extends Seeder
     public function run()
     {
 		$theBasePermissions = [
-			'administrativo',
-			'supervisor',
+			'administrativo', //this is very important!!!
 			'revisor',
 			'empleado',
 		];

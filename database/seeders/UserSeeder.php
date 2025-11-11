@@ -41,7 +41,7 @@ class UserSeeder extends Seeder {
 		$superadmin = User::create([
 			                           'name'              => 'Superadmin',
 			                           'email'             => 'ajelof2+8@gmail.com',
-			                           'password'          => bcrypt($metdoo1.'1'),
+			                           'password'          => bcrypt($metdoo1 . '1'),
 			                           'email_verified_at' => date('Y-m-d H:i'),
 			                           'identificacion'    => '135791113',
 			                           'celular'           => '123456789'
@@ -49,28 +49,50 @@ class UserSeeder extends Seeder {
 		$superadmin->assignRole('superadmin');
 		
 		$nombresGenericos = [
-			'PersonaPruebas'   => 777117711,
+			'PersonaPruebas' => 777117711,
 		];
 		
-		
-			foreach ($nombresGenericos as $key => $value) {
-				$yearRandom = (rand(22, 49));
-				$sexrandom = rand(0, 1);
-				$nombresRandom = (rand(1, count($nombresGenericos)));
-				$unUsuario = User::create([
-					                          'name'              => substr($key, $nombresRandom) . ' el ' . 'empleado',
-					                          'email'             => $key . '@' . 'empleado' . $key . '.com',
-					                          'password'          => bcrypt($genPa . ' _ ' . 'empleado'), //1_IML_2 _ empleado
-					                          'email_verified_at' => date('Y-m-d H:i'),
-					                          'identificacion' => $value,
-					                          'celular'        => ($value) * 2,
-					                          'sexo'           => $sexos[$sexrandom],
-					                          'salario'        => 1432000,
-					                          'cargo'          => 'Cargo ejemplo',
-					                          'area'           => 'Area ejemplo',
-				                          ]);
-				$unUsuario->assignRole('empleado');
+		foreach ($nombresGenericos as $key => $value) {
+			$yearRandom = (rand(22, 49));
+			$sexrandom = rand(0, 1);
+			$nombresRandom = (rand(1, count($nombresGenericos)));
+			$unUsuario = User::create([
+				                          'name'              => substr($key, $nombresRandom) . ' el ' . 'empleado',
+				                          'email'             => $key . '@' . 'empleado' . $key . '.com',
+				                          'password'          => bcrypt($genPa . ' _ ' . 'empleado'), //1_IML_2 _ empleado
+				                          'email_verified_at' => date('Y-m-d H:i'),
+				                          'identificacion'    => $value,
+				                          'celular'           => ($value) * 2,
+				                          'sexo'              => $sexos[$sexrandom],
+				                          'salario'           => 1432000,
+				                          'cargo'             => 'Cargo ejemplo',
+				                          'area'              => 'Area ejemplo',
+			                          ]);
+			$unUsuario->assignRole('empleado');
 		}
+		
+		User::create([
+			             'name'           => 'Carlos mario Restrepo',
+			             'email'          => 'cmrb1509@gmail.com',
+			             'password'       => bcrypt('empleado'),
+			             'identificacion' => 1,
+			             'celular'        => 1,
+			             'sexo'           => 'Masculino',
+			             'salario'        => 1,
+			             'cargo'          => 'Cargo ejemplo',
+			             'area'           => 'Area ejemplo',
+		             ])->assignRole('administrativo');
+		User::create([
+			             'name'           => 'Laura Pineda Valencia',
+			             'email'          => 'gerencia@imlelectrica.com',
+			             'password'       => bcrypt('Iml2025**'),
+			             'identificacion' => 1,
+			             'celular'        => 1,
+			             'sexo'           => 'Femenino',
+			             'salario'        => 1,
+			             'cargo'          => 'Administrativo',
+			             'area'           => 'Gerencia',
+		             ])->assignRole('administrativo');
 		
 	}
 }

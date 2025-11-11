@@ -143,8 +143,6 @@ const select = () => {
 watchEffect(() => {})
 
 
-
-
 const tipoReporte = [
     {value: 'soloreporte', title: 'Reportes'},
     {value: 'soloparo', title: 'Paros'},
@@ -309,9 +307,13 @@ const mostrarTiempoTranscurrido = (raw) => {
                                 </th>
                             </tr>
                             <tr>
+                                qwe{{props.fromController.data[0]}}
                                 <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
                                 <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center"></td>
                                 <td class="whitespace-nowrap py-4 px-2 sm:py-3"></td>
+                                <td class="whitespace-nowrap py-4 px-2 sm:py-3">
+                                    {{props.fromController.data[0]['fecha']}} achuu
+                                </td>
                                 <td v-for="titulo in titulos" class="whitespace-nowrap py-4 px-2 sm:py-3">
                                         <span v-if="titulo['type'] === 'text'"> {{
                                                 props.fromController.data[0][titulo['order']]
