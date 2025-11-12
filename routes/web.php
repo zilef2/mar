@@ -14,7 +14,13 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
-Route::get('/', function () { return redirect('/login'); });
+//Route::get('/', function () { return "El sistema responde correctamente."; });
+//Route::get('/', function () { return redirect('/login'); });
+
+Route::get('/login', function () { 
+    return "El login responde correctamente."; 
+})->name('login');
+
 Route::get('/dashboard', [UserController::class, 'Dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/RRepor', [UserController::class, 'RRepor'])->middleware(['auth', 'verified'])->name('RRepor');
 

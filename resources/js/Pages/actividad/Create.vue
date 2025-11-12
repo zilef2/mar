@@ -153,10 +153,3 @@ textarea {
     font-weight: 700;
 }
 </style>
-<style scoped>
->>> {
-  --vs-dropdown-bg: #fff;
-  --vs-dropdown-color: #000;
-  --vs-colors--dark: #fff;
-}
-</style>
