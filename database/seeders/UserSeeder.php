@@ -41,7 +41,7 @@ class UserSeeder extends Seeder {
 		$superadmin = User::create([
 			                           'name'              => 'Superadmin',
 			                           'email'             => 'ajelof2+8@gmail.com',
-			                           'password'          => bcrypt($metdoo1 . '1'),
+			                           'password'          => bcrypt($metdoo1 . '1'), //1_IML_2super+-*1_IML_2
 			                           'email_verified_at' => date('Y-m-d H:i'),
 			                           'identificacion'    => '135791113',
 			                           'celular'           => '123456789'
