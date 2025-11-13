@@ -16,6 +16,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 		'nombre',
 		'descripcion',
 		'cantidad_horas',
+		'Pedido',
+		'op',
+		'cliente',
+		'obra',
+		'contrato',
+		'producto_descripcion',
+		'estado',
+		'asesor',
+		'fecha_solicitud',
     ];
 
 
@@ -28,7 +37,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
         $result = [];
 
         foreach ($columns as $column) {
-            if (!in_array($column->Field, $fillable)) {
+            if (!in_array($column->Field, $fillable) || $column->Field === 'id') {
                 continue;
             }
 

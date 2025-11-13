@@ -14,7 +14,7 @@ const props = defineProps({
     show: Boolean,
     title: String,
     Ordenproducciona: Object,
-    titulos: Object, //parametros de la clase principal
+    getFillableWithTypes: Object, //parametros de la clase principal
     losSelect: Object,
 
 })
@@ -25,7 +25,7 @@ const data = reactive({
 })
 
 //very usefull
-const justNames = props.titulos.map(names => names['order'])
+const justNames = props.getFillableWithTypes.map(names => names['order'])
 const form = useForm({...Object.fromEntries(justNames.map(field => [field, '']))});
 onMounted(() => {
     if (props.numberPermissions > 9) {
@@ -38,7 +38,7 @@ onMounted(() => {
     // data.printForm.length -= 1 //dependex
 });
 
-props.titulos.forEach(names => {
+props.getFillableWithTypes.forEach(names => {
     data.printForm.push({
         idd: names['order'], label: names['label'], type: names['type']
         , value: form[names['order']]
@@ -51,7 +51,7 @@ watchEffect(() => {
         //     form[element] =  props.Ordenproducciona[element]
         // });
         form.errors = {}
-        props.titulos.forEach(names => {
+        props.getFillableWithTypes.forEach(names => {
             form[names['order']] = props.Ordenproducciona[names['order']]
         });
 

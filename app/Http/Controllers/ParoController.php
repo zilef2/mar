@@ -55,7 +55,7 @@ class ParoController extends Controller {
         $paros = paro::query();
         if ($request->has('search')) {
             $paros = $paros->where(function ($query) use ($request) {
-                $query->where('descripcion', 'LIKE', "%" . $request->search . "%")
+                $query->where('nombre', 'LIKE', "%" . $request->search . "%")
                     //                    ->orWhere('codigo', 'LIKE', "%" . $request->search . "%")
                     //                    ->orWhere('identificacion', 'LIKE', "%" . $request->search . "%")
                 ;

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('paros', function (Blueprint $table) {
-            $table->string('descripcion')->nullable();
+            $table->string('nombre')->nullable();
             $table->integer('cantidad_horas')->nullable();
             $table->id();
             $table->timestamps();

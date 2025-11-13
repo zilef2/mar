@@ -30,17 +30,21 @@ class RoleSeeder extends Seeder
 			'user',
 			'role',
 			'permission',
+	        'parametros',
 	        
-			'reporte','Ordenproduccion','parametros'
+			'Reporte',
+            'Ordenproduccion',
+	        'Paro',
+	        'Reproceso',
+	        'Actividad',
+	        
         ];
 		
         foreach ($vectorCRUD as $value) { foreach ($vectorModelo as $model) {
 			$superadmin->givePermissionTo([ $value.' '.$model ]); 
 		}}
 
-
         foreach ($vectorCRUD as $value) { foreach ($vectorModelo as $model) { $admin->givePermissionTo([ $value.' '.$model ]); } }
-		
 		
         //is todos
 		$theBasePermissions = config('app.theBasePermissions');
@@ -49,40 +53,46 @@ class RoleSeeder extends Seeder
 		    $superadmin->givePermissionTo('is'.$the_base_permission); //super => isempleado, etc
 		    $admin->givePermissionTo('is'.$the_base_permission);
 		}
-		 
         //no more admins
 
 	    
 	    
 	    
 	    
-	    
-	    
-	    
         $empleado = Role::create(['name' => 'empleado' ]);
         $empleado->givePermissionTo([
-             //#reporte
-            'read reporte',
-            'create reporte',
-            'delete reporte',
+             //#Reporte
+            'read Reporte',
+            'create Reporte',
+            'delete Reporte',
         ]);
 
         $administrativo = Role::create(['name' => 'administrativo']);
+        foreach ($vectorModelo as $model) { $administrativo->givePermissionTo([ 'read '.$model ]); } //todos los read
+         $administrativo->revokePermissionTo('read parametros');
+		$vectorListas = [
+			 'Reporte',
+	        'Ordenproduccion',
+	        'Paro',
+	        'Reproceso',
+	        'Actividad',
+		];
+        foreach ($vectorListas as $model) { 
+			$administrativo->givePermissionTo([ 'create '.$model ]); 
+			$administrativo->givePermissionTo([ 'update '.$model ]); 
+		} 
+		
         $administrativo->givePermissionTo([
             'isadministrativo',
 
-             //#user
-            'read user',
+             //user
             'create user',
-            // 'read role',
             'update user',
-
-            //#reporte
-            'read reporte',
-            'delete reporte',
-
+            //'delete user',
+            //Reporte
             //#parametros
-            'read parametros',
+			//'role',
+			//'permission',
         ]);
 
 

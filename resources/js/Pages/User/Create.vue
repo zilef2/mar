@@ -32,7 +32,7 @@ onMounted(() => {
         const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
         const randomDigits = (n) => Array.from({ length: n }, () => Math.floor(Math.random() * 10)).join('');
 
-        const firstNames = ['Juan', 'María', 'Carlos', 'Ana', 'Luis', 'Laura'];
+        const firstNames = ['Juan', 'María', 'Carlos', 'Ana', 'Luis', 'Laura','Mauricio','sandra','Giselle','Nataly','Nicol','Esteban','Miguel'];
         const surnames = ['García', 'Pérez', 'Rodríguez', 'López', 'Martínez'];
         const positions = ['Analista', 'Desarrollador', 'Coordinador', 'Supervisor', 'Administrador'];
         const areas = ['Ventas', 'Finanzas', 'RRHH', 'TI', 'Operaciones'];
@@ -186,7 +186,22 @@ const daynames = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'];
                             <InputError class="mt-2" :message="form.errors.cargo"/>
                         </div>
 
-                        <!-- otros campos -->
+                        <div>
+                            <div class="inline-flex">
+                                <InputLabel for="role" :value="lang().label.role"/>
+                                <small class="text-lg ml-1 font-bold"> * </small>
+                            </div>
+                            <SelectInput id="role" class="mt-1 block w-full" v-model="form.role" required
+                                         :dataSet="roles">
+                            </SelectInput>
+                            <InputError class="mt-2" :message="form.errors.role"/>
+                        </div>
+
+                    </div>
+                    <br/>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- otros campos -->
                         <div>
                             <div class="inline-flex">
                                 <InputLabel for="sexo" :value="lang().label.sexo"/>
@@ -217,18 +232,6 @@ const daynames = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'];
                                                                      :error="form.errors.fecha_nacimiento" />
                             <InputError class="mt-2" :message="form.errors.fecha_nacimiento"/>
                         </div>
-
-                        <div>
-                            <div class="inline-flex">
-                                <InputLabel for="role" :value="lang().label.role"/>
-                                <small class="text-lg ml-1 font-bold"> * </small>
-                            </div>
-                            <SelectInput id="role" class="mt-1 block w-full" v-model="form.role" required
-                                         :dataSet="roles">
-                            </SelectInput>
-                            <InputError class="mt-2" :message="form.errors.role"/>
-                        </div>
-
                     </div>
                     <!-- <div>
                         <InputLabel for="password" :value="lang().label.password" />

@@ -34,6 +34,7 @@ const props = defineProps({
 
     numberPermissions: Number,
     losSelect:Object,//normally used by headlessui
+    getFillableWithTypes:Object,
 })
 
 const data = reactive({
@@ -90,11 +91,6 @@ const select = () => data.multipleSelect = props.fromController?.data.length ===
 
 
 // text - string // number // dinero // date // datetime // foreign
-const titulos = [
-    { order: 'nombre', label: 'nombre', type: 'string' },
-    { order: 'descripcion', label: 'descripcion', type: 'string' },
-    // { order: 'cantidad_horas', label: 'cantidad_horas', type: 'number' },
-];
 
 </script>
 
@@ -113,10 +109,10 @@ const titulos = [
                     </PrimaryButton>
 
                     <Create v-if="can(['isAdmin','create Ordenproduccion'])" :numberPermissions="props.numberPermissions"
-                        :titulos="titulos" :show="data.createOpen" @close="data.createOpen = false" :title="props.title"
+                        :getFillableWithTypes="props.getFillableWithTypes" :show="data.createOpen" @close="data.createOpen = false" :title="props.title"
                         :losSelect=props.losSelect />
 
-                    <Edit v-if="can(['isAdmin','update Ordenproduccion'])" :titulos="titulos"
+                    <Edit v-if="can(['isAdmin','update Ordenproduccion'])" :getFillableWithTypes="props.getFillableWithTypes"
                         :numberPermissions="props.numberPermissions" :show="data.editOpen" @close="data.editOpen = false"
                         :Ordenproducciona="data.Ordenproducciono" :title="props.title" :losSelect=props.losSelect />
 
@@ -148,19 +144,13 @@ const titulos = [
                                 <th v-if="numberPermissions > 1" class="px-2 py-4">Accion</th>
 
                                 <th class="px-2 py-4 text-center">#</th>
-                                <th v-for="titulo in titulos" class="px-2 py-4 cursor-pointer"
+                                <th v-for="titulo in getFillableWithTypes" class="px-2 py-4 cursor-pointer"
                                     v-on:click="order(titulo['order'])">
                                     <div class="flex justify-between items-center">
                                         <span>{{ lang().label[titulo['label']] }}</span>
                                         <ChevronUpDownIcon class="w-4 h-4" />
                                     </div>
                                 </th>
-                                <!-- <th class="px-2 py-4 cursor-pointer" v-on:click="order('fecha_nacimiento')">
-                                    <div class="flex justify-between items-center"> <span>{{ lang().label.edad }}</span>
-                                        <ChevronUpDownIcon class="w-4 h-4" />
-                                    </div>
-                                </th> -->
-
                             </tr>
                         </thead>
                         <tbody>
@@ -190,7 +180,7 @@ const titulos = [
                                     </div>
                                 </td>
                                 <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center">{{ ++indexu }}</td>
-                                <td v-for="titulo in titulos" class="whitespace-nowrap py-4 px-2 sm:py-3">
+                                <td v-for="titulo in getFillableWithTypes" class="whitespace-nowrap py-4 px-2 sm:py-3">
                                     <span v-if="titulo['type'] === 'text' || titulo['type'] === 'string'"> {{ claseFromController[titulo['order']] }} </span>
                                     <span v-if="titulo['type'] === 'number'"> {{
                                             zilef_number_format(claseFromController[titulo['order']], 0, false)

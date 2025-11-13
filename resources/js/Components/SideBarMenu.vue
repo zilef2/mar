@@ -120,7 +120,7 @@ const sidebarButtoAdmin = [ //SAME AS WEB.PHP
         </button>
         <ul v-if="data.showContent2" class="space-y-2 my-4">
             <div class="" v-for="value in sidebarButtons">
-                <li v-show="can(['istrabajador','issupervisor','isAdmin'])"
+                <li v-show="can(['istrabajador','isadministrativo','isAdmin'])"
                     :class="[
                           'rounded-md items-center py-1 px-4 w-full block',
                           { 'bg-blue-700 dark:bg-blue-700': route().current(value + '.index') }
@@ -133,13 +133,10 @@ const sidebarButtoAdmin = [ //SAME AS WEB.PHP
                 </li>
             </div>
         </ul>
-        <ul v-show="can((['isAdmin']))" class="space-y-2 my-4">
+        <ul v-show="can((['isadministrativo']))" class="space-y-2 my-4">
             <div class="" v-for="value in sidebarButtoAdmin">
-                <li v-show="can(['issupervisor','isAdmin'])"
-                    :class="[
-                          'rounded-md items-center py-1 px-4 w-full',
-                          { 'bg-blue-700 dark:bg-blue-700': route().current(value + '.index') }
-                        ]"
+                <li v-show="can(['isadministrativo','isAdmin'])"
+                    :class="[ 'rounded-md items-center py-1 px-4 w-full', { 'bg-blue-700 dark:bg-blue-700': route().current(value + '.index') } ]"
                 >
                     <Link :href="route(value+'.index')" class="flex items-center py-1 px-4">
 

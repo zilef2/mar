@@ -14,13 +14,13 @@ use Inertia\Inertia;
 use Inertia\Response;
 
 class OrdenproduccionController extends Controller {
-    public array $thisAtributos;
+    public array $getFillableWithTypes;
     public string $FromController = 'Ordenproduccion';
 
 
     //<editor-fold desc="Construc | filtro and dependencia">
     public function __construct() {
-        $this->thisAtributos = (new Ordenproduccion())->getFillable(); //not using
+        $this->getFillableWithTypes = (new Ordenproduccion())->getFillableWithTypes();
     }
 
     public function index(Request $request) {
@@ -44,6 +44,7 @@ class OrdenproduccionController extends Controller {
             'perPage' => (int)$perPage,
             'numberPermissions' => $numberPermissions,
             'losSelect' => $losSelect ?? [],
+            'getFillableWithTypes' => $this->getFillableWithTypes ?? [],
         ]);
     }
 

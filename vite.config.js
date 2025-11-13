@@ -20,13 +20,13 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
-    server: {
-        host: 'mar.t', // Usa tu dominio virtual
-        hmr: {
-            host: 'mar.t',
-            protocol: 'wss', // Forzar protocolo WebSocket Secure
-            port: 5173, // Puerto predeterminado de Vite
-        },
-    },
+    // server: {
+    //     host: 'localhost', // Usa tu dominio virtual
+    //     hmr: {
+    //         host: 'localhost',
+    //         protocol: 'wss', // Forzar protocolo WebSocket Secure
+    //         port: 5173, // Puerto predeterminado de Vite
+    //     },
+    // },
     // ********************************
 });

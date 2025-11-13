@@ -54,7 +54,7 @@ const justNames = [ //useform fields
     'hora_inicial',
     'hora_final',
 
-    'TiempoEstimado',
+    'MinutosEstimados',
 
 ];
 const form = useForm({...Object.fromEntries(justNames.map(field => [field, '']))});
@@ -176,7 +176,7 @@ watch(() => form.tipoReporte, (newX) => {
     form.reproceso_id = null
     form.ordenproduccion_id = null
     // tipoReporte
-    form.TiempoEstimado = null
+    form.MinutosEstimados = null
 })
 
 // <!--</editor-fold>-->

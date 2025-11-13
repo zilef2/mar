@@ -1,16 +1,12 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head} from '@inertiajs/vue3';
-import Breadcrumb from '@/Components/Breadcrumb.vue';
 import TextInput from '@/Components/TextInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SelectInput from '@/Components/SelectInput.vue';
 import {reactive, watch, ref, watchEffect, onMounted} from 'vue';
-
 import DangerButton from '@/Components/DangerButton.vue';
 import pkg from 'lodash';
 import {router, usePage, Link, useForm} from '@inertiajs/vue3';
-
 import Pagination from '@/Components/Pagination.vue';
 import {
     ChevronUpDownIcon,
@@ -20,24 +16,20 @@ import {
     ArrowTrendingDownIcon,
     ArrowLongUpIcon
 } from '@heroicons/vue/24/solid';
-import {computed} from 'vue';
 import Create from '@/Pages/reporte/Create.vue';
-import Edit from '@/Pages/reporte/Edit.vue';
 import TerminarReporte from '@/Pages/reporte/TerminarReporte.vue';
-import Delete from '@/Pages/reporte/Delete.vue';
 import DeleteBulk from '@/Pages/reporte/DeleteBulk.vue';
-
 import Checkbox from '@/Components/Checkbox.vue';
 import InfoButton from '@/Components/InfoButton.vue';
 import ClockWorking from '@/Components/uiverse/ClockWorking.vue';
-
 import {TimeTo12Format, formatDate, CalcularAvg, zilef_number_format} from '@/global.ts';
-import InputError from "@/Components/InputError.vue";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import '@vuepic/vue-datepicker/dist/main.css';
-import CongeladoSection from "@/Pages/reporte/CongeladoSection.vue";
 
+/*
+import CongeladoSection from "@/Pages/reporte/CongeladoSection.vue";
+*/
 
 const {_, debounce, pickBy} = pkg
 const props = defineProps({
@@ -102,13 +94,13 @@ let titulos = [
     },
     {order: 'actividad_id', label: 'actividad', type: 'foreign', nameid: 'actividadsini', CanOrder: true},
     {order: 'Orden', label: 'Orden', type: 'text', CanOrder: false},
-    {order: 'TiempoEstimado', label: 'TiempoEstimado', type: 'text', CanOrder: true},
+    {order: 'MinutosEstimados', label: 'MinutosEstimados', type: 'text', CanOrder: true},
     {order: 'paro_id', label: 'paro', type: 'foreign', nameid: 'paro_s', CanOrder: true},
     {order: 'reproceso_id', label: 'reproceso', type: 'foreign', nameid: 'reproceso_s', CanOrder: true},
 ];
 onMounted(() => {
     if (props.numberPermissions < 2) {
-        titulos = titulos.filter(t => t.order !== 'TiempoEstimado');
+        titulos = titulos.filter(t => t.order !== 'MinutosEstimados');
 
     }
 })
@@ -155,7 +147,7 @@ const mostrarTiempoTranscurrido = (raw) => {
     console.log("🚀🚀mostrarTiempoTranscurrido ~ valor: ", valor);
     console.log("🚀🚀mostrarTiempoTranscurrido ~ raw: ", raw);
     if (isNaN(valor)) return '-'
-    if (valor < 60) {
+    if (valor < 120) {
         return zilef_number_format(valor * 60, 0, false) + ' mins'
     } else {
         return zilef_number_format(valor, 3, false) + ' hrs'
@@ -165,22 +157,19 @@ const mostrarTiempoTranscurrido = (raw) => {
 </script>
 
 <template>
-    <!--    <Head :title="props.title" />-->
-
-    <!--    <TripleSelect></TripleSelect>-->
     <AuthenticatedLayout>
         <!--        <Breadcrumb :title="title" :breadcrumbs="breadcrumbs" />-->
         <div class="space-y-4">
             <div class="px-4 sm:px-0">
                 <div class="rounded-lg overflow-hidden w-fit my-2">
 
-                    <Create v-if="can(['create reporte'])" :numberPermissions="props.numberPermissions"
+                    <Create v-if="can(['create Reporte'])" :numberPermissions="props.numberPermissions"
                             :show="data.createOpen" @close="data.createOpen = false" :title="props.title"
                             :losSelect=props.losSelect
                             :empleados=props.empleados
                     />
 
-                    <!--                    <Edit v-if="can(['update reporte']) && numberPermissions > 1"-->
+                    <!--                    <Edit v-if="can(['update Reporte']) && numberPermissions > 1"-->
                     <!--                          :numberPermissions="props.numberPermissions"-->
                     <!--                          :show="data.editOpen"-->
                     <!--                          @close="data.editOpen = false" :generica="data.generico" :title="props.title"-->
@@ -188,14 +177,10 @@ const mostrarTiempoTranscurrido = (raw) => {
                     <!--                          :empleados=props.empleados-->
                     <!--                    />-->
 
-                    <TerminarReporte v-if="can(['read reporte'])" :numberPermissions="props.numberPermissions"
+                    <TerminarReporte v-if="can(['read Reporte'])" :numberPermissions="props.numberPermissions"
                                      :show="data.TerminarOpen"
                                      @close="data.TerminarOpen = false" :generica="data.generico" :title="props.title"
                     />
-
-                    <Delete v-if="can(['delete reporte'])" :numberPermissions="props.numberPermissions"
-                            :show="data.deleteOpen" @close="data.deleteOpen = false" :generica="data.generico"
-                            :title="props.title"/>
 
                     <DeleteBulk :show="data.deleteBulkOpen"
                                 @close="data.deleteBulkOpen = false, data.multipleSelect = false, data.selectedId = []"
@@ -213,7 +198,7 @@ const mostrarTiempoTranscurrido = (raw) => {
 
                         <DangerButton
                             @click="data.deleteBulkOpen = true"
-                            v-show="data.selectedId.length !== 0 && can(['delete reporte'])"
+                            v-show="data.selectedId.length !== 0 && can(['delete Reporte'])"
                             class="px-3 py-2 h-10"
                             v-tooltip="lang().tooltip.delete_selected">
                             <TrashIcon class="w-5 h-5"/>
@@ -221,7 +206,7 @@ const mostrarTiempoTranscurrido = (raw) => {
 
                         <PrimaryButton
                             @click="data.hayCongelado = data.selectedId[0]"
-                            v-show="data.selectedId.length !== 0 && can(['delete reporte'])"
+                            v-show="data.selectedId.length !== 0 && can(['delete Reporte'])"
                             class="px-3 py-2 h-10"
                             v-tooltip="'Congelar'">
                             <ArrowLongUpIcon class="w-5 h-5"/>
@@ -230,7 +215,7 @@ const mostrarTiempoTranscurrido = (raw) => {
                         <PrimaryButton
                             class="rounded-xl px-4 h-9 mt-1 flex items-center justify-center hover:bg-indigo-800"
                             @click="data.createOpen = true"
-                            v-if="can(['create reporte'])">
+                            v-if="can(['create Reporte'])">
                             {{ lang().button.add }} {{ props.title }}
                         </PrimaryButton>
 
@@ -332,7 +317,7 @@ const mostrarTiempoTranscurrido = (raw) => {
                                     <ChevronUpDownIcon class="w-4 h-4"/>
                                 </div>
                             </th>
-                            <th v-on:click="order('TiempoEstimado', true)" class="px-2 py-4 cursor-pointer min-w-min">
+                            <th v-on:click="order('MinutosEstimados', true)" class="px-2 py-4 cursor-pointer min-w-min">
                                 <div class="flex">
 
                                     <span>Tiempo Estimado</span>
@@ -355,16 +340,16 @@ const mostrarTiempoTranscurrido = (raw) => {
                             <!--                            </th>-->
                         </tr>
                         </thead>
-                        <CongeladoSection
-                            :data="data"
-                            :titulos="titulos"
-                            :fromController="props.fromController"
-                            :can="can"
-                            :lang="lang"
-                            :number_format="zilef_number_format"
-                            :formatDate="formatDate"
-                            :TimeTo12Format="TimeTo12Format"
-                        />
+<!--                        <CongeladoSection-->
+<!--                            :data="data"-->
+<!--                            :titulos="titulos"-->
+<!--                            :fromController="props.fromController"-->
+<!--                            :can="can"-->
+<!--                            :lang="lang"-->
+<!--                            :number_format="zilef_number_format"-->
+<!--                            :formatDate="formatDate"-->
+<!--                            :TimeTo12Format="TimeTo12Format"-->
+<!--                        />-->
 
 
                         <tbody>
@@ -380,25 +365,19 @@ const mostrarTiempoTranscurrido = (raw) => {
                             <td class="whitespace-nowrap py-4 w-12 px-2 sm:py-3">
                                 <div class="flex justify-center items-center">
                                     <div class="rounded-md overflow-hidden">
-                                        <InfoButton v-show="can(['update reporte']) && clasegenerica.hora_final"
+                                        <InfoButton v-show="can(['update Reporte']) && clasegenerica.hora_final"
                                                     type="button"
                                                     @click="(data.editOpen = true), (data.generico = clasegenerica)"
                                                     class="px-2 py-1.5 rounded-none" v-tooltip="lang().tooltip.edit">
                                             <PencilIcon class="w-4 h-4"/>
                                         </InfoButton>
-                                        <InfoButton v-if="!clasegenerica.hora_final" v-show="can(['create reporte'])"
+                                        <InfoButton v-if="!clasegenerica.hora_final" v-show="can(['create Reporte'])"
                                                     type="button"
                                                     @click="(data.TerminarOpen = true), (data.generico = clasegenerica)"
                                                     class="px-2 py-1.5 rounded-none"
                                                     v-tooltip="lang().tooltip.finalizarTarea">
                                             <CheckCircleIcon class="w-4 h-4"/>
                                         </InfoButton>
-                                        <DangerButton v-show="can(['delete reporte'])" type="button"
-                                                      @click="(data.deleteOpen = true), (data.generico = clasegenerica)"
-                                                      class="px-2 py-1.5 rounded-none"
-                                                      v-tooltip="lang().tooltip.delete">
-                                            <TrashIcon class="w-4 h-4"/>
-                                        </DangerButton>
                                     </div>
                                 </div>
                             </td>
@@ -425,7 +404,7 @@ const mostrarTiempoTranscurrido = (raw) => {
                                 </span>
                             </td>
                             <td>{{ (clasegenerica['Orden']) }}</td>
-                            <td>{{ (clasegenerica['TiempoEstimado']) }}</td>
+                            <td>{{ (clasegenerica['MinutosEstimados']) }}</td>
                         </tr>
 
                         <!-- totales -->
@@ -448,7 +427,7 @@ const mostrarTiempoTranscurrido = (raw) => {
                             </td>
                             <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-left">
                                 <p v-if="props.numberPermissions > 1" class="">
-                                    {{ CalcularAvg(props.fromController.data, 'TiempoEstimado') }}
+                                    {{ CalcularAvg(props.fromController.data, 'MinutosEstimados') }}
                                 </p>
                             </td>
                         </tr>
@@ -465,12 +444,3 @@ const mostrarTiempoTranscurrido = (raw) => {
 
     </AuthenticatedLayout>
 </template>
-<style>
-.inamovible {
-    position: fixed;
-    top: 0;
-    left: 250px;
-    z-index: 5000;
-}
-
-</style>

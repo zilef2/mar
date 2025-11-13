@@ -17,7 +17,7 @@ const props = defineProps({
     show: Boolean,
     title: String,
     roles: Object,
-    titulos: Object, //parametros de la clase principal
+    getFillableWithTypes: Object, //parametros de la clase principal
     losSelect:Object,
     numberPermissions: Number,
 })
@@ -30,7 +30,7 @@ const data = reactive({
 })
 
 //very usefull
-let justNames = props.titulos.map(names =>{
+let justNames = props.getFillableWithTypes.map(names =>{
     if(names['order'] !== 'noquiero' 
         // &&
         // names['order'] !== 'noquiero1'
@@ -51,7 +51,7 @@ onMounted(() => {
 });
 
 const printForm =[];
-props.titulos.forEach(names =>{
+props.getFillableWithTypes.forEach(names =>{
  if(names['order'] !== 'noquiero'
      // && names['order'] !== 'noquiero1'
  )   

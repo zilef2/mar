@@ -12,10 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ordenproduccions', function (Blueprint $table) {
-            $table->string('nombre');
-            $table->string('descripcion')->nullable();
-            $table->integer('cantidad_horas')->nullable();
             $table->id();
+            $table->string('nombre');
+            $table->integer('cantidad_minutos')->nullable();
+			$table->integer('Pedido')->nullable();
+			$table->string('op')->nullable();
+			$table->string('cliente')->nullable();
+			$table->string('obra')->nullable(); 
+			$table->string('contrato')->nullable();
+			$table->string('producto_descripcion')->nullable();
+			$table->string('estado')->nullable();
+			$table->string('asesor')->nullable();
+			$table->date('fecha_solicitud')->nullable();
+			
             $table->timestamps();
         });
     }
@@ -28,3 +37,4 @@ return new class extends Migration
         Schema::dropIfExists('ordenproduccions');
     }
 };
+            

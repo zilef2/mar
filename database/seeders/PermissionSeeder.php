@@ -25,16 +25,17 @@ class PermissionSeeder extends Seeder
             Permission::create(['name' => 'is'.$the_base_permission]);
 		}
         
-        $vectorModelo = [
+        $vectorModelo = [//sync with: roleSeeder.php
 			'permission',
 			'role',
 	        'parametros',
-	        
 			'user',
-	        'reporte',
 	        
+	        'Reporte',
 	        'Ordenproduccion',
 	        'Paro',
+	        'Reproceso',
+	        'Actividad',
 	        //esto se define el 31octubre2025
         ];
         $vectorCRUD = ['create', 'update','read','delete',

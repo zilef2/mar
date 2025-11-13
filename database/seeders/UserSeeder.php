@@ -35,13 +35,13 @@ class UserSeeder extends Seeder {
 			}
 		}
 		if (!$genPa) {
-			dd($genPa . ' | no env, even with comands');
+			dd($genPa . ' | no env, even with comands');//123_demcosuper0.+-*123
 		}
 		$metdoo1 = $genPa . 'super+-*' . $genPa;
 		$superadmin = User::create([
 			                           'name'              => 'Superadmin',
 			                           'email'             => 'ajelof2+8@gmail.com',
-			                           'password'          => bcrypt($metdoo1 . '1'), //1_IML_2super+-*1_IML_2
+			                           'password'          => bcrypt($metdoo1 . '1'), //1_IML
 			                           'email_verified_at' => date('Y-m-d H:i'),
 			                           'identificacion'    => '135791113',
 			                           'celular'           => '123456789'
@@ -94,6 +94,33 @@ class UserSeeder extends Seeder {
 			             'cargo'          => 'Administrativo',
 			             'area'           => 'Gerencia',
 		             ])->assignRole('administrativo');
+		
+		
+		
+		//empelado
+		User::create([
+			             'name'           => 'ALVAREZ GUZMAN GERMAN GERARDO',
+			             'email'          => '71681723',
+			             'password'       => bcrypt('123'),
+			             'identificacion' => 71681723,
+			             'celular'        => '3145808140',
+			             'sexo'           => 'Masculino',
+			             'salario'        => 0,
+			             'cargo'          => 'LAVADOR',
+			             'area'           => 'Bello',
+		             ])->assignRole('empleado');
+		
+		User::create([
+			             'name'           => 'BUITRAGO QUICENO JUAN CARLOS',
+			             'email'          => '1020429596',
+			             'password'       => bcrypt('123'),
+			             'identificacion' => 1020429596,
+			             'celular'        => '3206643147',
+			             'sexo'           => 'Masculino',
+			             'salario'        => 0,
+			             'cargo'          => 'AUXILIAR ALMACEN',
+			             'area'           => 'CRA 66 # 20F-61 INT 104',
+		             ])->assignRole('empleado');
 		
 	}
 }

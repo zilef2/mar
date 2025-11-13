@@ -76,7 +76,7 @@ const justNames = [
 
     'nombreTablero',
     'OTItem',
-    'TiempoEstimado',
+    'MinutosEstimados',
 
 ];
 const form = useForm({...Object.fromEntries(justNames.map(field => [field, '']))});
@@ -126,9 +126,9 @@ function RecuperarForm() {
 
         // let tempCentro = form.centrotrabajo_id?.value - 1;
         // console.log("=>(Edit.vue:131) tempCentro", tempCentro);
-        // form.TiempoEstimado = data.nombresOT[form.ordenproduccion_ids.value][tiemposEstimados[tempCentro]];
+        // form.MinutosEstimados = data.nombresOT[form.ordenproduccion_ids.value][tiemposEstimados[tempCentro]];
     }
-    form.TiempoEstimado = props.generica.TiempoEstimado
+    form.MinutosEstimados = props.generica.MinutosEstimados
     form.actividad_id = props.generica.actividad_id
     form.hora_final = props.generica.hora_final
     form.actividad_id = {title: props.generica.actividad_s, value: props.generica.actividad_id}
@@ -140,7 +140,7 @@ watch(() => form.ordenproduccion_ids, (newX) => {
     data.soloUnaVez = true
     if (newX && form.tipoReporte.value !== 2 && form.ordenproduccion_ids) { //si no es una paro
         data.tempCentro = form.centrotrabajo_id?.value - 1
-        form.TiempoEstimado = data.nombresOT[form.ordenproduccion_ids.value][tiemposEstimados[data.tempCentro]];
+        form.MinutosEstimados = data.nombresOT[form.ordenproduccion_ids.value][tiemposEstimados[data.tempCentro]];
     } else {
         // form.ordenproduccion_id =
         console.log(form.ordenproduccion_ids) //se pondra dos digitos del año seguido de 000
@@ -224,7 +224,7 @@ watch(() => props.show, () => {
 
         form.nombreTablero = props.generica?.nombreTablero
         form.OTItem = props.generica?.OTItem
-        form.TiempoEstimado = props.generica?.TiempoEstimado
+        form.MinutosEstimados = props.generica?.MinutosEstimados
 
     } else {
         data.BanderaTipo = !props.show
@@ -432,7 +432,7 @@ const update = () => {
                          class=" col-span-1">
                         <InputLabel for="index" :value="arrayMostrarDelCodigo[3]"/>
                         <TextInput id="index" type="text" disabled class="mt-1 block w-full bg-gray-200"
-                                   v-model="form.TiempoEstimado"/>
+                                   v-model="form.MinutosEstimados"/>
                     </div>
 
                     <!-- eleccion -->

@@ -34,7 +34,7 @@ class Reporte extends Model {
 		'tipoReporte', //acti, repro,paro
 		
 		'tiempo_transcurrido',
-		'TiempoEstimado',
+		'MinutosEstimados',
 	];
 	
 	public function getOrdenAttribute(): string {return $this->ordenproduccion ? $this->ordenproduccion->nombre : ''; }
@@ -44,7 +44,7 @@ class Reporte extends Model {
 	public function getactividadsiniAttribute(): string {return $this->actividad ? $this->actividad->nombre : ''; }
 	
 	public function getparouAttribute(): string {
-		return $this->paro ? $this->paro->descripcion : ''; 
+		return $this->paro ? $this->paro->nombre : ''; 
 	}
 	public function getreprocesouAttribute(): string {
 		return $this->reproceso ? $this->reproceso->nombre : ''; 

@@ -86,7 +86,7 @@ const select = () => data.multipleSelect = props.fromController?.data.length ===
 // text - string // number // dinero // date // datetime // foreign
 const titulos = [
     // { order: 'codigo', label: 'codigo', type: 'text' },
-    { order: 'descripcion', label: 'descripcion', type: 'text' },
+    { order: 'nombre', label: 'nombre', type: 'text' },
   // { order: 'inventario', label: 'inventario', type: 'foreign',nameid:'userino'},
 ];
 

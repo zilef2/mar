@@ -14,7 +14,7 @@ class Actividad extends Model
     protected $fillable = [
         'id',
         'nombre',
-		'TiempoEstimado',
-//        'tipo',
+		'MinutosEstimados',
+		'cantidad_minutos_cargados',
     ];
 }

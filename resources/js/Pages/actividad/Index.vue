@@ -17,9 +17,7 @@ import { ChevronUpDownIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/soli
 
 import Create from '@/Pages/actividad/Create.vue';
 import Edit from '@/Pages/actividad/Edit.vue';
-import Delete from '@/Pages/actividad/Delete.vue';
-// import Delete from '@/Pages/actividad/DeleteBulk.vue';
-
+import Delete from '@/Pages/actividad/DeleteBulk.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import InfoButton from '@/Components/InfoButton.vue';
 
@@ -53,7 +51,7 @@ const data = reactive({
     createOpen: false,
     editOpen: false,
     deleteOpen: false,
-    // deleteBulkOpen: false,
+    deleteBulkOpen: false,
     dataSet: usePage().props.app.perpage,
 })
 
@@ -81,13 +79,7 @@ const selectAll = (event) => {
         })
     }
 }
-const select = () => {
-    if (props.actividads?.data.length == data.selectedId.length) {
-        data.multipleSelect = true
-    } else {
-        data.multipleSelect = false
-    }
-}
+const select = () => data.multipleSelect = props.actividads?.data.length === data.selectedId.length;
 
 
 // const form = useForm({ })
@@ -110,19 +102,19 @@ const titulos = [
             <!-- {{ props.fromController.data[2] }} -->
             <div class="px-4 sm:px-0">
                 <div class="rounded-lg overflow-hidden w-fit">
-                    <PrimaryButton class="rounded-none" @click="data.createOpen = true" v-if="can(['isAdmin','create actividad'])">
+                    <PrimaryButton class="rounded-none" @click="data.createOpen = true" v-if="can(['isAdmin','create Actividad'])">
                         {{ lang().button.add }}
                     </PrimaryButton>
 
-                    <Create v-if="can(['isAdmin','create actividad'])" :numberPermissions="props.numberPermissions" :titulos="titulos"
+                    <Create v-if="can(['isAdmin','create Actividad'])" :numberPermissions="props.numberPermissions" :titulos="titulos"
                         :show="data.createOpen" @close="data.createOpen = false" :title="props.title"
                         :losSelect=props.losSelect />
 
-                    <Edit v-if="can(['isAdmin','update actividad'])" :titulos="titulos" :numberPermissions="props.numberPermissions"
+                    <Edit v-if="can(['isAdmin','update Actividad'])" :titulos="titulos" :numberPermissions="props.numberPermissions"
                         :show="data.editOpen" @close="data.editOpen = false" :generica="data.generico" :title="props.title"
                         :losSelect=props.losSelect />
 
-                    <Delete v-if="can(['isAdmin','delete actividad'])" :numberPermissions="props.numberPermissions"
+                    <Delete v-if="can(['isAdmin','delete Actividad'])" :numberPermissions="props.numberPermissions"
                         :show="data.deleteOpen" @close="data.deleteOpen = false" :generica="data.generico"
                         :title="props.title" />
                 </div>
@@ -131,11 +123,11 @@ const titulos = [
                 <div class="flex justify-between p-2">
                     <div class="flex space-x-2">
                         <SelectInput v-model="data.params.perPage" :dataSet="data.dataSet" />
-                        <!-- <DangerButton @click="data.deleteBulkOpen = true"
-                            v-show="data.selectedId.length != 0 && can(['isAdmin',delete actividad'])" class="px-3 py-1.5"
+                        <DangerButton @click="data.deleteBulkOpen = true"
+                            v-show="data.selectedId.length !== 0 && can(['isAdmin', 'delete Actividad'])" class="px-3 py-1.5"
                             v-tooltip="lang().tooltip.delete_selected">
                             <TrashIcon class="w-5 h-5" />
-                        </DangerButton> -->
+                        </DangerButton>
                     </div>
                     <TextInput v-if="props.numberPermissions > 1" v-model="data.params.search" type="text"
                         class="block w-4/6 md:w-3/6 lg:w-2/6 rounded-lg" placeholder="Nombre, codigo" />
@@ -157,12 +149,6 @@ const titulos = [
                                         <ChevronUpDownIcon class="w-4 h-4" />
                                     </div>
                                 </th>
-                                <!-- <th class="px-2 py-4 cursor-pointer" v-on:click="order('fecha_nacimiento')">
-                                    <div class="flex justify-between items-center"> <span>{{ lang().label.edad }}</span>
-                                        <ChevronUpDownIcon class="w-4 h-4" />
-                                    </div>
-                                </th> -->
-
                             </tr>
                         </thead>
                         <tbody>
@@ -175,7 +161,7 @@ const titulos = [
                                         type="checkbox" @change="select" :value="clasegenerica.id"
                                         v-model="data.selectedId" />
                                 </td>
-                                <td v-if="numberPermissions > 1" class="whitespace-nowrap py-4 w-12 px-1 sm:py-3 w-12">
+                                <td v-if="numberPermissions > 1" class="whitespace-nowrap py-4 w-12 px-1 sm:py-3">
                                     <div class="flex justify-center items-center">
                                         <div class="rounded-md overflow-hidden">
                                             <InfoButton v-show="can(['isAdmin','update user'])" type="button"
@@ -195,17 +181,12 @@ const titulos = [
                                 <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center">{{ ++indexu }}</td>
                                 <td v-for="titulo in titulos" class="py-4 px-2 sm:py-3">
                                     <span v-if="titulo['type'] === 'text'"> {{ clasegenerica[titulo['order']] }} </span>
-                                    <span v-if="titulo['type'] === 'number'"> {{
-                                            zilef_number_format(clasegenerica[titulo['order']], 0, false)
-                                        }} </span>
-                                    <span v-if="titulo['type'] === 'dinero'"> {{
-                                            zilef_number_format(clasegenerica[titulo['order']], 0, true)
-                                        }} </span>
+                                    <span v-if="titulo['type'] === 'number'"> {{ zilef_number_format(clasegenerica[titulo['order']], 0, false) }} </span>
+                                    <span v-if="titulo['type'] === 'dinero'"> {{ zilef_number_format(clasegenerica[titulo['order']], 0, true) }} </span>
                                     <span v-if="titulo['type'] === 'date'"> {{ formatDate(clasegenerica[titulo['order']], false) }} </span>
                                     <span v-if="titulo['type'] === 'datetime'"> {{ formatDate(clasegenerica[titulo['order']], true) }} </span>
                                     <span v-if="titulo['type'] === 'foreign'"> {{ clasegenerica[titulo['nameid']] }} </span>
                                 </td>
-
                             </tr>
                             <tr class="border-t border-gray-600">
                                 <td v-if="numberPermissions > 1"

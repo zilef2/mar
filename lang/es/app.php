@@ -2,6 +2,14 @@
 
 return [
     'label' => [
+        //adicion a op
+        
+		'pedido' => 'pedido',
+		'op' => 'orden de prod',
+		'obra' => 'obra', 
+		'contrato' => 'contrato',
+		'producto_descripcion' => 'descripcion del producto',
+	    
         //paros
         'descripcion' => 'descripción',
         //actividad
@@ -45,7 +53,7 @@ return [
         'delete_confirm_quantity' => 'Por seguridad e integridad, no esta permitido borrar tantos reportes al tiempo',
         'finLaboral' => 'Finalización jornada laboral',
         'cantidad (pieza)' => 'Cantidad (pieza)',
-        'TiempoEstimado' => 'Tiempo Estimado',
+        'MinutosEstimados' => 'Minutos Estimados',
         'codigo' => 'Codigo',
         'cantidad' => 'Cantidad',
         'fecha' => 'Fecha',

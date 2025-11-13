@@ -16,14 +16,9 @@ class CreateActividadsTable extends Migration
         Schema::create('actividads', function (Blueprint $table) {
             $table->id();
 			$table->string('nombre');
-			$table->string('codigo')->nullable();
-			$table->double('TiempoEstimado')->nullable();
+			$table->double('MinutosEstimados')->nullable();
+            $table->double('cantidad_minutos_cargados')->nullable();
 
-            // $table->unsignedBigInteger('centrotrabajo_id');
-            // $table->foreign('centrotrabajo_id')
-            //     ->references('id')
-            //     ->on('centrotrabajos')
-            //     ->onDelete('restrict'); //cascade| restrict | set null
             $table->timestamps();
         });
     }

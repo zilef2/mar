@@ -26,3 +26,4 @@ yarn-error.log
 .bat
 *.bat
 public/build/
+resources/js/ziggy.js

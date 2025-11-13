@@ -60,7 +60,7 @@ class ReporteFactory extends Factory {
 			'tipoReporte'      => $tipoReporte,
 			
 			'tiempo_transcurrido' => $tiempoTranscurrido,
-			'TiempoEstimado'      => 0,
+			'MinutosEstimados'      => 0,
 		];
 	}
 }

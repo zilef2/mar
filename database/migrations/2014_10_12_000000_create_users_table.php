@@ -21,7 +21,7 @@ return new class extends Migration {
 			$table->string('sexo')->default('Masculino');
 			$table->string('celular')->nullable();
 			$table->string('identificacion')->nullable();
-			$table->string('area')->default('PRODUCCION');
+			$table->string('area')->default('Producción');
 			$table->string('cargo')->nullable();
 			$table->dateTime('fecha_nacimiento')->nullable();
 			$table->bigInteger('salario')->nullable();

@@ -30,7 +30,7 @@ class ReporteUpdateRequest extends FormRequest {
 			'tipoReporte'         => 'nullable',
 			'nombreTablero'       => 'nullable',
 			'OTItem'              => 'nullable',
-			'TiempoEstimado'      => 'nullable',
+			'MinutosEstimados'      => 'nullable',
 		];
 	}
 }

@@ -50,10 +50,10 @@ onUnmounted(() => {
 
 const maxWidthClass = computed(() => {
     return {
-        sm: 'sm:max-w-sm',
-        md: 'sm:max-w-md',
-        lg: 'sm:max-w-lg',
-        xl: 'sm:max-w-xl',
+        sm: 'max-w-sm',
+        md: 'max-w-md',
+        lg: 'max-w-[600px]',
+        xl: 'max-w-[650px]',
         '2xl': 'sm:max-w-[450px] md:max-w-[700px] xl:max-w-[800px]', //max-w-5xl 
         '3xl': 'sm:max-w-[500px] md:max-w-[750px] xl:max-w-[850px]', //max-w-6xl 
         '4xl': 'max-w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[950px]',

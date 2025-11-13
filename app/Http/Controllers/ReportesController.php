@@ -99,7 +99,7 @@ class ReportesController extends Controller {
 			$reportes->where('fecha', $request->searchDate);
 		}
 		if ($request->has('soloTiEstimado')) {
-			$reportes = $reportes->WhereNotnull('TiempoEstimado');
+			$reportes = $reportes->WhereNotnull('MinutosEstimados');
 		}
 		if (!$request->has('ultimosmeses')) {
 			if ($reportes->count() > 1000) {
@@ -349,7 +349,7 @@ class ReportesController extends Controller {
 				//tipoF no va
 				$actualizar_reporte['nombreTablero'] = $orden->Nombre_tablero ?? null;
 				$actualizar_reporte['OTItem'] = $orden->Item ?? null;
-				$actualizar_reporte['TiempoEstimado'] = $request->TiempoEstimado ?? null;
+				$actualizar_reporte['MinutosEstimados'] = $request->MinutosEstimados ?? null;
 				
 			}
 			else { //se esta reportando solo la hora fin

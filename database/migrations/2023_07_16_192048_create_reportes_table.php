@@ -26,7 +26,7 @@ class CreateReportesTable extends Migration
 			$table->integer('tipoReporte')->default(1);
 
 
-			$table->string('TiempoEstimado')->nullable();
+			$table->string('MinutosEstimados')->nullable();
             $table->double('tiempo_transcurrido')->nullable();
 			
 

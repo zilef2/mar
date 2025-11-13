@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
     use HasFactory;
     protected $fillable = [
 		'id',
-		'descripcion',
+		'nombre',
 	    'cantidad_horas'
     ];
 
