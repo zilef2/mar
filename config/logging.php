@@ -62,6 +62,11 @@ return [
             'path' => storage_path('logs/Adminlaravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
         ],
+        'solosuper' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/solosuper.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
         
         'single' => [
             'driver' => 'single',

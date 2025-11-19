@@ -13,10 +13,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
     use HasFactory;
     protected $fillable = [
         'id',
-		'nombre',
-		'descripcion',
-		'cantidad_horas',
-		'Pedido',
+//		'nombre',
+		'cantidad_minutos',
+		
+	    'pedido',
 		'op',
 		'cliente',
 		'obra',
@@ -37,7 +37,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
         $result = [];
 
         foreach ($columns as $column) {
-            if (!in_array($column->Field, $fillable) || $column->Field === 'id') {
+            if (!in_array($column->Field, $fillable) 
+	            || $column->Field === 'id'
+	            || $column->Field === 'cantidad_minutos'
+            ) {
                 continue;
             }
 
@@ -47,6 +50,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
                 $type = 'integer';
             } elseif (str_contains($column->Type, 'decimal') || str_contains($column->Type, 'float')) {
                 $type = 'dinero';
+            } elseif (str_contains($column->Type, 'date') || str_contains($column->Type, 'datetime')) {
+                $type = 'date';
             } elseif (str_contains($column->Type, 'foreign') || $column->Field === 'oferta_id') {
                 $type = 'foreign';
             }

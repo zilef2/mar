@@ -159,12 +159,9 @@ class ReportesController extends Controller {
 			$todosResultados = $modelInstance::All();
 			$result[$value] = Myhelp::NEW_turnInSelectID($todosResultados, ' ');
 			
-			//			if ($value === 'centrotrabajo') {
-			//				foreach ($todosResultados as $key2 => $val) {
-			//					$actis = $val->Actividads;
-			//					$result[$value . $val->nombre] = Myhelp::NEW_turnInSelectID($actis, ' ');
-			//				}
-			//			}
+			if ($value === 'ordenproduccion') {
+				$result[$value] = Myhelp::NEW_turnInSelectID($todosResultados, 'a orden','op');
+			}
 		}
 		
 		return $result;
@@ -433,83 +430,5 @@ class ReportesController extends Controller {
 		]);
 	}
 	
-	public function uploadempleados(Request $request) {
-		Myhelp::EscribirEnLog($this, get_called_class(), 'Empezo a importar', false);
-		$countfilas = 0;
-		try {
-			if ($request->archivo1) {
-				
-				$helpExcel = new HelpExcel();
-				$mensageWarning = $helpExcel->validarArchivoExcel($request);
-				if ($mensageWarning != '') {
-					return back()->with('warning', $mensageWarning);
-				}
-				
-				Excel::import(new PersonalImport(), $request->archivo1);
-				
-				$countfilas = session('CountFilas', 0);
-				session(['CountFilas' => 0]);
-				
-				$MensajeWarning = $this->MensajeWar();
-				if ($MensajeWarning !== '') {
-					return back()
-						->with('success', 'Usuarios nuevos: ' . $countfilas)->with('warning', $MensajeWarning)
-					;
-				}
-				
-				Myhelp::EscribirEnLog($this, 'IMPORT:reportes', ' finalizo con exito', false);
-				if ($countfilas == 0) {
-					return back()->with('success', __('app.label.op_successfully') . ' No hubo cambios');
-				}
-				else {
-					return back()->with('success', __('app.label.op_successfully') . ' Se leyeron ' . $countfilas . ' filas con exito');
-				}
-			}
-			else {
-				return back()->with('error', __('app.label.op_not_successfully') . ' archivo no seleccionado');
-			}
-		} catch (\Throwable $th) {
-			Myhelp::EscribirEnLog($this, 'IMPORT:reportes', ' Fallo importacion: ' . $th->getMessage() . ' L:' . $th->getLine() . ' Ubi: ' . $th->getFile(), false);
-			
-			return back()->with('error', __('app.label.op_not_successfully') . ' Usuario del error: ' . session('larow')[0] . ' error en la iteracion ' . $countfilas . ' ' . $th->getMessage() . ' L:' . $th->getLine() . ' Ubi: ' . $th->getFile());
-		}
-	}
 	
-	private function MensajeWar() {
-		$bandera = false;
-		$contares = [
-			'contar1',
-			'contar2',
-			'contar3',
-			'contar4',
-			'contar5',
-			'contarVacios',
-		];
-		$mensajesWarnings = [
-			'#correos Existentes: ',
-			'Novedad, error interno: ',
-			'#identificacions no numericas: ',
-			'#generos distintos(M,F,otro): ',
-			'#identificaciones repetidas: ',
-			'#filas con celdas vacias: ',
-		];
-		
-		foreach ($contares as $key => $value) {
-			$$value = session($value, 0);
-			session([$value => 0]);
-			$bandera = $bandera || $$value > 0;
-		}
-		session(['contar2' => - 1]);
-		
-		$mensaje = '';
-		if ($bandera) {
-			foreach ($mensajesWarnings as $key => $value) {
-				if (${$contares[$key]} > 0) {
-					$mensaje .= $value . ${$contares[$key]} . '. ';
-				}
-			}
-		}
-		
-		return $mensaje;
-	}
 }

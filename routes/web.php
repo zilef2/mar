@@ -1,5 +1,6 @@
 <?php
 //esto es main
+use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\OrdenproduccionController;
 use App\Http\Controllers\ParametrosController;
 use App\Http\Controllers\ParoController;
@@ -46,6 +47,10 @@ Route::middleware('auth', 'verified')->group(function () {
     //# SIDEBARMENU
     Route::resource('/reporte', ReportesController::class);
     Route::post('/reporte/destroy-bulk', [ReportesController::class, 'destroyBulk'])->name('reporte.destroy-bulk');
+    Route::post('/uploadUser', [ExcelController::class, 'uploadUser'])->name('uploadUser');
+    Route::post('/uploadOP', [ExcelController::class, 'uploadOP'])->name('uploadOP');
+     Route::get('/subirexceles', [ExcelController::class, 'subirexceles'])->name('subirexceles');
+
     Route::get('/reporte/createdev', [ReportesController::class, 'createdev'])->name('createdev');
 
 

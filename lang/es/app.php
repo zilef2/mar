@@ -4,6 +4,12 @@ return [
     'label' => [
         //adicion a op
         
+		'cantidad_minutos' => 'cantidad_minutos',
+		'pedido' => 'pedido',
+		'Pedido' => 'Pedido',
+		'estado' => 'Estado',
+		'asesor' => 'Asesor',
+		'fecha_solicitud' => 'Fecha de Solicitud',
 		'pedido' => 'pedido',
 		'op' => 'orden de prod',
 		'obra' => 'obra', 

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('ordenproduccions', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
+//            $table->string('nombre');
             $table->integer('cantidad_minutos')->nullable();
-			$table->integer('Pedido')->nullable();
+			$table->integer('pedido')->nullable();
 			$table->string('op')->nullable();
 			$table->string('cliente')->nullable();
 			$table->string('obra')->nullable(); 

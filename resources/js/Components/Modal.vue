@@ -66,7 +66,7 @@ const maxWidthClass = computed(() => {
 </script>
 
 <template>
-    <teleport to="body">
+    <teleport to="body">    
         <transition leave-active-class="duration-400">
             <div
                 v-show="show"

@@ -126,16 +126,12 @@ class UserController extends Controller
             }else{
                 $sexo = 'Masculino';
             }
-            //16marzo: updating all repositories
-            /*git filter-branch --tree-filter 'rm -rf database' HEAD
-            git filter-branch --tree-filter 'rm -rf database' HEAD
-            */
             $user = User::create([
                 'name'      => $request->name,
-                'email'     => $request->email,
+                'identificacion' => $request->identificacion,
+                'email'     => '',
                 'area'     => $request->area,
                 'cargo'     => $request->cargo,
-                'identificacion' => $request->identificacion,
                 'celular' => $request->celular,
                 'sexo' => $sexo,
                 'fecha_nacimiento' => $this->updatingDate($request->fecha_nacimiento),

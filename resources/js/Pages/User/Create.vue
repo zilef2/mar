@@ -40,7 +40,7 @@ onMounted(() => {
 
         const name = `${pick(firstNames)} ${pick(surnames)}`;
         form.name = name;
-        form.email = `${name.toLowerCase().replace(/\s+/g, '.')}${rand(1, 999)}@example.com`;
+        // form.email = `${name.toLowerCase().replace(/\s+/g, '.')}${rand(1, 999)}@example.com`;
         form.role = pick(props.roles?.map(r => r.name) || ['empleado']);
         form.identificacion = randomDigits(8);
         form.sexo = pick(sexes);
@@ -145,15 +145,15 @@ const daynames = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'];
                                        :placeholder="lang().placeholder.name" :error="form.errors.name"/>
                             <InputError class="mt-2" :message="form.errors.name"/>
                         </div>
-                        <div>
-                            <div class="inline-flex">
-                                <InputLabel for="email" :value="lang().label.email"/>
-                                <small class="text-lg ml-1 font-bold"> * </small>
-                            </div>
-                            <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email"
-                                       :placeholder="lang().placeholder.email" :error="form.errors.email"/>
-                            <InputError class="mt-2" :message="form.errors.email"/>
-                        </div>
+<!--                        <div>-->
+<!--                            <div class="inline-flex">-->
+<!--                                <InputLabel for="email" :value="lang().label.email"/>-->
+<!--                                <small class="text-lg ml-1 font-bold"> * </small>-->
+<!--                            </div>-->
+<!--                            <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email"-->
+<!--                                       :placeholder="lang().placeholder.email" :error="form.errors.email"/>-->
+<!--                            <InputError class="mt-2" :message="form.errors.email"/>-->
+<!--                        </div>-->
                         <div>
                             <div class="inline-flex">
                                 <InputLabel for="identificacion" :value="lang().label.identificacion"/>

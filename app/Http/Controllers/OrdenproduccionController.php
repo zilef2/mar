@@ -26,21 +26,14 @@ class OrdenproduccionController extends Controller {
     public function index(Request $request) {
         $numberPermissions = MyModels::getPermissionToNumber(Myhelp::EscribirEnLog($this, ' Ordenproduccions '));
         $Ordenproduccions = $this->Filtros($request)->get();
-//        $losSelect = $this->Dependencias();
-
 
         $perPage = $request->has('perPage') ? $request->perPage : 10;
         return Inertia::render($this->FromController . '/Index', [
             'fromController' => $this->PerPageAndPaginate($request, $Ordenproduccions),
             'total' => $Ordenproduccions->count(),
-
             'breadcrumbs' => [['label' => __('app.label.' . $this->FromController), 'href' => route($this->FromController . '.index')]],
             'title' => __('app.label.' . $this->FromController),
-            'filters' => $request->all([
-                                           'search',
-                                           'field',
-                                           'order'
-                                       ]),
+            'filters' => $request->all(['search', 'field', 'order']),
             'perPage' => (int)$perPage,
             'numberPermissions' => $numberPermissions,
             'losSelect' => $losSelect ?? [],
@@ -52,8 +45,8 @@ class OrdenproduccionController extends Controller {
         $Ordenproduccions = Ordenproduccion::query();
         if ($request->has('search')) {
             $Ordenproduccions = $Ordenproduccions->where(function ($query) use ($request) {
-                $query->where('nombre', 'LIKE', "%" . $request->search . "%")
-                    //                    ->orWhere('codigo', 'LIKE', "%" . $request->search . "%")
+                $query->where('pedido', 'LIKE', "%" . $request->search . "%")
+                                        ->orWhere('op', 'LIKE', "%" . $request->search . "%")
                     //                    ->orWhere('identificacion', 'LIKE', "%" . $request->search . "%")
                 ;
             });

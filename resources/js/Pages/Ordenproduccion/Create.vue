@@ -43,9 +43,17 @@ onMounted(() => {
 
         const valueRAn = Math.floor(Math.random() * (9) + 1)
         form.nombre = 'nombre genenerico '+ (valueRAn);
-        form.codigo = (valueRAn);
-        // form.hora_inicial = '0'+valueRAn+':00'//temp
-        // form.fecha = '2023-06-01'
+        form.Pedido = (valueRAn**3);
+        form.op = (valueRAn*2);
+        form.cliente = 'IML';
+        form.obra = (valueRAn);
+        form.contrato = (valueRAn);
+        form.producto_descripcion = (valueRAn);
+        form.estado = (valueRAn);
+        form.asesor = (valueRAn);
+        form.fecha_solicitud = (valueRAn);
+        form.hora_inicial = '0'+valueRAn+':00'//temp
+        form.fecha = '2025-10-13'
 
     }
 });
