@@ -148,9 +148,10 @@ const mostrarTiempoTranscurrido = (raw) => {
     console.log("🚀🚀mostrarTiempoTranscurrido ~ raw: ", raw);
     if (isNaN(valor)) return '-'
     if (valor < 120) {
-        return zilef_number_format(valor * 60, 0, false) + ' mins'
+        return zilef_number_format(valor, 0, false) + ' mins'
     } else {
-        return zilef_number_format(valor, 3, false) + ' hrs'
+        let minutossobrantes = valor%60 < 10 ? '0'+valor%60 : valor%60 
+        return zilef_number_format(valor / 60, 0, false) + ':' + (minutossobrantes) + ' hrs'
     }
 }
 
@@ -324,20 +325,6 @@ const mostrarTiempoTranscurrido = (raw) => {
                                     <ChevronUpDownIcon class="w-4 h-4"/>
                                 </div>
                             </th>
-                            <!--                            <th v-on:click="order('paro_id', true)" class="px-2 py-4 cursor-pointer min-w-min">-->
-                            <!--                                <div class="flex">-->
-
-                            <!--                                    <span>Paro</span>-->
-                            <!--                                    <ChevronUpDownIcon class="w-4 h-4"/>-->
-                            <!--                                </div>-->
-                            <!--                            </th>-->
-                            <!--                            <th v-on:click="order('reproceso_id', true)" class="px-2 py-4 cursor-pointer min-w-min">-->
-                            <!--                                <div class="flex">-->
-
-                            <!--                                    <span>Reproceso</span>-->
-                            <!--                                    <ChevronUpDownIcon class="w-4 h-4"/>-->
-                            <!--                                </div>-->
-                            <!--                            </th>-->
                         </tr>
                         </thead>
 <!--                        <CongeladoSection-->

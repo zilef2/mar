@@ -39,8 +39,8 @@ class ReporteFactory extends Factory {
 		$horaFinal = $horaFinalCarbon->format('H:i:s');
 		
 		// tiempo_transcurrido como resta en formato H:i:s
-		$segundosTranscurridos = $horaFinalCarbon->diffInSeconds($horaInicialCarbon);
-		$tiempoTranscurrido = ($segundosTranscurridos / 3600); // en horas
+		$segundosTranscurridos = $horaInicialCarbon->diffInSeconds($horaFinalCarbon);
+		$tiempoTranscurrido = ($segundosTranscurridos / 60); // en horas
 		
 		// otros campos aleatorios
 		$tipoFinalizacion = $this->faker->randomElement([1, 2, 3]); // 1: primera del dia, 2: intermedia, 3: ultima

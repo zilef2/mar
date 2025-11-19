@@ -35,21 +35,7 @@ class UserController extends Controller
 
     }
 
-    public function Dashboard() {
-        $numberPermissions = Myhelp::getPermissionToNumber(Myhelp::EscribirEnLog($this, ' Dashboard'));
-        if($numberPermissions > 1){
-
-            return Inertia::render('Dashboard', [
-                'users'         => (int) User::count(),
-                'roles'         => (int) Role::count(),
-                'reportes'      => (int) Reporte::count(),
-                'permissions'   => (int) Permission::count(),
-            ]);
-        }else{
-            return redirect()->route('reporte.index');
-        }
-
-    }
+  
 
     public function index(UserIndexRequest $request) {
         $permissions = Myhelp::EscribirEnLog($this, ' users');

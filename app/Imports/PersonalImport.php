@@ -87,7 +87,7 @@ class PersonalImport implements ToModel {
 
 			$user = new User([
                  'name'             => $row[0],
-                 'email'            => $nombreSinEspacio.'@'.$nombreSinEspacio,
+                 'email'            => $row[1],
                  'identificacion'   => $row[1],
                  'celular'          => $row[6],
                  'sexo'             => 'Masculino',
@@ -103,7 +103,6 @@ class PersonalImport implements ToModel {
 			return $user;
 		} catch (\Throwable $th) {
 			$erormejor = $th->getMessage() . ' L:' . $th->getLine() . ' Ubi: ' . $th->getFile();
-			dd($erormejor);
 			Myhelp::EscribirEnLog($this, 'IMPORT:users', ' Fallo dentro de la importacion: ' .$erormejor , false);
 		}
 	}

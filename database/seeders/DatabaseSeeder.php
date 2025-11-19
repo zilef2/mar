@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder {
 			            UserSeeder::class,
 			            ParametrosSeeder::class,
 			            ActividadSeeder::class,
-			            OrdenproduccionSeeder::class,
+//			            OrdenproduccionSeeder::class,
 		            ]);
 		
 //		\App\Models\User::factory(2)->create();

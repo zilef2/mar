@@ -1,5 +1,6 @@
 <?php
 //esto es main
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\OrdenproduccionController;
 use App\Http\Controllers\ParametrosController;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Session;
 //Route::get('/', function () { return "El sistema responde correctamente."; });
 Route::get('/', function () { return redirect('/login'); });
 
-Route::get('/dashboard', [UserController::class, 'Dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'Dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/RRepor', [UserController::class, 'RRepor'])->middleware(['auth', 'verified'])->name('RRepor');
 
 Route::get('/setLang/{locale}', function ($locale) {
