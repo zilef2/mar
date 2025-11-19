@@ -129,7 +129,7 @@ class UserController extends Controller
             $user = User::create([
                 'name'      => $request->name,
                 'identificacion' => $request->identificacion,
-                'email'     => '',
+                'email'     => $request->identificacion,
                 'area'     => $request->area,
                 'cargo'     => $request->cargo,
                 'celular' => $request->celular,
