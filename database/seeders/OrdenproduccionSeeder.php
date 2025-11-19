@@ -14,7 +14,7 @@ class OrdenproduccionSeeder extends Seeder
     public function run(): void
     {
         
-		Ordenproduccion::create(['nombre' => 'OP123']);
+//		Ordenproduccion::create(['op' => 'OP123']);
 		
     }
 }
