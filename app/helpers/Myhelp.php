@@ -116,29 +116,25 @@ class Myhelp {
 		return $Result;
 	}
 	
-	public static function NEW_turnInSelectID($theArrayofStrings, $selecc, $theName = null) {
+	public static function NEW_turnInSelectID($theArrayofStrings, $selecc = '', $theName = null,$secondName = null) {
 		if ($theName == null) {
 			$theName = 'nombre';
 		}
 		if (count($theArrayofStrings) == 0) {
-			return [
-				['title' => 'No hay registros ', 'value' => 0,]
-				// 'filtro' => 'General'
-			];
+			return [['title' => 'No hay registros ', 'value' => 0]];
 		}
-		
 		$result = [
 			[
-				'title' => 'Selecciona un ' . $selecc,
+				'title' => 'Selecciona un' . $selecc,
 				'value' => 0,
-				// 'filtro' => 'General'
 			]
 		];
 		foreach ($theArrayofStrings as $value) {
+			
+			$showthis = $secondName ? $value->{$theName} . ' - ' . $value->{$secondName} : $value->{$theName};
 			$result[] = [
-				'title' => $value->{$theName},
+				'title' => $showthis,
 				'value' => $value->id,
-				// 'filtro' => $value->teoricaOpractica
 			];
 		}
 		

@@ -43,7 +43,7 @@ onMounted(() => {
 
         const valueRAn = Math.floor(Math.random() * (9) + 1)
         form.nombre = 'nombre genenerico '+ (valueRAn);
-        form.Pedido = (valueRAn**3);
+        // form.Pedido = (valueRAn**3);
         form.op = (valueRAn*2);
         form.cliente = 'IML';
         form.obra = (valueRAn);

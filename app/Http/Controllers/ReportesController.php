@@ -160,7 +160,7 @@ class ReportesController extends Controller {
 			$result[$value] = Myhelp::NEW_turnInSelectID($todosResultados, ' ');
 			
 			if ($value === 'ordenproduccion') {
-				$result[$value] = Myhelp::NEW_turnInSelectID($todosResultados, 'a orden','op');
+				$result[$value] = Myhelp::NEW_turnInSelectID($todosResultados, 'a orden','op','producto_descripcion');
 			}
 		}
 		

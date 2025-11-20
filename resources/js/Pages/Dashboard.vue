@@ -8,13 +8,17 @@ import {Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, Lin
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
-import {createAcquisitionsChart} from './dimensions.js'; // Importa la función con nombre
+import {createAcquisitionsChart,charSuma} from './dimensions.js'; // Importa la función con nombre
 const props = defineProps({
     contadores: Array,
     roles: Number,
     reportes: Number,
     permissions: Number,
     acquisitionsData: {
+        type: Array,
+        required: true
+    },
+    acquisitionsData2: {
         type: Array,
         required: true
     }
@@ -35,10 +39,13 @@ const colores = [
 ];
 
 const canvas1 = ref(null);
+const canvas2 = ref(null);
 onMounted(() => {
     if (canvas1.value && props.acquisitionsData) {
-        // 💡 ¡Aquí pasamos la prop 'acquisitionsData' como segundo argumento!
         createAcquisitionsChart(canvas1.value, props.acquisitionsData);
+    }
+    if (canvas2.value && props.acquisitionsData2) {
+        charSuma(canvas2.value, props.acquisitionsData2);
     }
 });
 
@@ -48,10 +55,15 @@ onMounted(() => {
 
     <Head title="Dashboard"/>
     <AuthenticatedLayout>
-
-        <div style="width: 1200px; margin: auto;">
-            <!-- 3. Asocia la referencia de plantilla con el elemento canvas -->
-            <canvas ref="canvas1"></canvas>
+        <div class="grid grid-cols-1 2xl:grid-cols-2 gap-16">
+            <div style="width: 1000px; margin: auto;">
+                <h2 class="text-xl">Tiempos de este mes</h2>
+                <canvas ref="canvas1"></canvas>
+            </div>
+            <div style="width: 1000px; margin: auto;">
+                <h2 class="text-xl">Suma de Tiempos por Persona </h2>
+                <canvas ref="canvas2"></canvas>
+            </div>
         </div>
         <Breadcrumb :title="'Resumen'" :breadcrumbs="[]"/>
         <div class="space-y-4">

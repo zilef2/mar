@@ -98,29 +98,29 @@ class UserSeeder extends Seeder {
 		
 		
 		//empelado
-		User::create([
-			             'name'           => 'ALVAREZ GUZMAN GERMAN GERARDO',
-			             'email'          => '71681723',
-			             'password'       => bcrypt('123'),
-			             'identificacion' => 71681723,
-			             'celular'        => '3145808140',
-			             'sexo'           => 'Masculino',
-			             'salario'        => 0,
-			             'cargo'          => 'LAVADOR',
-			             'area'           => 'Bello',
-		             ])->assignRole('empleado');
-		
-		User::create([
-			             'name'           => 'BUITRAGO QUICENO JUAN CARLOS',
-			             'email'          => '1020429596',
-			             'password'       => bcrypt('123'),
-			             'identificacion' => 1020429596,
-			             'celular'        => '3206643147',
-			             'sexo'           => 'Masculino',
-			             'salario'        => 0,
-			             'cargo'          => 'AUXILIAR ALMACEN',
-			             'area'           => 'CRA 66 # 20F-61 INT 104',
-		             ])->assignRole('empleado');
+//		User::create([
+//			             'name'           => 'ALVAREZ GUZMAN GERMAN GERARDO',
+//			             'email'          => '71681723',
+//			             'password'       => bcrypt('123'),
+//			             'identificacion' => 71681723,
+//			             'celular'        => '3145808140',
+//			             'sexo'           => 'Masculino',
+//			             'salario'        => 0,
+//			             'cargo'          => 'LAVADOR',
+//			             'area'           => 'Bello',
+//		             ])->assignRole('empleado');
+//		
+//		User::create([
+//			             'name'           => 'BUITRAGO QUICENO JUAN CARLOS',
+//			             'email'          => '1020429596',
+//			             'password'       => bcrypt('123'),
+//			             'identificacion' => 1020429596,
+//			             'celular'        => '3206643147',
+//			             'sexo'           => 'Masculino',
+//			             'salario'        => 0,
+//			             'cargo'          => 'AUXILIAR ALMACEN',
+//			             'area'           => 'CRA 66 # 20F-61 INT 104',
+//		             ])->assignRole('empleado');
 		
 	}
 }

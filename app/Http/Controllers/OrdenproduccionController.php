@@ -36,7 +36,6 @@ class OrdenproduccionController extends Controller {
             'filters' => $request->all(['search', 'field', 'order']),
             'perPage' => (int)$perPage,
             'numberPermissions' => $numberPermissions,
-            'losSelect' => $losSelect ?? [],
             'getFillableWithTypes' => $this->getFillableWithTypes ?? [],
         ]);
     }

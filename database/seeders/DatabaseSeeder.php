@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder {
 		            ]);
 		
 //		\App\Models\User::factory(2)->create();
-//		\App\Models\Reporte::factory(102)->create();
+//		\App\Models\Reporte::factory(25)->create();
 		
 		Paro::create(['nombre' => 'Paro ejemplo',]);
 		Reproceso::create(['nombre' => 'Reproceso ejemplo',]);

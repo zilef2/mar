@@ -186,8 +186,8 @@ const select = () => data.multipleSelect = props.fromController?.data.length ===
                             </td>
                             <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center">{{ ++indexu }}</td>
                             <td v-for="titulo in getFillableWithTypes" class="whitespace-nowrap py-4 px-2 sm:py-3">
-                                <span v-if="titulo['type'] === 'text' || titulo['type'] === 'string'"> {{ claseFromController[titulo['order']] }}</span>
-                                <span v-if="titulo['type'] === 'number' || titulo['type'] === 'integer'"> {{ zilef_number_format(claseFromController[titulo['order']], 0, false) }}</span>
+                                <span v-if="titulo['type'] === 'text' || titulo['type'] === 'integer' || titulo['type'] === 'string'"> {{ claseFromController[titulo['order']] }}</span>
+                                <span v-if="titulo['type'] === 'number'"> {{ zilef_number_format(claseFromController[titulo['order']], 0, false) }}</span>
                                 <span v-if="titulo['type'] === 'dinero'"> {{ zilef_number_format(claseFromController[titulo['order']], 0, true) }}</span>
                                 <span v-if="titulo['type'] === 'date'"> {{ formatDate(claseFromController[titulo['order']], false) }}</span>
                                 <span v-if="titulo['type'] === 'datetime'"> {{ formatDate(claseFromController[titulo['order']], true) }}</span>

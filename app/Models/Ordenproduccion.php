@@ -13,18 +13,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
     use HasFactory;
     protected $fillable = [
         'id',
-//		'nombre',
-		'cantidad_minutos',
 		
-	    'pedido',
+//	    'pedido',
 		'op',
 		'cliente',
 		'obra',
-		'contrato',
+//		'contrato',
 		'producto_descripcion',
 		'estado',
 		'asesor',
 		'fecha_solicitud',
+	    
+		'cantidad_minutos',
     ];
 
 
