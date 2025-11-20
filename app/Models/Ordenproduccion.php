@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 		'producto_descripcion',
 		'estado',
 		'asesor',
+		'cantidad',
 		'fecha_solicitud',
 	    
 		'cantidad_minutos',

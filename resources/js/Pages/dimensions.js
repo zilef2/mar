@@ -35,9 +35,17 @@ export function charSuma(canvasElement, chartData) {
         labels: chartData.map(row => row.trabajador),
         datasets: [
           {
-            label: 'Minutos por persona',
+            label: 'Minutos Reportados',
             data: chartData.map(row => row.total_mins)
-          }
+          },
+          {
+            label: 'Faltante',
+            data: chartData.map(row => row.disponible)
+          },
+          {
+            label: 'Meta semanal',
+            data: chartData.map(row => row.minimo)
+          },
         ]
       }
     }
