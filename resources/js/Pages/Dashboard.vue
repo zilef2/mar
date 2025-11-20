@@ -55,12 +55,12 @@ onMounted(() => {
 
     <Head title="Dashboard"/>
     <AuthenticatedLayout>
-        <div class="grid grid-cols-1 2xl:grid-cols-2 gap-16">
-            <div style="width: 1000px; margin: auto;">
+        <div class="grid grid-cols-1 gap-16">
+            <div style="width: 1400px; margin: auto;">
                 <h2 class="text-xl">Tiempos de este mes</h2>
                 <canvas ref="canvas1"></canvas>
             </div>
-            <div style="width: 1000px; margin: auto;">
+            <div style="width: 1400px; margin: auto;">
                 <h2 class="text-xl">Suma de Tiempos por Persona </h2>
                 <canvas ref="canvas2"></canvas>
             </div>
