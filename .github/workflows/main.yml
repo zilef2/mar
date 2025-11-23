@@ -1,0 +1,23 @@
+name: Artisan Down
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-artisan-down:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ejecutar php artisan down en servidor Windows
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USER }}
+          key: ${{ secrets.PROD_KEY }}
+          script: |
+            cd C:\laragon\www\mar
+            php artisan down
+            echo "Aplicación puesta en mantenimiento."
