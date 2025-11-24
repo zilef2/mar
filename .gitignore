@@ -28,3 +28,4 @@ yarn-error.log
 *.bat
 public/build/
 resources/js/ziggy.js
+vite.config.js

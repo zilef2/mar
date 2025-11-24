@@ -10,7 +10,6 @@ return [
 		'estado' => 'Estado',
 		'asesor' => 'Asesor',
 		'fecha_solicitud' => 'Fecha de Solicitud',
-		'pedido' => 'pedido',
 		'op' => 'orden de prod',
 		'obra' => 'obra', 
 		'contrato' => 'contrato',

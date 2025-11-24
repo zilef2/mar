@@ -147,11 +147,11 @@ const mostrarTiempoTranscurrido = (raw) => {
     console.log("🚀🚀mostrarTiempoTranscurrido ~ valor: ", valor);
     console.log("🚀🚀mostrarTiempoTranscurrido ~ raw: ", raw);
     if (isNaN(valor)) return '-'
-    if (valor < 120) {
-        return zilef_number_format(valor, 0, false) + ' mins'
+    if (valor < 1) {
+        return zilef_number_format(valor*60, 0, false) + ' mins'
     } else {
-        let minutossobrantes = valor%60 < 10 ? '0'+valor%60 : valor%60 
-        return zilef_number_format(valor / 60, 0, false) + ':' + (minutossobrantes) + ' hrs'
+        // let minutossobrantes = valor%60 < 10 ? '0'+valor%60 : valor%60 
+        return zilef_number_format(valor, 0, false) + ' hrs'
     }
 }
 
@@ -318,7 +318,7 @@ const mostrarTiempoTranscurrido = (raw) => {
                                     <ChevronUpDownIcon class="w-4 h-4"/>
                                 </div>
                             </th>
-                            <th v-on:click="order('MinutosEstimados', true)" class="px-2 py-4 cursor-pointer min-w-min">
+                            <th v-if="props.numberPermissions > 1" v-on:click="order('MinutosEstimados', true)" class="px-2 py-4 cursor-pointer min-w-min">
                                 <div class="flex">
 
                                     <span>Tiempo Estimado</span>
@@ -391,7 +391,7 @@ const mostrarTiempoTranscurrido = (raw) => {
                                 </span>
                             </td>
                             <td>{{ (clasegenerica['Orden']) }}</td>
-                            <td>{{ (clasegenerica['MinutosEstimados']) }}</td>
+                            <td v-if="props.numberPermissions > 1">{{ (clasegenerica['MinutosEstimados']) }}</td>
                         </tr>
 
                         <!-- totales -->

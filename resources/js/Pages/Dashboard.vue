@@ -57,11 +57,11 @@ onMounted(() => {
     <AuthenticatedLayout>
         <div class="grid grid-cols-1 gap-16">
             <div style="width: 1400px; margin: auto;">
-                <h2 class="text-xl">Tiempos de este mes</h2>
+                <h2 class="text-xl my-4 text-center font-bold">Tiempos por actividad</h2>
                 <canvas ref="canvas1"></canvas>
             </div>
             <div style="width: 1400px; margin: auto;">
-                <h2 class="text-xl">Suma de Tiempos por Persona </h2>
+                <h2 class="text-xl my-4 text-center font-bold">Tiempos por Persona (44h/semana)</h2>
                 <canvas ref="canvas2"></canvas>
             </div>
         </div>

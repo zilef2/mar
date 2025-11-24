@@ -11,7 +11,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 {
     /** @use HasFactory<\Database\Factories\OrdenproduccionFactory> */
     use HasFactory;
-    protected $fillable = [
+	    
+	    /**
+	     * @var \Illuminate\Support\HigherOrderCollectionProxy|mixed
+	     */
+	    protected $fillable = [
         'id',
 		
 //	    'pedido',
