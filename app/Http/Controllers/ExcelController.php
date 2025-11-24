@@ -27,9 +27,7 @@ class ExcelController extends Controller {
 	
 	public function uploadOP(Request $request): \Illuminate\Http\RedirectResponse //import
 	{
-		//		ini_set('max_execution_time', 360); // 6 minutos
-		
-		ini_set('max_execution_time', 1800); // 30 minutos
+		ini_set('max_execution_time', 360); // 6 minutos
 		
 		$pesoMaximo = 8192;
 		$pesoString = (int)($pesoMaximo / 1000) . 'MB';
@@ -48,7 +46,7 @@ class ExcelController extends Controller {
 		if ($exten != 'xlsx' && $exten != 'xls') {
 			return back()->with('warning', 'El archivo debe ser de Excel');
 		}
-//		Myhelp::EscribirEnLog($this, $VariablesEsteProyecto['log'], ' Subir a excel, paso las primeras validaciones');
+		Myhelp::EscribirEnLog($this, $VariablesEsteProyecto['log'], ' Subir a excel, paso las primeras validaciones');
 		$pesoKilobyte = ((int)($request->archivo2->getSize())) / (1024);
 		if ($pesoKilobyte > $pesoMaximo) {
 			return back()->with('warning', $VariablesEsteProyecto['Validaciones']['pesoMaximoerror']);
@@ -57,8 +55,6 @@ class ExcelController extends Controller {
 		try {
 			$ruta = $request->file('archivo2')->storeAs('importGenericous', uniqid() . '_' . $request->file('archivo2')->getClientOriginalName());
 			$theEmail = Myhelp::AuthU()->email;
-//			$request->file('archivo2')->move(storage_path('app/importOrden'), $ruta);
-		
 			ImportGenericousChunkJob::dispatch($ruta, $theEmail);
 			
 			return back()->with('success', 'La importación está en proceso. Recibirás un correo al finalizar.');

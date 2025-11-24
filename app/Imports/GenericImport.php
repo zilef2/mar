@@ -43,13 +43,13 @@ class GenericImport implements ToCollection, WithHeadingRow, SkipsOnError, WithC
 	];
 	private string $columnaIndice = 'op';
 	private array $camposObligatorios = [
-		'pedido' => 'No se pudo leer la columna PEDIDO. ',
+//		'pedido' => 'No se pudo leer la columna PEDIDO. ',
 		'op'     => 'No se pudo leer la columna OP. ',
 	];
 	
 	private array $hacerZeroSiSonNulos = [ //solo columnas de numeros
-		'pedido',
-		'op'
+//		'pedido',
+//		'op'
 	];
 	private array $lasColumnas = [ //pegar las columnas de excel
 	
@@ -62,14 +62,15 @@ class GenericImport implements ToCollection, WithHeadingRow, SkipsOnError, WithC
 	// Campos a mapear directamente desde la fila
 	private array $camposMapeados = [
 		//como esta en excel  =>  como esta en el model
-		"pedido"               => 'pedido',
+//		"pedido"               => 'pedido',
 		"op"                   => 'op',
 		"cliente"              => 'cliente',
 		"obra "                => 'obra',
-		"contrato"             => 'contrato',
+//		"contrato"             => 'contrato',
 		"producto_descripcion" => 'producto_descripcion',
 		"asesor"               => 'asesor',
 		"estado"               => 'estado',
+		"cantidad"               => 'cant',
 		//		fecha	
 	
 	];
@@ -110,21 +111,24 @@ class GenericImport implements ToCollection, WithHeadingRow, SkipsOnError, WithC
 		foreach ($collection as $row) {//foreach principal
 			$keys = implode(', ', $row->keys()->toArray());
 			Log::channel('solosuper')->info('indices row: ' . $keys);
-			
 			Log::channel('solosuper')->info('  ' . $this->columnaIndice);
 			Log::channel('solosuper')->info('this columna indice  ' . $this->columnaIndice);
 			Log::channel('solosuper')->info('$row[$this->columnaIndice]  ' . $row[$this->columnaIndice]);
 			$this->numeroFilas ++;
 			
-			if (!isset($row[$this->columnaIndice])) {
+			
+			if (!isset($row[$this->columnaIndice]) || $row[$this->columnaIndice] === "op") {
 				$ArrayMensajeome[] = '!!row omitida: Sin ' . $this->columnaIndice;
 				Log::channel('solosuper')->info('Genericimport  no hay indice');
 				
 				$this->nFilasOmitidas ++;
 				continue;
 			}
+			
 			else {
+				
 				Log::channel('solosuper')->info('Genericimport  hay indice');
+				//todobien
 				if (!$row[$this->columnaIndice] || in_array($row[$this->columnaIndice], $this->ForbidenCodes)) {
 					$razones = [];
 					
@@ -153,7 +157,7 @@ class GenericImport implements ToCollection, WithHeadingRow, SkipsOnError, WithC
 			
 			Log::channel('solosuper')->info('revisando, existe indice:: ' . $row[$this->columnaIndice]);
 			
-			if (isset($row[$this->columnaIndice]) && $row) {
+			if (isset($row[$this->columnaIndice])) {
 				//inicio validaciones
 				$ValidRow0 = $this->Validarvacios($row);
 				$this->TransformarNumeros($row);
@@ -230,7 +234,7 @@ class GenericImport implements ToCollection, WithHeadingRow, SkipsOnError, WithC
 	}
 	
 	private function CrearYContar(mixed $row) {
-		$codigoUnico = intval($row[$this->columnaIndice]);
+		$codigoUnico = ($row[$this->columnaIndice]);
 		Log::channel('solosuper')->info('existe la variable codigounico = ' . $codigoUnico);
 		
 		// -------------------------------------------
@@ -239,61 +243,31 @@ class GenericImport implements ToCollection, WithHeadingRow, SkipsOnError, WithC
 		$fechasProcesadas = [];
 		foreach ($this->camposFecha as $campoFecha) {
 			
-			$valorFecha = Carbon::parse($row[$campoFecha]);
+			$valorFecha = Carbon::createFromDate(1899, 12, 30)->addDays($row[$campoFecha]);
 			Log::channel('solosuper')->info('fecha solicitud = ' . $valorFecha);
 			
 			$fechasProcesadas[$campoFecha] = $valorFecha;
 		}
-		Log::channel('solosuper')->info('Job en fase3: paso las validaciones de fechas');
-		
-		// -------------------------------------------
-		// CAMPOS MAPeADOS → agregar con key original o con alias
-		// -------------------------------------------
-		$mapeadosProcesados = [];
-		foreach ($this->camposMapeados as $key => $alias) {
+		$camposFinal = [];
+		foreach ($this->camposMapeados as $modelo => $excel) {
 			
-			// si la clave es numérica, alias = key real
-			if (is_int($key)) {
-				$columna = $alias;
-			}else {
-				$columna = $key;
-			}
-			$destino = $alias;
-			
-			$mapeadosProcesados[$destino] = $row[$columna] ?? '';
+			$camposFinal[$modelo] = $row[$excel];
 		}
-		
-		// -------------------------------------------
-		// HABILITADO
-		// -------------------------------------------
-		//		$rowDeshabilitado = trim($row['deshabilitado'] ?? '');
-		//		$habilitado = ($rowDeshabilitado == 1 || $rowDeshabilitado === '1' || $rowDeshabilitado === '') ? 0 : 1;
-		
-		// -------------------------------------------
-		// UNIFICAR DATOS
-		// -------------------------------------------
-//		$nombre = !$row['producto_descripcion'] ? '' : $row['producto_descripcion'];
-			
-		$DatosDelorden = array_merge([
-			                             $this->columnaIndice => $codigoUnico,
-			                             //			                             'habilitado'         => $habilitado,
-		                             ], $fechasProcesadas, $mapeadosProcesados
-//		,['nombre' => $nombre]
-		);
-		
-		Log::channel('solosuper')->info('Job en fase4: ' . implode(',', $DatosDelorden));
+		$DatosDelorden = array_merge([$this->columnaIndice => $codigoUnico,], $fechasProcesadas, $camposFinal);
+		Log::channel('solosuper')->info('Job en fase3: ' . implode(',', $DatosDelorden));
 		
 		// -------------------------------------------
 		// GUARDAR / ACTUALIZAR
 		// -------------------------------------------
-		$orden = Ordenproduccion::updateOrCreate([$this->columnaIndice => $codigoUnico], $DatosDelorden);
-		
+		$orden = Ordenproduccion::updateOrCreate(
+			[$this->columnaIndice => $codigoUnico],
+			$DatosDelorden
+		);
 		Log::channel('solosuper')->info('Orden ID = ' . $orden->id);
 		
 		if ($orden->wasRecentlyCreated) {
 			$this->nFilasNuevas ++;
-		}
-		else {
+		}else {
 			$this->nFilasActualizadas ++;
 		}
 		

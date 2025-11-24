@@ -107,22 +107,21 @@ const titulos = [
     <AuthenticatedLayout>
         <Breadcrumb :title="title" :breadcrumbs="breadcrumbs" />
         <div class="space-y-4">
-            <!-- {{ props.fromController.data[2] }} -->
             <div class="px-4 sm:px-0">
                 <div class="rounded-lg overflow-hidden w-fit">
-                    <PrimaryButton class="rounded-none" @click="data.createOpen = true" v-if="can(['isAdmin','create reproceso'])">
+                    <PrimaryButton class="rounded-none" @click="data.createOpen = true" v-if="can(['isAdmin','create Reproceso'])">
                         {{ lang().button.add }}
                     </PrimaryButton>
 
-                    <Create v-if="can(['isAdmin','create reproceso'])" :numberPermissions="props.numberPermissions" :titulos="titulos"
+                    <Create v-if="can(['isAdmin','create Reproceso'])" :numberPermissions="props.numberPermissions" :titulos="titulos"
                         :show="data.createOpen" @close="data.createOpen = false" :title="props.title"
                         :losSelect=props.losSelect />
 
-                    <Edit v-if="can(['isAdmin','update reproceso'])" :titulos="titulos" :numberPermissions="props.numberPermissions"
+                    <Edit v-if="can(['isAdmin','update Reproceso'])" :titulos="titulos" :numberPermissions="props.numberPermissions"
                         :show="data.editOpen" @close="data.editOpen = false" :generica="data.generico" :title="props.title"
                         :losSelect=props.losSelect />
 
-                    <Delete v-if="can(['isAdmin','delete reproceso'])" :numberPermissions="props.numberPermissions"
+                    <Delete v-if="can(['isAdmin','delete Reproceso'])" :numberPermissions="props.numberPermissions"
                         :show="data.deleteOpen" @close="data.deleteOpen = false" :generica="data.generico"
                         :title="props.title" />
                 </div>
@@ -131,11 +130,11 @@ const titulos = [
                 <div class="flex justify-between p-2">
                     <div class="flex space-x-2">
                         <SelectInput v-model="data.params.perPage" :dataSet="data.dataSet" />
-                        <!-- <DangerButton @click="data.deleteBulkOpen = true"
+                        <DangerButton @click="data.deleteBulkOpen = true"
                             v-show="data.selectedId.length != 0 && can(['isAdmin','delete reproceso'])" class="px-3 py-1.5"
                             v-tooltip="lang().tooltip.delete_selected">
                             <TrashIcon class="w-5 h-5" />
-                        </DangerButton> -->
+                        </DangerButton>
                     </div>
                     <TextInput v-if="props.numberPermissions > 1" v-model="data.params.search" type="text"
                         class="block w-4/6 md:w-3/6 lg:w-2/6 rounded-lg" placeholder="Nombre, codigo" />
@@ -178,12 +177,12 @@ const titulos = [
                                 <td v-if="numberPermissions > 1" class="whitespace-nowrap py-4 w-12 px-2 sm:py-3">
                                     <div class="flex justify-center items-center">
                                         <div class="rounded-md overflow-hidden">
-                                            <InfoButton v-show="can(['isAdmin','update user'])" type="button"
+                                            <InfoButton v-show="can(['isAdmin','update Reproceso'])" type="button"
                                                 @click="(data.editOpen = true), (data.generico = clasegenerica)"
                                                 class="px-2 py-1.5 rounded-none" v-tooltip="lang().tooltip.edit">
                                                 <PencilIcon class="w-4 h-4" />
                                             </InfoButton>
-                                            <DangerButton v-show="can(['isAdmin','delete user'])" type="button"
+                                            <DangerButton v-show="can(['isAdmin','delete Reproceso'])" type="button"
                                                 @click="(data.deleteOpen = true), (data.generico = clasegenerica)"
                                                 class="px-2 py-1.5 rounded-none" v-tooltip="lang().tooltip.delete">
                                                 <TrashIcon class="w-4 h-4" />
