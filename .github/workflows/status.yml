@@ -17,3 +17,5 @@ jobs:
           ) else (
             echo ESTADO: UP
           )
+          echo "Runner: $env:RUNNER_NAME"
+          echo "OS: $env:RUNNER_OS"
