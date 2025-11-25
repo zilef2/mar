@@ -29,3 +29,4 @@ yarn-error.log
 public/build/
 resources/js/ziggy.js
 vite.config.js
+/resources/js/ziggy.js
