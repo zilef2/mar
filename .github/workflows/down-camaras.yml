@@ -1,0 +1,16 @@
+name: DOWN en CAMARAS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-down:
+    runs-on: [self-hosted, CAMARAS]
+
+    steps:
+      - name: Ejecutar php artisan down
+        shell: cmd
+        run: |
+          cd C:\laragon\www\mar
+          php artisan down
+          echo Ejecutado php artisan down en CAMARAS

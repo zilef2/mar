@@ -17,3 +17,6 @@ jobs:
           php artisan optimize
           php artisan optimize:clear
           php artisan down
+          echo ------ INFO DEL RUNNER ------
+          echo RUNNER NAME: %RUNNER_NAME%
+          echo RUNNER OS: %RUNNER_OS%
