@@ -14,4 +14,6 @@ jobs:
       - name: Ejecutar PHP Artisan Down
         run: |
           cd C:\laragon\www\mar
+          php artisan optimize
+          php artisan optimize:clear
           php artisan down

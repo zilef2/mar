@@ -1,0 +1,18 @@
+name: Estado del Proyecto
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check-status:
+    runs-on: self-hosted
+
+    steps:
+      - name: Revisar estado de Laravel
+        run: |
+          cd C:\laragon\www\mar
+          if exist storage\framework\down (
+              echo "ESTADO: DOWN"
+          ) else (
+              echo "ESTADO: UP"
+          )
