@@ -1,18 +1,11 @@
-name: Estado del Proyecto
-
-on:
-  workflow_dispatch:
-
-jobs:
-  check-status:
-    runs-on: self-hosted
-
-    steps:
-      - name: Revisar estado de Laravel
-        run: |
-          cd C:\laragon\www\mar
-          if exist storage\framework\down (
-              echo "ESTADO: DOWN"
-          ) else (
-              echo "ESTADO: UP"
-          )
+- name: Revisar estado de Laravel
+  shell: powershell
+  run: |
+    cd C:\laragon\www\mar
+    echo "OS: $env:RUNNER_OS"
+    echo "NAME: $env:RUNNER_NAME"
+    if (Test-Path "storage\framework\down") {
+        echo "ESTADO: DOWN"
+    } else {
+        echo "ESTADO: UP"
+    }
