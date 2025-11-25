@@ -50,6 +50,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::post('/reporte/destroy-bulk', [ReportesController::class, 'destroyBulk'])->name('reporte.destroy-bulk');
     Route::post('/uploadUser', [ExcelController::class, 'uploadUser'])->name('uploadUser');
     Route::post('/uploadOP', [ExcelController::class, 'uploadOP'])->name('uploadOP');
+    Route::post('//deploy/artisan-down', [ExcelController::class, 'deployartisandown'])->name('deploy.artisan-down');
      Route::get('/subirexceles', [ExcelController::class, 'subirexceles'])->name('subirexceles');
 
     Route::get('/reporte/createdev', [ReportesController::class, 'createdev'])->name('createdev');
@@ -86,28 +87,6 @@ Route::get('/foo', function () {
     return 'Listo';
 });
 
-// routes/web.php o routes/api.php
-Route::post('/internal/maintenance/{action}', function ($action) {
-    // Protección fuerte (muy importante)
-    if (
-        request()->header('Authorization') !== 'Bearer TU_TOKEN_SUPER_SECRETO_256_CHARS' ||
-        request()->ip() !== '127.0.0.1' && !str_starts_with(request()->ip(), '10.') // opcional: solo IPs confiables
-    ) {
-        abort(403);
-    }
-
-    if ($action === 'down') {
-        Artisan::call('down --secret="tu-secret-para-bypass-2025" --redirect=/');
-        return 'App en mantenimiento';
-    }
-
-    if ($action === 'up') {
-        Artisan::call('up');
-        return 'App de vuelta online';
-    }
-
-    abort(404);
-})->where('action', 'down|up');
 
 Route::get('/clear-c', function () {
     Artisan::call('optimize');

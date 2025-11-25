@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -95,12 +96,11 @@ class ExcelController extends Controller {
 		$numberPermissions = Myhelp::getPermissionToNumber($permissions);
 		
 		return Inertia::render('User/subirExceles', [
-			'numUsuarios' => count(User::all()) - 1,
-			'numOrdenes' => count(Ordenproduccion::all()),
-			 'numberPermissions'   => $numberPermissions
+			'numUsuarios'       => count(User::all()) - 1,
+			'numOrdenes'        => count(Ordenproduccion::all()),
+			'numberPermissions' => $numberPermissions
 		]);
 	}
-	
 	
 	public function uploadUser(Request $request) {
 		Myhelp::EscribirEnLog($this, get_called_class(), 'Empezo a importar', false);
@@ -117,7 +117,7 @@ class ExcelController extends Controller {
 				$personalimpo = new PersonalImport();
 				Excel::import($personalimpo, $request->archivo1);
 				$countfilas = $personalimpo->CountFilas;
-			
+				
 				$MensajeWarning = $this->MensajeWar($personalimpo);
 				
 				if ($MensajeWarning !== '') {
@@ -128,10 +128,12 @@ class ExcelController extends Controller {
 				
 				if ($countfilas == 0) {
 					return back()->with('success', __('app.label.op_successfully') . ' No hubo cambios');
-				}else {
+				}
+				else {
 					return back()->with('success', __('app.label.op_successfully') . ' Se leyeron ' . $countfilas . ' filas con exito');
 				}
-			}else {
+			}
+			else {
 				return back()->with('error', __('app.label.op_not_successfully') . ' archivo no seleccionado');
 			}
 			
@@ -165,5 +167,11 @@ class ExcelController extends Controller {
 		}
 		
 		return $mensaje;
+	}
+	
+	public function deployartisandown() {
+		echo Artisan::call('down --secret="token-it"');
+		
+		return "Aplicación abajo: token-it";
 	}
 }
