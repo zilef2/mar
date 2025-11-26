@@ -18,6 +18,18 @@
   }
 }
 
+/*
+el zilef
+ */
+.inertia-progress-spinner {
+    transform: scale(1.8) !important;
+}
+.inertia-progress-spinner {
+    border-width: 4px !important; /* por defecto son 2px */
+}
+/*
+fin el zilef
+ */
 .scrollbar::-webkit-scrollbar {
     @apply bg-gray-800 dark:bg-gray-300;
 }

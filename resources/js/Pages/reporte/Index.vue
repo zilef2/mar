@@ -30,6 +30,7 @@ import '@vuepic/vue-datepicker/dist/main.css';
 /*
 import CongeladoSection from "@/Pages/reporte/CongeladoSection.vue";
 */
+const page = usePage()
 
 const {_, debounce, pickBy} = pkg
 const props = defineProps({
@@ -154,6 +155,11 @@ const mostrarTiempoTranscurrido = (raw) => {
         return zilef_number_format(valor, 0, false) + ' hrs'
     }
 }
+watchEffect(() => {
+    if (page.props.inertiaError === 'expired') {
+        window.location.href = route('login')
+    }
+})
 
 </script>
 
