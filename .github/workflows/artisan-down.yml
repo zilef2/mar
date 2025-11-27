@@ -1,4 +1,4 @@
-name: Artisan Down
+name: Artisan optimize Down
 
 on:
   push:
@@ -16,17 +16,23 @@ jobs:
           cd C:\laragon\www\mar
           php artisan optimize
           php artisan optimize:clear
-          php artisan down
-          echo ------ INFO DEL RUNNER ------
+          
           echo RUNNER NAME: %RUNNER_NAME%
           echo RUNNER OS: %RUNNER_OS%
 
-      - name: Notificar por Telegram
-        if: always() # Siempre se ejecuta, falle o no
+      - name: Notificar a Telegram
+        if: always()
+        shell: pwsh
         run: |
-          STATUS="${{ job.status }}"
-          MESSAGE="Workflow '${{ github.workflow }}' finalizó con estado: $STATUS en el runner ${{ runner.name }}"
+            $TOKEN = "${{ secrets.TELEGRAM_BOT_TOKEN }}"
+            $CHATID = "${{ secrets.TELEGRAM_CHAT_ID }}"
+            $STATUS = "${{ job.status }}"
+            $MSG = "Workflow '${{ github.workflow }}' finalizó con estado: $STATUS"
 
-          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
-            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            -d text="$MESSAGE"
+            curl -Method Post `
+              -Uri "https://api.telegram.org/bot$TOKEN/sendMessage" `
+              -Body @{
+                chat_id = $CHATID
+                text    = $MSG
+              }
+
