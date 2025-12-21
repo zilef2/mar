@@ -145,11 +145,9 @@ const tipoReporte = [
 ]
 const mostrarTiempoTranscurrido = (raw) => {
     const valor = parseFloat(raw)
-    console.log("🚀🚀mostrarTiempoTranscurrido ~ valor: ", valor);
-    console.log("🚀🚀mostrarTiempoTranscurrido ~ raw: ", raw);
     if (isNaN(valor)) return '-'
     if (valor < 1) {
-        return zilef_number_format(valor*60, 0, false) + ' mins'
+        return zilef_number_format(valor * 60, 0, false) + ' mins'
     } else {
         // let minutossobrantes = valor%60 < 10 ? '0'+valor%60 : valor%60 
         return zilef_number_format(valor, 0, false) + ' hrs'
@@ -199,10 +197,7 @@ watchEffect(() => {
                     class="flex flex-wrap justify-between items-center gap-3 px-2 py-2 bg-white dark:bg-gray-800 shadow-sm rounded-md">
 
                     <!-- Controles de la izquierda -->
-                    <div class="flex flex-wrap items-center gap-3">
-
-                        <SelectInput v-model="data.params.perPage" :dataSet="data.dataSet" class="h-10"/>
-
+                    <div class="flex flex-wrap items-center gap-1">
                         <DangerButton
                             @click="data.deleteBulkOpen = true"
                             v-show="data.selectedId.length !== 0 && can(['delete Reporte'])"
@@ -220,16 +215,16 @@ watchEffect(() => {
                         </PrimaryButton>
 
                         <PrimaryButton
-                            class="rounded-xl px-4 h-9 mt-1 flex items-center justify-center hover:bg-indigo-800"
+                            class="rounded-lg px-1 h-7 mt-1 flex items-center justify-center hover:bg-indigo-800"
                             @click="data.createOpen = true"
                             v-if="can(['create Reporte'])">
-                            {{ lang().button.add }} {{ props.title }}
+                            Reportar
                         </PrimaryButton>
 
                         <!-- filtros -->
-                        <div class="flex flex-wrap gap-3 mb-3 items-end">
+                        <div class="flex flex-wrap gap-5 mb-3 items-end">
 
-                            <div v-if="numberPermissions > 1" class="w-64">
+                            <div v-if="numberPermissions > 1" class="w-52">
                                 <label class="block text-sm dark:text-white">Trabajador</label>
                                 <vSelect :options="props.empleados" label="title"
                                          class="dark:bg-gray-400"
@@ -237,7 +232,7 @@ watchEffect(() => {
                                          v-model="data.params.search2"></vSelect>
                             </div>
 
-                            <div v-if="numberPermissions > 1" class="w-32">
+                            <div v-if="numberPermissions > 1" class="w-36">
                                 <label class="block text-sm dark:text-white">Tipo</label>
                                 <vSelect :options="tipoReporte" label="title"
                                          class="dark:bg-gray-400"
@@ -245,23 +240,25 @@ watchEffect(() => {
                                          v-model="data.params.search3"></vSelect>
                             </div>
 
-                            <div v-if="numberPermissions > 1" class="w-48">
+                            <div v-if="numberPermissions > 1" class="w-36">
                                 <input type="text" v-model="data.params.search4" placeholder="OP"
                                        class="w-full h-9 rounded-md border-[1px] px-2 border-gray-400 dark:bg-white"/>
                             </div>
-                            <div v-if="numberPermissions > 1" class="w-48">
+                            <div v-if="numberPermissions > 1" class="w-36">
                                 <input type="text" v-model="data.params.search5" placeholder="Actividad"
                                        class="w-full h-9 rounded-md border-[1px] px-2 border-gray-400 dark:bg-white"/>
+                            </div>
+                            <div v-if="numberPermissions > 1" class="w-36">
+                            
+                                <TextInput v-model="data.params.searchDate" type="date"
+                                           class="w-36 rounded-lg h-10"
+                                           placeholder="Buscar por Fecha (mes o año)"/>
                             </div>
                         </div>
                     </div>
 
                     <!-- Controles de la derecha -->
-                    <div v-if="numberPermissions > 1" class="flex items-center gap-2">
-                        <TextInput v-model="data.params.searchDate" type="date"
-                                   class="w-40 rounded-lg h-10"
-                                   placeholder="Buscar por Fecha (mes o año)"/>
-                    </div>
+                    <div v-if="numberPermissions > 1" class="flex items-center gap-0"></div>
                 </div>
 
                 <div
@@ -328,7 +325,8 @@ watchEffect(() => {
                                     <ChevronUpDownIcon class="w-4 h-4"/>
                                 </div>
                             </th>
-                            <th v-if="props.numberPermissions > 1" v-on:click="order('MinutosEstimados', true)" class="px-2 py-4 cursor-pointer min-w-min">
+                            <th v-if="props.numberPermissions > 1" v-on:click="order('MinutosEstimados', true)"
+                                class="px-2 py-4 cursor-pointer min-w-min">
                                 <div class="flex">
 
                                     <span>Tiempo Estimado</span>
@@ -337,16 +335,16 @@ watchEffect(() => {
                             </th>
                         </tr>
                         </thead>
-<!--                        <CongeladoSection-->
-<!--                            :data="data"-->
-<!--                            :titulos="titulos"-->
-<!--                            :fromController="props.fromController"-->
-<!--                            :can="can"-->
-<!--                            :lang="lang"-->
-<!--                            :number_format="zilef_number_format"-->
-<!--                            :formatDate="formatDate"-->
-<!--                            :TimeTo12Format="TimeTo12Format"-->
-<!--                        />-->
+                        <!--                        <CongeladoSection-->
+                        <!--                            :data="data"-->
+                        <!--                            :titulos="titulos"-->
+                        <!--                            :fromController="props.fromController"-->
+                        <!--                            :can="can"-->
+                        <!--                            :lang="lang"-->
+                        <!--                            :number_format="zilef_number_format"-->
+                        <!--                            :formatDate="formatDate"-->
+                        <!--                            :TimeTo12Format="TimeTo12Format"-->
+                        <!--                        />-->
 
 
                         <tbody>
@@ -434,6 +432,8 @@ watchEffect(() => {
                 </div>
                 <div v-if="props.total > 0"
                      class="flex justify-between items-center p-2 border-t border-gray-200 dark:border-gray-700">
+                    <SelectInput v-model="data.params.perPage" :dataSet="data.dataSet" class="h-10"/>
+
                     <Pagination :links="props.fromController" :filters="data.params"/>
                 </div>
             </div>

@@ -66,20 +66,22 @@ const disableContextMenu = (event) => {
 };
 
 onMounted(() => {
-    if (props.numberPermissions > 9) {
-        setTimeout(() => ParaElSuper(), 500)
+    if (props.numberPermissions > 9) setTimeout(() => ParaElSuper(), 500)
+    
+    let ordenLocal = localStorage.getItem('ordenproduccion_id')
+     if (ordenLocal) {
+        form.ordenproduccion_id = props.losSelect.ordenproduccion.find((ele) => {
+            return ele.value == ordenLocal 
+        })
+        console.log("🚀🚀 ~ form.ordenproduccion_id: ", form.ordenproduccion_id);
     }
 
-    // document.body.addEventListener('contextmenu', this.disableContextMenu);
     document.body.addEventListener('contextmenu', disableContextMenu);
 });
 
-onBeforeUnmount(() => {
-    // document.body.removeEventListener('contextmenu', this.disableContextMenu);
-})
-
 //called from onmounted
 function ParaElSuper() {
+    //esto es para el suchadmin
 }
 
 
@@ -142,7 +144,6 @@ let ValidarCreateReporte = () => {
     else return result
 }
 
-
 // <!--<editor-fold desc="Watchers">-->
 
 watchEffect(() => {
@@ -166,6 +167,12 @@ watchEffect(() => {
         data.BanderaTipo = true
     }
 })
+watch(() => form.ordenproduccion_id, (newX) => {
+    if (newX && newX.value) {
+        localStorage.setItem('ordenproduccion_id', newX.value)
+        console.log("🚀🚀 ~ se guardo el value:  ", newX.value);
+    }
+})
 
 
 watch(() => form.tipoReporte, (newX) => {
@@ -174,12 +181,11 @@ watch(() => form.tipoReporte, (newX) => {
     form.user_id = null
     form.ordenproduccion_id = null
     form.reproceso_id = null
-    form.ordenproduccion_id = null
     // tipoReporte
     form.MinutosEstimados = null
 })
-
 // <!--</editor-fold>-->
+
 
 
 // <!--<editor-fold desc="SendToBackend">-->
@@ -215,8 +221,6 @@ const opcinesActividadOTros = [
 </script>
 
 <template>
-    <!--    <meta http-equiv="refresh" content="120">-->
-
     <section class="space-y-6  dark:text-white">
         <Modal :show="props.show" @close="emit('close')" :maxWidth="'6xl'">
             <form class="px-6 my-8" @submit.prevent="create">
