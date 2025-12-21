@@ -57,7 +57,7 @@ const data = reactive({
         search2: props.filters.search2,
         search3: props.filters.search3, //tipo reporte 
         search4: props.filters.search4, //OT
-        search5: props.filters.search5,
+        search5: props.filters.search5, //actividad
         search6: props.filters.search6,
         field: props.filters.field,
         order: props.filters.order,
@@ -247,6 +247,10 @@ watchEffect(() => {
 
                             <div v-if="numberPermissions > 1" class="w-48">
                                 <input type="text" v-model="data.params.search4" placeholder="OP"
+                                       class="w-full h-9 rounded-md border-[1px] px-2 border-gray-400 dark:bg-white"/>
+                            </div>
+                            <div v-if="numberPermissions > 1" class="w-48">
+                                <input type="text" v-model="data.params.search5" placeholder="Actividad"
                                        class="w-full h-9 rounded-md border-[1px] px-2 border-gray-400 dark:bg-white"/>
                             </div>
                         </div>

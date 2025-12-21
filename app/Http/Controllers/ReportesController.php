@@ -32,6 +32,7 @@ class ReportesController extends Controller {
 		$empleados = User::WhereHas('roles', function ($query) {
 			return $query->whereIn('name', ['supervisor', 'empleado']);
 		})->get();
+		
 		$empleados = Myhelp::NEW_turnInSelectID($empleados, ' trabajador', 'name');
 		
 		$total = $reportes->count();
@@ -60,10 +61,6 @@ class ReportesController extends Controller {
 			$reportes = Reporte::Where('user_id', $authid);
 		}
 		
-		//->when($request->search, fn($q) => $q->where('campo', 'like', "%{$request->search}%"))
-		
-		
-		
 		if ($request->has('searchdia')) {
 			$reportes = $reportes->WhereDay('fecha', $request->searchdia);
 		}
@@ -91,6 +88,12 @@ class ReportesController extends Controller {
 		if ($request->has('search4')) {
 			$nombreop = $request->search4;
 			$reportes = $reportes->WhereHas('ordenproduccion', function($query) use ($nombreop) {
+				return $query->Where('op', 'like', '%' . $nombreop . '%');
+			});
+		}
+		if ($request->has('search5')) {
+			$nombreop = $request->search5;
+			$reportes = $reportes->WhereHas('actividad', function($query) use ($nombreop) {
 				return $query->Where('nombre', 'like', '%' . $nombreop . '%');
 			});
 		}

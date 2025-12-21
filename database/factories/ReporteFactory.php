@@ -42,15 +42,27 @@ class ReporteFactory extends Factory {
 		$segundosTranscurridos = $horaInicialCarbon->diffInSeconds($horaFinalCarbon);
 		$tiempoTranscurrido = ($segundosTranscurridos / 60); // en horas
 		
-		// otros campos aleatorios
 		$tipoFinalizacion = $this->faker->randomElement([1, 2, 3]); // 1: primera del dia, 2: intermedia, 3: ultima
-		$tipoReporte = $this->faker->randomElement([0,1,2]); // 0: actividad, 1: reproceso, 2: paro
+		$tipoReporte = $this->faker->randomElement([0, 1, 2]); // 0: actividad, 1: reproceso, 2: paro
+		
+		//80 - 20 %
+		$tipo = $this->faker->randomElement(['normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'reproceso', 'paro']);
+		$reprocesoId = null;
+		$paroId = null;
+		
+		if ($tipo === 'reproceso') {
+			$reprocesoId = $this->faker->randomElement($IDrepoArray);
+		}
+		
+		if ($tipo === 'paro') {
+			$paroId = $this->faker->randomElement($IDparoArray);
+		}
 		
 		return [
 			'user_id'            => $this->faker->randomElement($IDusersArray),
 			'actividad_id'       => $this->faker->randomElement($IDactiArray),
-			'reproceso_id'       => $this->faker->randomElement($IDrepoArray),
-			'paro_id'            => $this->faker->randomElement($IDparoArray),
+			'reproceso_id'       => $reprocesoId,
+			'paro_id'            => $paroId,
 			'ordenproduccion_id' => $this->faker->randomElement($IDordenArray),
 			
 			'fecha'            => $fecha,
@@ -60,7 +72,7 @@ class ReporteFactory extends Factory {
 			'tipoReporte'      => $tipoReporte,
 			
 			'tiempo_transcurrido' => $tiempoTranscurrido,
-			'MinutosEstimados'      => 0,
+			'MinutosEstimados'    => 0,
 		];
 	}
 }
