@@ -64,6 +64,23 @@ function uploadFileOrdenes() {
 }
 
 // const downloadExcel = () => { window.open('users/export/' + form.quincena + '/' + (form.fecha_ini.month) + '/' + form.fecha_ini.year, '_blank') }
+
+	
+const nombres = //GenericImport.php --private array $camposMapeados = [ 
+    {
+		//como esta en excel  :  como esta en el model
+//		"pedido"               : 'pedido',
+		"op"                   : 'op',
+		"cliente"              : 'cliente',
+		"obra "                : 'obra',
+//		"contrato"             : 'contrato',
+		"producto_descripcion" : 'producto_descripcion',
+		"asesor"               : 'asesor',
+		"estado"               : 'estado',
+		"cantidad"               : 'cant',
+		//		fecha	
+
+}
 </script>
 
 <template>
@@ -170,17 +187,9 @@ function uploadFileOrdenes() {
 
                                         <h2 class="text-xl text-gray-900 dark:text-white">El formato necesita las
                                             siguientes columnas, el simbolo * significa que es un campo obligatorio</h2>
-                                        <ul class="list-decimal my-6 mx-5">
+                                        <ul  class="list-decimal my-6 mx-5">
 
-                                            <li class="text-lg">PEDIDO</li>
-                                            <li class="text-lg">OP</li>
-                                            <li class="text-lg">CLIENTE</li>
-                                            <li class="text-lg">OBRA</li>
-                                            <li class="text-lg">CONTRATO</li>
-                                            <li class="text-lg">PRODUCTO</li>
-                                            <li class="text-lg">ASESOR</li>
-                                            <li class="text-lg">ESTADO</li>
-                                            <li class="text-lg">FECHA</li>
+                                            <li v-for="nombre in nombres" class="text-lg">{{ nombre }}</li>
                                         </ul>
 
                                         <div class="flex items-center flex-wrap my-6">
