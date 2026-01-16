@@ -150,7 +150,7 @@ const mostrarTiempoTranscurrido = (raw) => {
         return zilef_number_format(valor * 60, 0, false) + ' mins'
     } else {
         // let minutossobrantes = valor%60 < 10 ? '0'+valor%60 : valor%60 
-        return zilef_number_format(valor, 0, false) + ' hrs'
+        return zilef_number_format(valor, 2 , false) + ' hrs'
     }
 }
 watchEffect(() => {
@@ -201,18 +201,18 @@ watchEffect(() => {
                         <DangerButton
                             @click="data.deleteBulkOpen = true"
                             v-show="data.selectedId.length !== 0 && can(['delete Reporte'])"
-                            class="px-3 py-2 h-10"
+                            class="px-1 py-2 h-8"
                             v-tooltip="lang().tooltip.delete_selected">
                             <TrashIcon class="w-5 h-5"/>
                         </DangerButton>
 
-                        <PrimaryButton
-                            @click="data.hayCongelado = data.selectedId[0]"
-                            v-show="data.selectedId.length !== 0 && can(['delete Reporte'])"
-                            class="px-3 py-2 h-10"
-                            v-tooltip="'Congelar'">
-                            <ArrowLongUpIcon class="w-5 h-5"/>
-                        </PrimaryButton>
+<!--                        <PrimaryButton-->
+<!--                            @click="data.hayCongelado = data.selectedId[0]"-->
+<!--                            v-show="data.selectedId.length !== 0 && can(['delete Reporte'])"-->
+<!--                            class="px-3 py-2 h-10"-->
+<!--                            v-tooltip="'Congelar'">-->
+<!--                            <ArrowLongUpIcon class="w-5 h-5"/>-->
+<!--                        </PrimaryButton>-->
 
                         <PrimaryButton
                             class="rounded-lg px-1 h-7 mt-1 flex items-center justify-center hover:bg-indigo-800"
@@ -377,8 +377,8 @@ watchEffect(() => {
                                 </div>
                             </td>
                             <td class="whitespace-nowrap py-4 px-2 sm:py-3 text-center">{{ ++indexu }}</td>
-                            <td>{{ clasegenerica['fecha'] }}</td>
-                            <td>{{ clasegenerica['userino'] }}</td>
+                            <td class="text-xs">{{ clasegenerica['fecha'] }}</td>
+                            <td class="text-sm">{{ clasegenerica['userino'] }}</td>
                             <td>{{ TimeTo12Format(clasegenerica['hora_inicial']) }}</td>
 
                             <td v-if="clasegenerica['hora_final']">
@@ -399,7 +399,7 @@ watchEffect(() => {
                                 </span>
                             </td>
                             <td>{{ (clasegenerica['Orden']) }}</td>
-                            <td v-if="props.numberPermissions > 1">{{ (clasegenerica['MinutosEstimados']) }}</td>
+                            <td v-if="props.numberPermissions > 1">{{ zilef_number_format(clasegenerica['MinutosEstimados'],2) }} hrs</td>
                         </tr>
 
                         <!-- totales -->

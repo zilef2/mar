@@ -18,8 +18,8 @@ class DashboardController extends Controller {
 	
 	public function Dashboard() {
 		$numberPermissions = Myhelp::getPermissionToNumber(Myhelp::EscribirEnLog($this, ' Dashboard'));
-		$semanas = [];
 		$esteMes = Carbon::now()->startOfMonth();
+		
 //		$MesPasado = Carbon::now()->addMonth(- 1)->startOfMonth();
 		
 		$data = Reporte::selectRaw('
@@ -27,7 +27,7 @@ class DashboardController extends Controller {
         WEEK(fecha) as semana,
         AVG(tiempo_transcurrido) as promedio,
         COUNT(*) as cantidad_reportes
-	    ')->whereMonth('fecha', '>=', $esteMes)
+	    ')->where('fecha', '>=', $esteMes)
 	      ->with('actividad:id,nombre')
 	      ->groupBy('actividad_id', 'semana')->orderBy('actividad_id')->get()->map(function ($row) {
 				$this->semanas[] = $row->semana;
@@ -37,17 +37,16 @@ class DashboardController extends Controller {
 					'cantidad_reportes' => $row->cantidad_reportes,
 					'promedio'          => (float)$row->promedio,
 				];
-			})->toArray()
-		;
+			})->toArray();
 		
-		$disponible = 44*60; //44 semanales * 60 (minutos)
+		$disponible = 44*60; //44 h/semanales * 60 (minutos) = 2640 mins
 		$data2 = Reporte::selectRaw('
 		        user_id,
 		        SUM(tiempo_transcurrido) as total_mins
-			    ')->whereMonth('fecha', '>=', $esteMes)
+			    ')->Where('fecha', '>=', $esteMes)
 			    ->where('user_id', '!=', 1)
 		          ->with('trabajador:id,name') // Ajusta el nombre de la relación
-		                ->groupBy('user_id')->orderByDesc('total_mins')->limit(15)->get()->map(function ($row) use ($disponible) {
+		                ->groupBy('user_id')->orderByDesc('total_mins')->limit(10)->get()->map(function ($row) use ($disponible) {
 				return [
 					'trabajador' => $row->trabajador->name ?? 'Sin nombre',
 					'total_mins' => (float)$row->total_mins,
