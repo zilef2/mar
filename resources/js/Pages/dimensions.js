@@ -8,11 +8,11 @@ export function createAcquisitionsChart(canvasElement, chartData) {
                 labels: chartData.map(row => row.actividad),
                 datasets: [
                     {
-                        label: 'Reportes por semana',
-                        data: chartData.map(row => row.cantidad_reportes)
+                        label: 'Estimado',
+                        data: chartData.map(row => row.Estimado)
                     },
                     {
-                        label: 'Tiempo Promedio (minutos)', // Segundo conjunto de datos
+                        label: 'Tiempo Promedio (Horas)', // Segundo conjunto de datos
                         data: chartData.map(row => row.promedio),
                         backgroundColor: 'rgba(153, 102, 255, 0.6)', // Color diferente para el segundo set
                         borderColor: 'rgba(153, 102, 255, 1)',
@@ -31,7 +31,7 @@ export function createAcquisitionsChart(canvasElement, chartData) {
                     y: {
                         title: {
                             display: true,
-                            text: 'MINUTOS'
+                            text: 'Horas'
                         }
                     }
                 }
@@ -39,6 +39,82 @@ export function createAcquisitionsChart(canvasElement, chartData) {
         }
     );
 }
+export function createAcquisitionsChart3(canvasElement, chartData) {
+
+    new Chart(canvasElement, {
+            type: 'bar',
+            data: {
+                labels: chartData.map(row => row.actividad),
+                datasets: [
+                    {
+                        label: 'Estimado',
+                        data: chartData.map(row => row.Estimado)
+                    },
+                    {
+                        label: 'Tiempo Promedio (Horas)', // Segundo conjunto de datos
+                        data: chartData.map(row => row.promedio),
+                        backgroundColor: 'rgba(153, 102, 255, 0.6)', // Color diferente para el segundo set
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'ACTIVIDAD'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Horas'
+                        }
+                    }
+                }
+            }
+        }
+    );
+}
+
+export function createAcquisitionsChart4(canvasElement, chartData) {
+
+    const dataValues = [
+        Number(chartData.reportes ?? 0),
+        Number(chartData.reprocesos ?? 0),
+        Number(chartData.paros ?? 0),
+    ];
+
+    return new Chart(canvasElement, {
+        type: 'pie',
+        data: {
+            labels: ['Reportes', 'Reprocesos', 'Paros'],
+            datasets: [{
+                label: 'Fracción de paros y reprocesos',
+                data: dataValues,
+                backgroundColor: [
+                    '#4bc0c0',
+                    '#ffcd56',
+                    '#ff6384'
+                ],
+                hoverOffset: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' },
+                title: {
+                    display: true,
+                    text: 'Análisis de Operaciones'
+                }
+            }
+        }
+    });
+}
+
 
 export function charSuma(canvasElement, chartData) {
 

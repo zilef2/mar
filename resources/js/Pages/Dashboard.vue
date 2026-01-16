@@ -1,16 +1,14 @@
 <script setup>
 import Breadcrumb from '@/Components/Breadcrumb.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {ChevronRightIcon, KeyIcon, ShieldCheckIcon, UserIcon} from '@heroicons/vue/24/solid';
 import {Head, Link} from '@inertiajs/vue3';
 import {watchEffect, ref, onMounted} from 'vue';
 import {Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale} from 'chart.js'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
-import {createAcquisitionsChart,charSuma} from './dimensions.js'; // Importa la función con nombre
+import {createAcquisitionsChart,charSuma,createAcquisitionsChart3,createAcquisitionsChart4} from './dimensions.js';
 const props = defineProps({
-    contadores: Array,
     roles: Number,
     reportes: Number,
     permissions: Number,
@@ -18,34 +16,28 @@ const props = defineProps({
         type: Array,
         required: true
     },
-    acquisitionsData2: {
-        type: Array,
-        required: true
-    }
+    acquisitionsData2: {type: Array, required: true},
+    acquisitionsData3: {type: Array, required: true},
+    acquisitionsData4: {type: Array, required: true}
 })
-
-const dashboard = [
-    'users',
-    'reportes',
-    'Ordenproduccions',
-];
-const dashSinS = dashboard.map((value, index, array) => {
-    return value.slice(0, -1)
-})
-const colores = [
-    'bg-blue-500',
-    'bg-green-500',
-    'bg-blue-700',
-];
 
 const canvas1 = ref(null);
 const canvas2 = ref(null);
+const canvas3 = ref(null);
+const canvas4 = ref(null);
 onMounted(() => {
     if (canvas1.value && props.acquisitionsData) {
         createAcquisitionsChart(canvas1.value, props.acquisitionsData);
     }
     if (canvas2.value && props.acquisitionsData2) {
         charSuma(canvas2.value, props.acquisitionsData2);
+    }
+    if (canvas3.value && props.acquisitionsData3) {
+        createAcquisitionsChart3(canvas3.value, props.acquisitionsData3);
+    }
+    if (canvas4.value && props.acquisitionsData4) {
+        createAcquisitionsChart4(canvas4.value, props.acquisitionsData4);
+
     }
 });
 
@@ -57,13 +49,18 @@ onMounted(() => {
     <AuthenticatedLayout>
         <div class="grid grid-cols-1 gap-16">
             <div style="width: 1200px; margin: auto;">
-                <h2 class="text-xl my-4 text-center font-medium">Actividades</h2>
-                <canvas ref="canvas1"></canvas>
-            </div>
-            <div style="width: 1200px; margin: auto;">
                 <h2 class="text-xl my-4 text-center font-medium">Tiempos por trabajador (44h/semana o 2640 mins)</h2>
                 <canvas ref="canvas2"></canvas>
             </div>
+            <div style="width: 1200px; margin: auto;">
+                <h2 class="text-xl my-4 text-center font-medium">Actividades (semanal)</h2>
+                <canvas ref="canvas1"></canvas>
+            </div>
+            <div style="width: 1200px; margin: auto;">
+                <h2 class="text-xl my-4 text-center font-medium">Actividades (Mesual)</h2>
+                <canvas ref="canvas3"></canvas>
+            </div>
+            <div style="width: 800px; margin: auto;"><h2 class="text-xl my-4 text-center font-medium">Relacion reportes</h2><canvas ref="canvas4"></canvas></div>
         </div>
 <!--        <Breadcrumb :title="'Resumen'" :breadcrumbs="[]"/>-->
 <!--        <div class="space-y-4">-->

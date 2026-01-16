@@ -15,7 +15,7 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $superadmin = Role::create(['name' => 'superadmin']);
+        $superadmin = Role::create(['name' => 'superadmin']); //superadmin,Admin, empleado,administrativo
 	    $superadmin->givePermissionTo(['isSuper', 'isAdmin']);
         $admin = Role::create(['name'=> 'Admin' ]);
 //		unset($vectorCRUD[3]);

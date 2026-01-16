@@ -55,7 +55,6 @@ class UserController extends Controller
             $users = $users->orderBy($request->field, $request->order);
         }else{
             $users = $users->orderBy('updated_at', 'desc');
-
         }
 
         $perPage = $request->has('perPage') ? $request->perPage : 10;
