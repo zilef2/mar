@@ -256,9 +256,13 @@ class GenericImport implements ToCollection, WithHeadingRow, SkipsOnError, WithC
 		$DatosDelorden = array_merge([$this->columnaIndice => $codigoUnico,], $fechasProcesadas, $camposFinal);
 		Log::channel('solosuper')->info('Job en fase3: ' . implode(',', $DatosDelorden));
 		
+		
 		// -------------------------------------------
 		// GUARDAR / ACTUALIZAR
 		// -------------------------------------------
+		$DatosDelorden = collect($DatosDelorden)
+		    ->mapWithKeys(fn ($value, $key) => [trim($key) => $value])
+		    ->toArray();
 		$orden = Ordenproduccion::updateOrCreate(
 			[$this->columnaIndice => $codigoUnico],
 			$DatosDelorden
@@ -266,9 +270,9 @@ class GenericImport implements ToCollection, WithHeadingRow, SkipsOnError, WithC
 		Log::channel('solosuper')->info('Orden ID = ' . $orden->id);
 		
 		if ($orden->wasRecentlyCreated) {
-			$this->nFilasNuevas ++;
+			$this->nFilasNuevas++;
 		}else {
-			$this->nFilasActualizadas ++;
+			$this->nFilasActualizadas++;
 		}
 		
 		Log::channel('solosuper')->info('finalizo la fila exitosamente');

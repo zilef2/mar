@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 	     */
 	    protected $fillable = [
         'id',
-		
 //	    'pedido',
 		'op',
 		'cliente',
