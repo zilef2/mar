@@ -58,6 +58,7 @@ class Reporte extends Model {
 	
 	public function trabajador(): BelongsTo { return $this->BelongsTo(User::class, 'user_id'); }
 	
+	
 	public function paro(): BelongsTo { return $this->BelongsTo(paro::class, 'paro_id'); }
 	
 	public function reproceso(): BelongsTo { return $this->BelongsTo(Reproceso::class); }

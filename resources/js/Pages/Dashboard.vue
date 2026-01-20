@@ -44,69 +44,45 @@ onMounted(() => {
 
 </script>
 <template>
-
     <Head title="Dashboard"/>
     <AuthenticatedLayout>
-        <div class="grid grid-cols-1 gap-16">
-            <div style="width: 1200px; margin: auto;">
-                <h2 class="text-xl my-4 text-center font-medium">Tiempos por trabajador (44h/semana o 2640 mins)</h2>
-                <canvas ref="canvas2"></canvas>
+        <div class="p-4 sm:p-1 lg:p-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-1 lg:gap-2">
+                <!-- Chart 1 -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-1">
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 text-center mb-1">
+                        Tiempos por trabajador (44h/semana o 10560 mins/mes)
+                    </h2>
+                    <p class="text-xs text-gray-400 dark:text-gray-200 text-center my-1">
+                        15 primeros trabajadores
+                    </p>
+                    <canvas ref="canvas2"></canvas>
+                </div>
+
+                <!-- Chart 2 -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-1">
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 text-center mb-4">
+                        Actividades (semanal)
+                    </h2>
+                    <canvas ref="canvas1"></canvas>
+                </div>
+
+                <!-- Chart 3 -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-1">
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 text-center mb-4">
+                        Actividades (Mensual)
+                    </h2>
+                    <canvas ref="canvas3"></canvas>
+                </div>
+
+                <!-- Chart 4 -->
+                <div class=" w-80 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-1">
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 text-center mb-4">
+                        Relacion reportes
+                    </h2>
+                    <canvas ref="canvas4"></canvas>
+                </div>
             </div>
-            <div style="width: 1200px; margin: auto;">
-                <h2 class="text-xl my-4 text-center font-medium">Actividades (semanal)</h2>
-                <canvas ref="canvas1"></canvas>
-            </div>
-            <div style="width: 1200px; margin: auto;">
-                <h2 class="text-xl my-4 text-center font-medium">Actividades (Mesual)</h2>
-                <canvas ref="canvas3"></canvas>
-            </div>
-            <div style="width: 800px; margin: auto;"><h2 class="text-xl my-4 text-center font-medium">Relacion reportes</h2><canvas ref="canvas4"></canvas></div>
         </div>
-<!--        <Breadcrumb :title="'Resumen'" :breadcrumbs="[]"/>-->
-<!--        <div class="space-y-4">-->
-<!--            <div-->
-<!--                class="text-white dark:text-gray-100 grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-4 gap-2 sm:gap-4 overflow-hidden shadow-sm">-->
-<!--                <div v-for="(modelo, index) in dashboard" :key="index">-->
-<!--                    <div-->
-<!--                        class="rounded-t-none sm:rounded-t-lg px-4 py-6 flex justify-between items-center overflow-hidden"-->
-<!--                        :class="colores[index]">-->
-<!--                        <div class="flex flex-col">-->
-<!--                            <p class="text-4xl font-bold">{{ props.contadores[modelo] }}</p>-->
-<!--                            <p class="text-md md:text-lg uppercase">{{ lang().label[modelo] }}</p>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div-->
-<!--                        class="rounded-b-none sm:rounded-b-lg p-2 overflow-hidden hover:bg-sky-600 dark:hover:bg-black"-->
-<!--                        :class="colores[index]"-->
-<!--                    >-->
-<!--                        <Link :href="route(dashSinS[index]+'.index')" class="flex justify-between items-center">-->
-<!--                            <p>{{ lang().label.more }}</p>-->
-<!--                            <ChevronRightIcon class="w-5 h-5"/>-->
-<!--                        </Link>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-
-<!--                <div v-if="can(['isSuper'])">-->
-<!--                    <div-->
-<!--                        class="rounded-t-none sm:rounded-t-lg px-4 py-6 flex justify-between bg-amber-600/70 dark:bg-amber-500/80 items-center overflow-hidden">-->
-<!--                        <div class="flex flex-col">-->
-<!--                            <p class="text-4xl font-bold">{{ props.contadores.permissions }}</p>-->
-<!--                            <p class="text-md md:text-lg uppercase">{{ lang().label.permission }}</p>-->
-<!--                        </div>-->
-<!--                        &lt;!&ndash; <div>-->
-<!--                            <ShieldCheckIcon class="w-16 h-auto" />-->
-<!--                        </div> &ndash;&gt;-->
-<!--                    </div>-->
-<!--                    <div-->
-<!--                        class="bg-amber-600 dark:bg-amber-600/80 rounded-b-none sm:rounded-b-lg p-2 overflow-hidden hover:bg-amber-600/90 dark:hover:bg-amber-600/70">-->
-<!--                        <Link :href="route('permission.index')" class="flex justify-between items-center">-->
-<!--                            <p>{{ lang().label.more }}</p>-->
-<!--                            <ChevronRightIcon class="w-5 h-5"/>-->
-<!--                        </Link>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
     </AuthenticatedLayout>
 </template>

@@ -131,25 +131,29 @@ class UserSeeder extends Seeder {
 			}
 			return 1;
 		}
-		for ($i = 0; $i < $cuantos; $i ++) {
+		
+		$minicontador = 0;
+		foreach ($nombresGenericos as $key => $value) {
+			if($minicontador > $cuantos) break;
 			$sexrandom = rand(0, 1);
 			$nombresRandom = (rand(1, count($nombresGenericos)));
-			$invertido = array_flip($nombresGenericos);
-			$key = $invertido[$nombresGenericos[$i]];
+//			$invertido = array_flip($nombresGenericos);
+//			$key = $invertido[$value];
 			
 			$unUsuario = User::create([
 				                          'name'              => substr($key, $nombresRandom) . ' el ' . 'empleado',
 				                          'email'             => $key . '@' . 'empleado' . $key . '.com',
 				                          'password'          => bcrypt($genPa . ' _ ' . 'empleado'), //1_IML_2 _ empleado
 				                          'email_verified_at' => date('Y-m-d H:i'),
-				                          'identificacion'    => $nombresGenericos[$i],
-				                          'celular'           => ($nombresGenericos[$i]) * 2,
+				                          'identificacion'    => $value,
+				                          'celular'           => ($value) * 2,
 				                          'sexo'              => $sexos[$sexrandom],
 				                          'salario'           => 1432000,
 				                          'cargo'             => 'Cargo ejemplo',
 				                          'area'              => 'Area ejemplo',
 			                          ]);
 			$unUsuario->assignRole('empleado');
+			$minicontador++;
 		}
 		return 1;
 	}

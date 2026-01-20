@@ -22,7 +22,7 @@ const downloadExcel = () => { window.open('IMI' , '_blank') }
             <div class="flex justify-between h-16">
                 <div class="flex">
                     <!-- Hamburger -->
-                    <div class="mr-4 shrink-0 flex items-center lg:hidden">
+                    <div class="mr-4 shrink-0 flex items-center">
                         <button v-on:click="emit('open')"
                             class="hover:text-gray-400 hover:bg-gray-900 focus:bg-gray-900 focus:text-gray-400 inline-flex items-center justify-center p-2 rounded-md lg:hover:text-gray-500 dark:hover:text-gray-400 lg:hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none lg:focus:bg-gray-100 dark:focus:bg-gray-900 lg:focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
                             <Bars3CenterLeftIcon class="h-5 w-5" />
