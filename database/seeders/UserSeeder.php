@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder {
 	
@@ -14,8 +15,7 @@ class UserSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		//php artisan config:clear ; php artisan cache:clear ; php artisan config:cache ; php artisan migrate:fresh --seed
-		$sexos = ['Masculino', 'Femenino'];
+		//   php artisan config:clear ; php artisan cache:clear ; php artisan config:cache ; php artisan migrate:fresh --seed
 		$genPa = config('app.sap_gen');
 		
 		if (is_null($genPa)) {
@@ -48,28 +48,7 @@ class UserSeeder extends Seeder {
 		                           ]);
 		$superadmin->assignRole('superadmin');
 		
-		$nombresGenericos = [
-			'PersonaPruebas' => 777117711,
-		];
-		
-		foreach ($nombresGenericos as $key => $value) {
-			$yearRandom = (rand(22, 49));
-			$sexrandom = rand(0, 1);
-			$nombresRandom = (rand(1, count($nombresGenericos)));
-			$unUsuario = User::create([
-				                          'name'              => substr($key, $nombresRandom) . ' el ' . 'empleado',
-				                          'email'             => $key . '@' . 'empleado' . $key . '.com',
-				                          'password'          => bcrypt($genPa . ' _ ' . 'empleado'), //1_IML_2 _ empleado
-				                          'email_verified_at' => date('Y-m-d H:i'),
-				                          'identificacion'    => $value,
-				                          'celular'           => ($value) * 2,
-				                          'sexo'              => $sexos[$sexrandom],
-				                          'salario'           => 1432000,
-				                          'cargo'             => 'Cargo ejemplo',
-				                          'area'              => 'Area ejemplo',
-			                          ]);
-			$unUsuario->assignRole('empleado');
-		}
+		$this->generarVariosUsers(2);
 		
 		User::create([
 			             'name'           => 'Carlos mario Restrepo',
@@ -95,32 +74,83 @@ class UserSeeder extends Seeder {
 			             'area'           => 'Gerencia',
 		             ])->assignRole('administrativo');
 		
-		
-		
 		//empelado
-//		User::create([
-//			             'name'           => 'ALVAREZ GUZMAN GERMAN GERARDO',
-//			             'email'          => '71681723',
-//			             'password'       => bcrypt('123'),
-//			             'identificacion' => 71681723,
-//			             'celular'        => '3145808140',
-//			             'sexo'           => 'Masculino',
-//			             'salario'        => 0,
-//			             'cargo'          => 'LAVADOR',
-//			             'area'           => 'Bello',
-//		             ])->assignRole('empleado');
-//		
-//		User::create([
-//			             'name'           => 'BUITRAGO QUICENO JUAN CARLOS',
-//			             'email'          => '1020429596',
-//			             'password'       => bcrypt('123'),
-//			             'identificacion' => 1020429596,
-//			             'celular'        => '3206643147',
-//			             'sexo'           => 'Masculino',
-//			             'salario'        => 0,
-//			             'cargo'          => 'AUXILIAR ALMACEN',
-//			             'area'           => 'CRA 66 # 20F-61 INT 104',
-//		             ])->assignRole('empleado');
+		//		User::create([
+		//			             'name'           => 'ALVAREZ GUZMAN GERMAN GERARDO',
+		//			             'email'          => '71681723',
+		//			             'password'       => bcrypt('123'),
+		//			             'identificacion' => 71681723,
+		//			             'celular'        => '3145808140',
+		//			             'sexo'           => 'Masculino',
+		//			             'salario'        => 0,
+		//			             'cargo'          => 'LAVADOR',
+		//			             'area'           => 'Bello',
+		//		             ])->assignRole('empleado');
+		//		
+		//		User::create([
+		//			             'name'           => 'BUITRAGO QUICENO JUAN CARLOS',
+		//			             'email'          => '1020429596',
+		//			             'password'       => bcrypt('123'),
+		//			             'identificacion' => 1020429596,
+		//			             'celular'        => '3206643147',
+		//			             'sexo'           => 'Masculino',
+		//			             'salario'        => 0,
+		//			             'cargo'          => 'AUXILIAR ALMACEN',
+		//			             'area'           => 'CRA 66 # 20F-61 INT 104',
+		//		             ])->assignRole('empleado');
 		
+	}
+	
+	/**
+	 * @param mixed $genPa
+	 * @param array $sexos
+	 * @return int
+	 */
+	public static function generarVariosUsers(int $cuantos, mixed $genPa = 'a', array $sexos = ['Masculino', 'Femenino']): int {
+		$nombresGenericos = [
+			'PersonaPruebas' => 777117711, //0
+			'Alejo'          => 123123123, //1
+			'madrid'         => 234234234, //2
+			'felizzola'      => 345345345, //3
+			'maria'          => 567567567, //4
+			'josefina'       => 567567568, //5
+			'perris'         => 567567569, //6
+			'alejandra'      => 567567570, //7
+			'absurda'        => 567567571, //8
+		];
+		if($cuantos > count($nombresGenericos)){
+			for($i = 0; $i < $cuantos; $i++) {
+				$user = User::create([
+					                     'name'              => fake()->name(),
+					                     'email'             => fake()->unique()->safeEmail(),
+					                     'email_verified_at' => now(),
+					                     'password'          => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+					                     'remember_token'    => Str::random(10),
+				                     ]);
+				$user->assignRole('empleado');
+			}
+			return 1;
+		}
+		for ($i = 0; $i < $cuantos; $i ++) {
+			$sexrandom = rand(0, 1);
+			$nombresRandom = (rand(1, count($nombresGenericos)));
+			$invertido = array_flip($nombresGenericos);
+			$key = $invertido[$nombresGenericos[$i]];
+			
+			$unUsuario = User::create([
+				                          'name'              => substr($key, $nombresRandom) . ' el ' . 'empleado',
+				                          'email'             => $key . '@' . 'empleado' . $key . '.com',
+				                          'password'          => bcrypt($genPa . ' _ ' . 'empleado'), //1_IML_2 _ empleado
+				                          'email_verified_at' => date('Y-m-d H:i'),
+				                          'identificacion'    => $nombresGenericos[$i],
+				                          'celular'           => ($nombresGenericos[$i]) * 2,
+				                          'sexo'              => $sexos[$sexrandom],
+				                          'salario'           => 1432000,
+				                          'cargo'             => 'Cargo ejemplo',
+				                          'area'              => 'Area ejemplo',
+			                          ]);
+			$unUsuario->assignRole('empleado');
+		}
+		return 1;
 	}
 }
