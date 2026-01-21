@@ -154,7 +154,9 @@ export function formatTime(date): string {
     // validDate = new Date(validDate.getTime() + (5 * 60 * 60 * 1000))
 
     let hora = validDate.getHours();
-    let hourAndtime = (hora < 10 ? '0' : '') + hora + ':' + (validDate.getMinutes() < 10 ? '0' : '') + validDate.getMinutes() + ':00';
+    let hourAndtime = (hora < 10 ? '0' : '') + hora + ':'
+        + (validDate.getMinutes() < 10 ? '0' : '')
+        + validDate.getMinutes() + ':00';
 
     return `${hourAndtime}`;
 }
@@ -183,6 +185,13 @@ export function TransformTdate(dateString) {
     const hours = ('0' + date.getHours()).slice(-2);
     const minutes = ('0' + date.getMinutes()).slice(-2);
     return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+export function NumToHour(HourWithDecimals : number) {
+    const hours = Math.floor(HourWithDecimals)
+    console.log("🚀🚀NumToHour ~ hours: ", hours);
+    console.log("🚀🚀NumToHour ~ HourWithDecimals: ", HourWithDecimals);
+    const minutes = Math.floor((HourWithDecimals - hours) * 60)
+    return `${hours} h ${minutes} mins`;
 }
 
 // fin DATE functions
