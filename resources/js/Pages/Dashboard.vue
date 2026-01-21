@@ -218,8 +218,8 @@ onMounted(() => {
                     <!-- Metricas Combinadas -->
                     <div class="bg-gradient-to-br from-sky-100 to-indigo-200 dark:from-purple-700 dark:to-indigo-800 overflow-hidden shadow-lg sm:rounded-lg p-6 flex flex-col items-center justify-center h-full dark:text-white">
                         <div class="flex justify-center items-center gap-2">
-                            <h3 class="text-xl font-bold">Promedios</h3>
-                            <button v-tooltip="'Estos son los promedios de eficiencia mensual y diaria.'" class="text-gray-400 hover:text-gray-200">
+                            <h3 class="text-xl font-bold">Indicadores</h3>
+                            <button v-tooltip="'Estos son  el promedio y la eficiencia.'" class="text-gray-400 hover:text-gray-200">
                                 <QuestionMarkCircleIcon class="h-5 w-5"/>
                             </button>
                         </div>
