@@ -2,7 +2,7 @@ import Chart from 'chart.js/auto';
 
 export function createAcquisitionsChart(canvasElement, chartData) {
 
-    new Chart(canvasElement, {
+    return new Chart(canvasElement, {
             type: 'bar',
             data: {
                 labels: chartData.map(row => row.actividad),
@@ -39,9 +39,10 @@ export function createAcquisitionsChart(canvasElement, chartData) {
         }
     );
 }
+
 export function createAcquisitionsChart3(canvasElement, chartData) {
 
-    new Chart(canvasElement, {
+    return new Chart(canvasElement, {
             type: 'bar',
             data: {
                 labels: chartData.map(row => row.actividad),
@@ -118,7 +119,49 @@ export function createAcquisitionsChart4(canvasElement, chartData) {
 
 export function charSuma(canvasElement, chartData) {
 
-    new Chart(canvasElement, {
+    return new Chart(canvasElement, {
+            type: 'bar',
+            data: {
+                labels: chartData.map(row => row.trabajador),
+                datasets: [
+                    {
+                        label: 'Minutos Reportados',
+                        data: chartData.map(row => row.total_mins)
+                    },
+                    {
+                        label: 'Faltante',
+                        data: chartData.map(row => row.disponible)
+                    },
+                    {
+                        label: 'Meta semanal',
+                        data: chartData.map(row => row.minimo)
+                    },
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'TRABAJADORES'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'MINUTOS'
+                        }
+                    }
+                }
+            }
+        }
+    );
+}
+
+//peores trabajadores 
+export function charSuma2(canvasElement, chartData) {
+
+    return new Chart(canvasElement, {
             type: 'bar',
             data: {
                 labels: chartData.map(row => row.trabajador),
