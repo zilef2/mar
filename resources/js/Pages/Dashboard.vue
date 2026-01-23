@@ -128,7 +128,7 @@ onMounted(() => {
             
             <div class="grid px-4 gap-6" :class="singleColumnView ? 'grid-cols-1 mx-24' : 'grid-cols-1 md:grid-cols-2'">
                 <!-- Chart 1 -->
-                <div class="bg-gradient-to-br from-sky-100 to-indigo-200 dark:from-purple-700 dark:to-indigo-800 dark:text-white overflow-hidden shadow-lg sm:rounded-lg p-4">
+                <div class="bg-gradient-to-br from-sky-100 to-indigo-50 dark:from-purple-700 dark:to-indigo-800 dark:text-white overflow-hidden shadow-lg sm:rounded-lg p-4">
                     <div class="flex justify-center items-center gap-2">
                         <h2 class="text-center">
                             Tiempos por trabajador (44h/semana o 10560 mins/mes)
@@ -143,7 +143,7 @@ onMounted(() => {
                     <canvas ref="canvas2"></canvas>
                 </div>
                 <!-- Chart 1.5 -->
-                <div class="bg-gradient-to-br from-sky-100 to-indigo-200 dark:from-purple-700 dark:to-indigo-800 dark:text-white overflow-hidden shadow-lg sm:rounded-lg p-4">
+                <div class="bg-gradient-to-br from-sky-100 to-indigo-50 dark:from-purple-700 dark:to-indigo-800 dark:text-white overflow-hidden shadow-lg sm:rounded-lg p-4">
                     <div class="flex justify-center items-center gap-2">
                         <h2 class="text-center">
                             Tiempos por trabajador (menor tiempo)
@@ -159,7 +159,7 @@ onMounted(() => {
                 </div>
 
                 <!-- Analisis de Actividades -->
-                <div v-if="bloqueoNoPago" class="bg-gradient-to-br from-sky-100 to-indigo-200 dark:from-purple-700 dark:to-indigo-800 dark:text-white overflow-hidden shadow-lg sm:rounded-lg p-4">
+                <div v-if="bloqueoNoPago" class="bg-gradient-to-br from-sky-100 to-indigo-50 dark:from-purple-700 dark:to-indigo-800 dark:text-white overflow-hidden shadow-lg sm:rounded-lg p-4">
                     <div class="flex justify-center items-center gap-2">
                         <h2 class="text-xl font-bold text-center">
                             Análisis de Actividades: Semanal y Mensual
@@ -190,7 +190,7 @@ onMounted(() => {
                 <!-- Chart 4 y Metricas -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Chart 4 -->
-                    <div class="bg-gradient-to-br from-sky-100 to-indigo-200 dark:from-purple-700 dark:to-indigo-800 dark:text-white w-full overflow-hidden shadow-lg sm:rounded-lg p-4">
+                    <div class="bg-gradient-to-br from-sky-100 to-indigo-50 dark:from-purple-700 dark:to-indigo-800 dark:text-white w-full overflow-hidden shadow-lg sm:rounded-lg p-4">
                         <div class="flex justify-center items-center gap-2">
                             <h2 class="text-lg font-medium text-center">
                                 Relacion reportes
@@ -202,7 +202,7 @@ onMounted(() => {
                         <canvas ref="canvas4"></canvas>
                     </div>
 <!--                    chart ?-->
-                    <div class="bg-gradient-to-br from-sky-100 to-indigo-200 dark:from-purple-700 dark:to-indigo-800 dark:text-white w-full overflow-hidden shadow-lg sm:rounded-lg p-4">
+                    <div class="bg-gradient-to-br from-sky-100 to-indigo-50 dark:from-purple-700 dark:to-indigo-800 dark:text-white w-full overflow-hidden shadow-lg sm:rounded-lg p-4">
                         <div class="flex justify-center items-center gap-2">
                             <h2 class="text-lg font-medium text-center">
                                 
@@ -216,7 +216,7 @@ onMounted(() => {
                 <div class="">
 
                     <!-- Metricas Combinadas -->
-                    <div class="bg-gradient-to-br from-sky-100 to-indigo-200 dark:from-purple-700 dark:to-indigo-800 overflow-hidden shadow-lg sm:rounded-lg p-6 flex flex-col items-center justify-center h-full dark:text-white">
+                    <div class="bg-gradient-to-br from-sky-100 to-indigo-50 dark:from-purple-700 dark:to-indigo-800 overflow-hidden shadow-lg sm:rounded-lg p-6 flex flex-col items-center justify-center h-full dark:text-white">
                         <div class="flex justify-center items-center gap-2">
                             <h3 class="text-xl font-bold">Indicadores</h3>
                             <button v-tooltip="'Estos son  el promedio y la eficiencia.'" class="text-gray-400 hover:text-gray-200">

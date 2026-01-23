@@ -15,103 +15,138 @@ use App\Http\Controllers\ReprocesosController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 
+
+$pagoOno = '/nopago'; // login
 //Route::get('/', function () { return "El sistema responde correctamente."; });
-Route::get('/', function () { return redirect('/login'); });
+Route::get('/', function () use($pagoOno) { return redirect($pagoOno); });
 
 Route::get('/dashboard', [DashboardController::class, 'Dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/RRepor', [UserController::class, 'RRepor'])->middleware(['auth', 'verified'])->name('RRepor');
 
 Route::get('/setLang/{locale}', function ($locale) {
-    Session::put('locale', $locale);
-    return back();
+	Session::put('locale', $locale);
+	
+	return back();
 })->name('setlang');
 
 Route::middleware('auth', 'verified')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    //# user
-    Route::resource('/user', UserController::class)->except('create', 'show', 'edit');
-    Route::post('/user/destroy-bulk', [UserController::class, 'destroyBulk'])->name('user.destroy-bulk');
-
-    Route::resource('/role', RoleController::class)->except('create', 'show', 'edit');
-    Route::post('/role/destroy-bulk', [RoleController::class, 'destroyBulk'])->name('role.destroy-bulk');
-
-    Route::resource('/permission', PermissionController::class)->except('create', 'show', 'edit');
-    Route::post('/permission/destroy-bulk', [PermissionController::class, 'destroyBulk'])->name('permission.destroy-bulk');
-
-
-    Route::resource('/parametro', ParametrosController::class);
-
-    //# SIDEBARMENU
-    Route::resource('/reporte', ReportesController::class);
-    Route::post('/reporte/destroy-bulk', [ReportesController::class, 'destroyBulk'])->name('reporte.destroy-bulk');
-    Route::post('/uploadUser', [ExcelController::class, 'uploadUser'])->name('uploadUser');
-    Route::post('/uploadOP', [ExcelController::class, 'uploadOP'])->name('uploadOP');
-    Route::post('//deploy/artisan-down', [ExcelController::class, 'deployartisandown'])->name('deploy.artisan-down');
-     Route::get('/subirexceles', [ExcelController::class, 'subirexceles'])->name('subirexceles');
-
-    Route::get('/reporte/createdev', [ReportesController::class, 'createdev'])->name('createdev');
-
-
-    Route::resource('/actividad', ActividadsController::class);
-
-    Route::resource('/Paro', ParoController::class);
-    Route::resource('/reproceso', ReprocesosController::class);
-
-    Route::resource('/Ordenproduccion', OrdenproduccionController::class);
+	Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+	Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+	Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+	
+	//# user
+	Route::resource('/user', UserController::class)->except('create', 'show', 'edit');
+	Route::post('/user/destroy-bulk', [UserController::class, 'destroyBulk'])->name('user.destroy-bulk');
+	
+	Route::resource('/role', RoleController::class)->except('create', 'show', 'edit');
+	Route::post('/role/destroy-bulk', [RoleController::class, 'destroyBulk'])->name('role.destroy-bulk');
+	
+	Route::resource('/permission', PermissionController::class)->except('create', 'show', 'edit');
+	Route::post('/permission/destroy-bulk', [PermissionController::class, 'destroyBulk'])->name('permission.destroy-bulk');
+	
+	Route::resource('/parametro', ParametrosController::class);
+	
+	//# SIDEBARMENU
+	Route::resource('/reporte', ReportesController::class);
+	Route::post('/reporte/destroy-bulk', [ReportesController::class, 'destroyBulk'])->name('reporte.destroy-bulk');
+	Route::post('/uploadUser', [ExcelController::class, 'uploadUser'])->name('uploadUser');
+	Route::post('/uploadOP', [ExcelController::class, 'uploadOP'])->name('uploadOP');
+	Route::post('//deploy/artisan-down', [ExcelController::class, 'deployartisandown'])->name('deploy.artisan-down');
+	Route::get('/subirexceles', [ExcelController::class, 'subirexceles'])->name('subirexceles');
+	
+	Route::get('/reporte/createdev', [ReportesController::class, 'createdev'])->name('createdev');
+	
+	Route::resource('/actividad', ActividadsController::class);
+	
+	Route::resource('/Paro', ParoController::class);
+	Route::resource('/reproceso', ReprocesosController::class);
+	
+	Route::resource('/Ordenproduccion', OrdenproduccionController::class);
 	//aquipues
-
-    //# EXCEL
-    Route::get('/IMI', [UserController::class,'todaBD'])->name('IMIdb');
+	
+	//# EXCEL
+	Route::get('/IMI', [UserController::class, 'todaBD'])->name('IMIdb');
 });
-
 
 require __DIR__ . '/auth.php';
 
 // <editor-fold desc="Artisan">
 Route::get('/exception', function () {
-    throw new Exception('Probando excepciones y enrutamiento. La prueba ha concluido exitosamente.');
+	throw new Exception('Probando excepciones y enrutamiento. La prueba ha concluido exitosamente.');
+});
+Route::get('/probando', function () {
+	return Inertia::render('Dashboard2', []);
+});
+
+Route::get('/nopago', function () {
+	return "
+    <!DOCTYPE html>
+    <html lang='es'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <script src='https://cdn.tailwindcss.com'></script>
+        <title>Pago Pendiente</title>
+    </head>
+    <body class='bg-gray-50 flex items-center justify-center h-screen'>
+        <div class='text-center p-8 bg-white shadow-xl rounded-2xl border border-gray-100 max-w-sm'>
+            <div class='bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6'>
+                <span class='text-4xl text-green-600'>$</span>
+            </div>
+            <h1 class='text-2xl font-bold text-gray-800 mb-2'>Pago pendiente</h1>
+            <p class='text-gray-600 mb-6'>
+                Este desarrollo a la medida presenta un <b>pago parcial</b>. 
+                Por favor, completa el saldo pendiente para habilitar todas las funciones.
+            </p>
+            <div class='text-sm text-gray-400 italic'>
+                Estado: Pagado parcialmente
+            </div>
+        </div>
+    </body>
+    </html>
+    ";
 });
 
 Route::get('/foo', function () {
-    if (file_exists(public_path('storage'))) {
-        return 'Ya existe';
-    }
-    App('files')->link(
-        storage_path('App/public'),
-        public_path('storage')
-    );
-    return 'Listo';
+	if (file_exists(public_path('storage'))) {
+		return 'Ya existe';
+	}
+	App('files')->link(storage_path('App/public'), public_path('storage'));
+	
+	return 'Listo';
 });
 
-
 Route::get('/clear-c', function () {
-    Artisan::call('optimize');
-    Artisan::call('optimize:clear');
-    return "Optimizacion finalizada";
-    // throw new Exception('Optimizacion finalizada!');
+	Artisan::call('optimize');
+	Artisan::call('optimize:clear');
+	
+	return "Optimizacion finalizada";
+	// throw new Exception('Optimizacion finalizada!');
 });
 
 Route::get('/tmantenimiento', function () {
-    echo Artisan::call('down --secret="token-it"');
-    return "Aplicación abajo: token-it";
+	echo Artisan::call('down --secret="token-it"');
+	
+	return "Aplicación abajo: token-it";
 });
 Route::get('/Arriba', function () {
-    echo Artisan::call('up');
-    return "Aplicación funcionando";
+	echo Artisan::call('up');
+	
+	return "Aplicación funcionando";
 });
 Route::get('/test-email', function () {
-    try {
-        \Illuminate\Support\Facades\Mail::raw('Este es un correo de prueba.', function ($message) {
-            $message->to('ajelof2@gmail.com')
-                ->subject('Correo de prueba');
-        });
-        return 'Correo enviado con éxito.';
-    } catch (\Exception $e) {
-        return 'Error al enviar el correo: ' . $e->getMessage();
-    }
+	try {
+		\Illuminate\Support\Facades\Mail::raw('Este es un correo de prueba.', function ($message) {
+			$message
+				->to('ajelof2@gmail.com')->subject('Correo de prueba')
+			;
+		});
+		
+		return 'Correo enviado con éxito.';
+	} catch (\Exception $e) {
+		return 'Error al enviar el correo: ' . $e->getMessage();
+	}
 });
 //</editor-fold>

@@ -17,6 +17,8 @@ class DashboardController extends Controller {
 	public array $semanas = [];
 	
 	public function Dashboard(Request $request) {
+		if(!config('pagoOno')) return redirect('/nopago');
+		
 		$numberPermissions = Myhelp::getPermissionToNumber(Myhelp::EscribirEnLog($this, ' Dashboard'));
 		if ($numberPermissions > 1) {
 			
