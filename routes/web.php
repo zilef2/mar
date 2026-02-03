@@ -18,8 +18,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 
-$pagoOno = '/nopago'; // login
-//Route::get('/', function () { return "El sistema responde correctamente."; });
+$pagoOno = '/login'; // login  ||  nopago
 Route::get('/', function () use($pagoOno) { return redirect($pagoOno); });
 
 Route::get('/dashboard', [DashboardController::class, 'Dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
