@@ -24,23 +24,33 @@ class ReportesController extends Controller {
 	public function index(Request $request): Response {
 		$permissions = Myhelp::EscribirEnLog($this, ' reportes');
 		$numberPermissions = Myhelp::getPermissionToNumber($permissions);
-		
 		$perPage = $request->has('perPage') ? $request->perPage : 50;
 		
-		$reportes = $this->ZounaSearch($request,$perPage,$numberPermissions); //se hace get()
-		
+		$reportes = $this->ZounaSearch($request, $perPage, $numberPermissions); //se hace get()
 		$empleados = User::WhereHas('roles', function ($query) {
 			return $query->whereIn('name', ['supervisor', 'empleado']);
 		})->get();
-		
 		$empleados = Myhelp::NEW_turnInSelectID($empleados, ' trabajador', 'name');
 		
 		$total = $reportes->count();
+		$losfiltros = [
+			'search',
+			'field',
+			'order',
+			'soloTiEstimado',
+			'searchdia',
+			'search2',
+			'search3',
+			'search4',
+			'search5',
+			'search6',
+			'search7',
+		];
 		
 		return Inertia::render('reporte/Index', [
 			'breadcrumbs'       => [['label' => __('app.label.reporte'), 'href' => route('reporte.index')]],
 			'title'             => __('app.label.reporte'),
-			'filters'           => $request->all(['search', 'field', 'order', 'soloTiEstimado', 'searchdia']),
+			'filters'           => $request->all($losfiltros),
 			'perPage'           => (int)$perPage,
 			'fromController'    => $reportes,
 			'total'             => $total,
@@ -50,8 +60,8 @@ class ReportesController extends Controller {
 		]);
 	}
 	
-	public function ZounaSearch($request,$perPage,$numberPermissions) {
-//		$page = (int)(request('page', 1)); // Current page number
+	public function ZounaSearch($request, $perPage, $numberPermissions) {
+		//		$page = (int)(request('page', 1)); // Current page number
 		
 		if ($numberPermissions > 1) {
 			$reportes = Reporte::query();
@@ -87,34 +97,46 @@ class ReportesController extends Controller {
 		}
 		if ($request->has('search4')) {
 			$nombreop = $request->search4;
-			$reportes = $reportes->WhereHas('ordenproduccion', function($query) use ($nombreop) {
+			$reportes = $reportes->WhereHas('ordenproduccion', function ($query) use ($nombreop) {
 				return $query->Where('op', 'like', '%' . $nombreop . '%');
 			});
 		}
 		if ($request->has('search5')) {
 			$nombreop = $request->search5;
-			$reportes = $reportes->WhereHas('actividad', function($query) use ($nombreop) {
+			$reportes = $reportes->WhereHas('actividad', function ($query) use ($nombreop) {
 				return $query->Where('nombre', 'like', '%' . $nombreop . '%');
 			});
 		}
-		
+		if ($request->filled('search6') && $request->search6 >= 1 && $request->search6 <= 12) {
+//			dd(
+//			    (int)$request->search6,
+//				$reportes->get(),
+//				$reportes->get()[0],
+//			);
+			$reportes = $reportes->whereMonth('fecha', (int)$request->search6);
+		}
+		if ($request->has('search7')) {
+			$reportes = $reportes->whereYear('fecha', $request->search7);
+		}
 		if ($request->has('searchDate')) {
 			$reportes->where('fecha', $request->searchDate);
 		}
 		if ($request->has('soloTiEstimado')) {
 			$reportes = $reportes->WhereNotnull('MinutosEstimados');
 		}
-		if (!$request->has('ultimosmeses')) {
-			if ($reportes->count() > 1000) {
-				$BusquedaMenorAMil = Carbon::now()->firstOfMonth()->format('Y-m-d');
-				$reportes = $reportes->whereBetween('fecha', [$BusquedaMenorAMil, now()]);
-				
-				if ($reportes->count() > 2000) {
-					$BusquedaMenorAMil = Carbon::now()->firstOfMonth()->addDays(10)->format('Y-m-d');
-					$reportes = $reportes->whereBetween('fecha', [$BusquedaMenorAMil, now()]);
-				}
-			}
-		}
+		
+//		if (!$request->has('ultimosmeses')) {
+//			if ($reportes->count() > 1000) {
+//				$BusquedaMenorAMil = Carbon::now()->firstOfMonth()->format('Y-m-d');
+//				$reportes = $reportes->whereBetween('fecha', [$BusquedaMenorAMil, now()]);
+//				
+//				if ($reportes->count() > 2000) {
+//					$BusquedaMenorAMil = Carbon::now()->firstOfMonth()->addDays(10)->format('Y-m-d');
+//					$reportes = $reportes->whereBetween('fecha', [$BusquedaMenorAMil, now()]);
+//				}
+//			}
+//		}
+		
 		
 		if ($request->has(['field', 'order'])) {
 			$reportes = $reportes->orderByRaw('ISNULL(hora_final) DESC')->orderbyDesc('fecha')->orderBy($request->field, $request->order);
@@ -123,22 +145,18 @@ class ReportesController extends Controller {
 			$reportes = $reportes->orderByRaw('ISNULL(hora_final) DESC')->orderbyDesc('fecha')->orderByDesc('updated_at');
 		}
 		
-		
-		
-		$page = (int) $request->get('page', 1);
-		$perPage = (int) $request->get('perPage', 50);
+		$page = (int)$request->get('page', 1);
+		$perPage = (int)$request->get('perPage', 50);
 		
 		$reportes = $reportes->get();
+		
 		$reportesPaginados = $reportes->slice(($page - 1) * $perPage, $perPage)->values();
 		
-		return new LengthAwarePaginator(
-		    $reportesPaginados,
-		    $reportes->count(),
-		    $perPage,
-		    $page,
-		    ['path' => $request->url(), 'query' => $request->query()]
-		);
-//		return $reportes->get();
+		return new LengthAwarePaginator($reportesPaginados, $reportes->count(), $perPage, $page, [
+			'path'  => $request->url(),
+			'query' => $request->query()
+		]);
+		//		return $reportes->get();
 	}
 	
 	public function SelectsMasivos(): array { //aproved
@@ -163,7 +181,7 @@ class ReportesController extends Controller {
 			$result[$value] = Myhelp::NEW_turnInSelectID($todosResultados, ' ');
 			
 			if ($value === 'ordenproduccion') {
-				$result[$value] = Myhelp::NEW_turnInSelectID($todosResultados, 'a orden','op','producto_descripcion');
+				$result[$value] = Myhelp::NEW_turnInSelectID($todosResultados, 'a orden', 'op', 'producto_descripcion');
 			}
 		}
 		
@@ -204,19 +222,19 @@ class ReportesController extends Controller {
 	}
 	
 	//todo: poner esto en modelo Reporte
-//	public function MapearClasePP(&$reportes, $numberPermissions, $valuesGoogleBody): void {
-//		$reportes = $reportes->get()->map(function ($reporte) use ($numberPermissions, $valuesGoogleBody) {
-//			// $reporte->ordenproduccion_s = $valuesGoogleBody->Where('Item_vue',$reporte->ordenproduccion_id)->first()->Item ?? '';
-//			$reporte->actividad_s = $reporte->actividad()->first() !== null ? $reporte->actividad()->first()->nombre : '';
-//			$reporte->centrotrabajo_s = $reporte->centrotrabajo()->first() !== null ? $reporte->centrotrabajo()->first()->nombre : '';
-//			$reporte->trabajador_s = $reporte->trabajador()->first() !== null ? $reporte->trabajador()->first()->name : '';
-//			
-//			$reporte->paro_s = $reporte->paro()->first() !== null ? $reporte->paro()->first()->nombre : '';
-//			$reporte->reproceso_s = $reporte->reproceso()->first() !== null ? $reporte->reproceso()->first()->nombre : '';
-//			
-//			return $reporte;
-//		})->filter();
-//	}
+	//	public function MapearClasePP(&$reportes, $numberPermissions, $valuesGoogleBody): void {
+	//		$reportes = $reportes->get()->map(function ($reporte) use ($numberPermissions, $valuesGoogleBody) {
+	//			// $reporte->ordenproduccion_s = $valuesGoogleBody->Where('Item_vue',$reporte->ordenproduccion_id)->first()->Item ?? '';
+	//			$reporte->actividad_s = $reporte->actividad()->first() !== null ? $reporte->actividad()->first()->nombre : '';
+	//			$reporte->centrotrabajo_s = $reporte->centrotrabajo()->first() !== null ? $reporte->centrotrabajo()->first()->nombre : '';
+	//			$reporte->trabajador_s = $reporte->trabajador()->first() !== null ? $reporte->trabajador()->first()->name : '';
+	//			
+	//			$reporte->paro_s = $reporte->paro()->first() !== null ? $reporte->paro()->first()->nombre : '';
+	//			$reporte->reproceso_s = $reporte->reproceso()->first() !== null ? $reporte->reproceso()->first()->nombre : '';
+	//			
+	//			return $reporte;
+	//		})->filter();
+	//	}
 	
 	//fin index
 	
@@ -250,16 +268,17 @@ class ReportesController extends Controller {
 			$tipoReport = $request->tipoReporte['value'];
 			
 			$reporte = Reporte::create([
-				                           'fecha'            => $request->fecha,
-				                           'tipoReporte'      => $tipoReport,
-				                           'hora_inicial'     => $request->hora_inicial,
-				                           'hora_final'       => null,
-				                           'user_id'          => $userID,
-				                           'actividad_id'     => $request->actividad_id['value'] ?? null,
-				                           'paro_id'          => $Valueparo,
-				                           'reproceso_id'     => ($request->reproceso_id['value']) ?? null,
-				                           'ordenproduccion_id'     => ($request->ordenproduccion_id['value']) ?? null,
-				                           'tipoFinalizacion' => $tipoFin, //BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
+				                           'fecha'              => $request->fecha,
+				                           'tipoReporte'        => $tipoReport,
+				                           'hora_inicial'       => $request->hora_inicial,
+				                           'hora_final'         => null,
+				                           'user_id'            => $userID,
+				                           'actividad_id'       => $request->actividad_id['value'] ?? null,
+				                           'paro_id'            => $Valueparo,
+				                           'reproceso_id'       => ($request->reproceso_id['value']) ?? null,
+				                           'ordenproduccion_id' => ($request->ordenproduccion_id['value']) ?? null,
+				                           'tipoFinalizacion'   => $tipoFin,
+				                           //BOUNDED 1: primera del dia | 2:intermedia | 3:Ultima del dia
 			                           ]);
 			DB::commit();
 			Myhelp::EscribirEnLog($this, 'STORE:reportes', 'usuario id:' . $user->id . ' | ' . $user->name . ' ha guardado el reporte ' . $reporte->id, false);
@@ -360,7 +379,7 @@ class ReportesController extends Controller {
 				else {
 					$actualizar_reporte['hora_inicial'] = $request->hora_inicial ?? null;
 					$actualizar_reporte['hora_final'] = $request->hora_final ?? null;
-//					$actualizar_reporte['tiempo_transcurrido'] = $request->tiempo_transcurrido ?? null;
+					//					$actualizar_reporte['tiempo_transcurrido'] = $request->tiempo_transcurrido ?? null;
 					$actualizar_reporte['fecha'] = $request->fecha ?? null;
 				}
 			}
@@ -432,6 +451,5 @@ class ReportesController extends Controller {
 			// 'UniversidadSelect'   => Universidad::all()
 		]);
 	}
-	
 	
 }

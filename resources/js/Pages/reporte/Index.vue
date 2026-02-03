@@ -58,7 +58,8 @@ const data = reactive({
         search3: props.filters.search3, //tipo reporte 
         search4: props.filters.search4, //OT
         search5: props.filters.search5, //actividad
-        search6: props.filters.search6,
+        search6: props.filters.search6, //mes
+        search7: props.filters.search7, //anio
         field: props.filters.field,
         order: props.filters.order,
         perPage: props.perPage,
@@ -104,6 +105,8 @@ onMounted(() => {
         titulos = titulos.filter(t => t.order !== 'MinutosEstimados');
 
     }
+    const anioActual = new Date().getFullYear();
+    data.params.search7 = props.filters.search7 ? parseInt(props.filters.search7) : anioActual
 })
 const order = (field, CanOrder) => {
     if (CanOrder) {
@@ -174,14 +177,6 @@ watchEffect(() => {
                             :empleados=props.empleados
                     />
 
-                    <!--                    <Edit v-if="can(['update Reporte']) && numberPermissions > 1"-->
-                    <!--                          :numberPermissions="props.numberPermissions"-->
-                    <!--                          :show="data.editOpen"-->
-                    <!--                          @close="data.editOpen = false" :generica="data.generico" :title="props.title"-->
-                    <!--                          :losSelect=props.losSelect-->
-                    <!--                          :empleados=props.empleados-->
-                    <!--                    />-->
-
                     <TerminarReporte v-if="can(['read Reporte'])" :numberPermissions="props.numberPermissions"
                                      :show="data.TerminarOpen"
                                      @close="data.TerminarOpen = false" :generica="data.generico" :title="props.title"
@@ -206,23 +201,15 @@ watchEffect(() => {
                             <TrashIcon class="w-5 h-5"/>
                         </DangerButton>
 
-<!--                        <PrimaryButton-->
-<!--                            @click="data.hayCongelado = data.selectedId[0]"-->
-<!--                            v-show="data.selectedId.length !== 0 && can(['delete Reporte'])"-->
-<!--                            class="px-3 py-2 h-10"-->
-<!--                            v-tooltip="'Congelar'">-->
-<!--                            <ArrowLongUpIcon class="w-5 h-5"/>-->
-<!--                        </PrimaryButton>-->
-
                         <PrimaryButton
-                            class="rounded-lg px-1 h-7 mt-1 flex items-center justify-center hover:bg-indigo-800"
+                            class="rounded-lg px-1 h-9 mt-1 flex items-center justify-center hover:bg-indigo-800"
                             @click="data.createOpen = true"
                             v-if="can(['create Reporte'])">
                             Reportar
                         </PrimaryButton>
 
                         <!-- filtros -->
-                        <div class="flex flex-wrap gap-5 mb-3 items-end">
+                        <div class="flex flex-wrap gap-5 mb-3 ml-4 items-end">
 
                             <div v-if="numberPermissions > 1" class="w-52">
                                 <label class="block text-sm dark:text-white">Trabajador</label>
@@ -249,7 +236,14 @@ watchEffect(() => {
                                        class="w-full h-9 rounded-md border-[1px] px-2 border-gray-400 dark:bg-white"/>
                             </div>
                             <div v-if="numberPermissions > 1" class="w-36">
-                            
+                                <input type="number" v-model="data.params.search6" placeholder="Mes"
+                                       class="w-full h-9 rounded-md border-[1px] px-2 border-gray-400 dark:bg-white"/>
+                            </div>
+                            <div v-if="numberPermissions > 1" class="w-36">
+                                <input type="number" v-model="data.params.search7" placeholder="Año"
+                                       class="w-full h-9 rounded-md border-[1px] px-2 border-gray-400 dark:bg-white"/>
+                            </div>
+                            <div v-if="numberPermissions > 1" class="w-36">
                                 <TextInput v-model="data.params.searchDate" type="date"
                                            class="w-36 rounded-lg h-10"
                                            placeholder="Buscar por Fecha (mes o año)"/>
@@ -433,7 +427,6 @@ watchEffect(() => {
                 <div v-if="props.total > 0"
                      class="flex justify-between items-center p-2 border-t border-gray-200 dark:border-gray-700">
                     <SelectInput v-model="data.params.perPage" :dataSet="data.dataSet" class="h-10"/>
-
                     <Pagination :links="props.fromController" :filters="data.params"/>
                 </div>
             </div>

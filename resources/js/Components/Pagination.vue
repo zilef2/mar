@@ -17,6 +17,8 @@ const data = reactive({
         search4: props.filters?.search4,
         search5: props.filters?.search5,
         search6: props.filters?.search6,
+        search7: props.filters?.search7,
+        search8: props.filters?.search8,
         field: props.filters?.field,
         order: props.filters?.order,
         perPage: props.filters?.perPage,

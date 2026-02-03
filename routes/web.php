@@ -62,6 +62,7 @@ Route::middleware('auth', 'verified')->group(function () {
 	Route::resource('/Paro', ParoController::class);
 	Route::resource('/reproceso', ReprocesosController::class);
 	
+	
 	Route::resource('/Ordenproduccion', OrdenproduccionController::class);
 	//aquipues
 	
