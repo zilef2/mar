@@ -273,6 +273,8 @@ export function CalcularSexo(value) {
 }
 
 
+
+
 //STRING FUNCTIONS
 export function sinTildes(value) {
     let pattern = /[^a-zA-Z0-9\s]/g;

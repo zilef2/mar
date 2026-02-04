@@ -38,6 +38,8 @@ class Reporte extends Model {
 		'MinutosEstimados',
 	];
 	
+	
+	
 	public function getOrdenAttribute(): string { return $this->ordenproduccion ? $this->ordenproduccion->op : ''; }
 	
 	public function getuserinoAttribute(): string { return $this->trabajador ? $this->trabajador->name : ''; }
