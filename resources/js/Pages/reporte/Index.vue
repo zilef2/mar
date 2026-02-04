@@ -13,7 +13,7 @@ import {
     CheckCircleIcon,
     PencilIcon,
     TrashIcon,
-    ArrowTrendingDownIcon,
+    StopCircleIcon,
     ArrowLongUpIcon
 } from '@heroicons/vue/24/solid';
 import Create from '@/Pages/reporte/Create.vue';
@@ -136,6 +136,25 @@ const selectAll = (event) => {
 const select = () => {
     data.multipleSelect = props.reportes?.data.length === data.selectedId.length;
 }
+const mocharSeleccionados = () => {
+    if (data.selectedId.length === 0) {
+        alert('No hay elementos seleccionados para mochar.');
+        return;
+    }
+    router.post(route('reporte.mocharSeleccionados'), {
+        selectedIds: data.selectedId
+    }, {
+        onSuccess: () => {
+            data.selectedId = [];
+            data.multipleSelect = false;
+            router.reload({ preserveScroll: true });
+        },
+        onError: (errors) => {
+            console.error('Error al mochar seleccionados:', errors);
+            alert('Hubo un error al mochar los elementos seleccionados.');
+        }
+    });
+};
 // const form = useForm({ })
 watchEffect(() => {
 })
@@ -196,9 +215,16 @@ watchEffect(() => {
                         <DangerButton
                             @click="data.deleteBulkOpen = true"
                             v-show="data.selectedId.length !== 0 && can(['delete Reporte'])"
-                            class="px-1 py-2 h-8"
+                            class="px-1 py-2 h-9 mt-0.5 mx-1"
                             v-tooltip="lang().tooltip.delete_selected">
                             <TrashIcon class="w-5 h-5"/>
+                        </DangerButton>
+                        <DangerButton
+                            @click="mocharSeleccionados"
+                            v-show="data.selectedId.length !== 0 && can(['isadministrativo'])"
+                            class="px-1 py-2 h-9 mt-0.5 mx-1"
+                            v-tooltip="lang().tooltip.close_selected">
+                            <StopCircleIcon class="w-5 h-5"/>
                         </DangerButton>
 
                         <PrimaryButton
@@ -206,6 +232,13 @@ watchEffect(() => {
                             @click="data.createOpen = true"
                             v-if="can(['create Reporte'])">
                             Reportar
+                        </PrimaryButton>
+                        <PrimaryButton
+                            class="rounded-lg px-1 h-9 mt-1 flex items-center justify-center hover:bg-indigo-800"
+                            v-if="can(['isadministrativo'])">
+                            <Link :href="route('mochar')">  
+                            Cortar reportes
+                        </Link>
                         </PrimaryButton>
 
                         <!-- filtros -->

@@ -6,6 +6,7 @@ use App\Http\Controllers\OrdenproduccionController;
 use App\Http\Controllers\ParametrosController;
 use App\Http\Controllers\ParoController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PersonalizacionController;
 use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -64,6 +65,9 @@ Route::middleware('auth', 'verified')->group(function () {
 	
 	
 	Route::resource('/Ordenproduccion', OrdenproduccionController::class);
+	Route::get('/mochar', [PersonalizacionController::class, 'mochar'])->name('mochar'); //sin ejemplos papa
+	Route::post('/reporte/mochar-seleccionados', [PersonalizacionController::class, 'mocharSeleccionados'])->name('reporte.mocharSeleccionados');
+
 	//aquipues
 	
 	//# EXCEL

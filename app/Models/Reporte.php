@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -37,17 +38,18 @@ class Reporte extends Model {
 		'MinutosEstimados',
 	];
 	
-	public function getOrdenAttribute(): string {return $this->ordenproduccion ? $this->ordenproduccion->op : ''; }
+	public function getOrdenAttribute(): string { return $this->ordenproduccion ? $this->ordenproduccion->op : ''; }
 	
-	public function getuserinoAttribute(): string {return $this->trabajador ? $this->trabajador->name : ''; }
+	public function getuserinoAttribute(): string { return $this->trabajador ? $this->trabajador->name : ''; }
 	
-	public function getactividadsiniAttribute(): string {return $this->actividad ? $this->actividad->nombre : ''; }
+	public function getactividadsiniAttribute(): string { return $this->actividad ? $this->actividad->nombre : ''; }
 	
 	public function getparouAttribute(): string {
-		return $this->paro ? $this->paro->nombre : ''; 
+		return $this->paro ? $this->paro->nombre : '';
 	}
+	
 	public function getreprocesouAttribute(): string {
-		return $this->reproceso ? $this->reproceso->nombre : ''; 
+		return $this->reproceso ? $this->reproceso->nombre : '';
 	}
 	
 	// public function reportes() { return $this->hasMany('App\Models\Reporte'); }
@@ -58,7 +60,6 @@ class Reporte extends Model {
 	
 	public function trabajador(): BelongsTo { return $this->BelongsTo(User::class, 'user_id'); }
 	
-	
 	public function paro(): BelongsTo { return $this->BelongsTo(paro::class, 'paro_id'); }
 	
 	public function reproceso(): BelongsTo { return $this->BelongsTo(Reproceso::class); }
@@ -67,22 +68,41 @@ class Reporte extends Model {
 		if ($this->hora_final) {
 			$horaFinal = Carbon::parse($this->hora_final);
 			$horaInicial = Carbon::parse($this->hora_inicial);
-		
-			$this->update(['tiempo_transcurrido' => 
-				               (double)number_format($horaInicial->diffInSeconds($horaFinal) / 3600, 3)
+			
+			$this->update([
+				              'tiempo_transcurrido' => (double)number_format($horaInicial->diffInSeconds($horaFinal) / 3600, 3)
 			              ]);
 		}
 	}
 	
-	public function HorFinalNoValidacion($horaFinal): void {
-		$horaFinal = Carbon::parse($this->hora_final);
+	public function TiempoTranscurrido($horaFinal): float {
+		
+		$horaInicial = Carbon::parse($this->hora_inicial);
+		
+		return ($horaFinal->diffInSeconds($horaInicial) / 3600);
+	}
+	
+	public function CerrarReporte($horaFinal): void {
+		
 		$horaInicial = Carbon::parse($this->hora_inicial);
 		$tiemtras = number_format($horaFinal->diffInSeconds($horaInicial) / 3600, 3);
 		$repor = [
 			'hora_final'          => $horaFinal,
-			'tiempo_transcurrido' => $tiemtras
+			'tiempo_transcurrido' => $tiemtras //debe estar en horas
 		];
+		
 		$this->update($repor);
+	}
+	
+	public function scopeCerrarReportes(Builder $query, Carbon $horaFinal): void {
+		$query->each(function ($reporte) use ($horaFinal) {
+			$horaInicial = Carbon::parse($reporte->hora_inicial);
+			
+			$reporte->update([
+				                 'hora_final'          => $horaFinal,
+				                 'tiempo_transcurrido' => round($horaFinal->diffInSeconds($horaInicial) / 3600, 3),
+			                 ]);
+		});
 	}
 	
 }

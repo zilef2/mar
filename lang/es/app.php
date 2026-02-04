@@ -226,7 +226,8 @@ return [
 
         'edit' => 'Editar',
         'delete' => 'borrar',
-        'delete_selected' => 'borrar todo lo seleccionado',
+        'delete_selected' => 'Borrar todo lo seleccionado',
+        'close_selected' => 'Cerrar todo lo seleccionado',
         'dark_mode' => 'Modo claro/oscuro',
         'detail' => 'Click para detalles',
         'locale' => 'Change to Indonesian',
