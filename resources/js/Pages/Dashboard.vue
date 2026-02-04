@@ -163,29 +163,78 @@ onMounted(() => {
 
             <!-- KPIs -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
-                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Órdenes Totales</h3>
-                    <p class="mt-1 text-3xl font-semibold text-gray-900 dark:text-white">{{ props.totalOps }}</p>
+                <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 p-6 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out text-center border border-green-200 dark:border-green-700/50 group cursor-pointer">
+                    <div class="flex justify-center mb-2">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center group-hover:bg-green-600 transition-colors duration-200">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Completadas</h3>
+                    <p class="mt-1 text-3xl font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-200">{{ props.opsCompletadas }}</p>
                 </div>
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
-                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">En Proceso</h3>
-                    <p class="mt-1 text-3xl font-semibold text-gray-900 dark:text-white">{{ props.opsEnProceso }}</p>
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 p-6 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out text-center border border-blue-200 dark:border-blue-700/50 group cursor-pointer">
+                    <div class="flex justify-center mb-2">
+                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center group-hover:bg-blue-600 transition-colors duration-200">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">En Proceso</h3>
+                    <p class="mt-1 text-3xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">{{ props.opsEnProceso }}</p>
                 </div>
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
-                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Completadas</h3>
-                    <p class="mt-1 text-3xl font-semibold text-gray-900 dark:text-white">{{ props.opsCompletadas }}</p>
+                <div class="bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/30 dark:to-amber-800/30 p-6 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out text-center border border-amber-200 dark:border-amber-700/50 group cursor-pointer">
+                    <div class="flex justify-center mb-2">
+                        <div class="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center group-hover:bg-amber-600 transition-colors duration-200">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Órdenes Totales</h3>
+                    <p class="mt-1 text-3xl font-bold text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors duration-200">{{ props.totalOps }}</p>
                 </div>
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
-                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Paros Hoy</h3>
-                    <p class="mt-1 text-3xl font-semibold text-gray-900 dark:text-white">{{ props.parosHoy }}</p>
+                <div class="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/30 p-6 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out text-center border border-red-200 dark:border-red-700/50 group cursor-pointer">
+                    <div class="flex justify-center mb-2">
+                        <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center group-hover:bg-red-600 transition-colors duration-200">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Paros Hoy</h3>
+                    <p class="mt-1 text-3xl font-bold text-gray-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors duration-200">{{ props.parosHoy }}</p>
                 </div>
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md text-center">
-                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Reprocesos (Mes)</h3>
-                    <p class="mt-1 text-3xl font-semibold text-gray-900 dark:text-white">{{ props.totalReprocesosMes }}</p>
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 p-6 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out text-center border border-purple-200 dark:border-purple-700/50 group cursor-pointer">
+                    <div class="flex justify-center mb-2">
+                        <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center group-hover:bg-purple-600 transition-colors duration-200">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Reprocesos (Mes)</h3>
+                    <p class="mt-1 text-3xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200">{{ props.totalReprocesosMes }}</p>
                 </div>
             </div>
             
-            <div class="grid grid-cols-1 gap-6" :class="singleColumnView ? 'md:grid-cols-1' : 'md:grid-cols-2'">
+            <div class="grid gap-2" :class="singleColumnView ? 'grid-cols-1' : 'grid-cols-2'">
+                
+                 <!-- Tiempos por trabajador (Top) -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-lg p-4">
+                    <h2 class="text-center text-lg font-medium">Top {{props.int_limit}} Trabajadores con Más Horas</h2>
+                    <canvas ref="canvas2"></canvas>
+                </div>
+
+                <!-- Tiempos por trabajador (Bottom) -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-lg p-4">
+                    <h2 class="text-center text-lg font-medium">Top {{props.int_limit}} Trabajadores con Menos Horas</h2>
+                    <canvas ref="canvas5"></canvas>
+                </div>
+                
+                
                 <!-- Nueva Gráfica: Causas de Paro -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-lg p-4">
                     <canvas ref="canvasCausasParo"></canvas>
@@ -198,17 +247,7 @@ onMounted(() => {
                     </div>
                 </div>
 
-                <!-- Tiempos por trabajador (Top) -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-lg p-4">
-                    <h2 class="text-center text-lg font-medium">Top {{props.int_limit}} Trabajadores con Más Horas</h2>
-                    <canvas ref="canvas2"></canvas>
-                </div>
-
-                <!-- Tiempos por trabajador (Bottom) -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-lg p-4">
-                    <h2 class="text-center text-lg font-medium">Top {{props.int_limit}} Trabajadores con Menos Horas</h2>
-                    <canvas ref="canvas5"></canvas>
-                </div>
+               
 
                 <!-- Analisis de Actividades -->
                 <div v-if="bloqueoNoPago" class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-lg p-4 md:col-span-2">
@@ -237,6 +276,20 @@ onMounted(() => {
                             <h4 class="text-lg font-medium text-gray-500 dark:text-gray-400">Horas Promedio Diarias</h4>
                             <p class="text-4xl font-bold mt-2">{{NumToHour(props.promedioDiario)}}</p>
                         </div>
+                    </div>
+                </div>
+                <!-- ? -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-lg p-6 flex flex-col items-center justify-center h-full">
+                    <h3 class="text-xl font-bold mb-4">Indicadores de </h3>
+                    <div class="flex space-x-8"> ?
+<!--                        <div class="text-center">-->
+<!--                            <h4 class="text-lg font-medium text-gray-500 dark:text-gray-400">Eficiencia Jornada</h4>-->
+<!--                            <p class="text-4xl font-bold mt-2">{{(props.porcentajeJornada)}}<span class="text-3xl">%</span></p>-->
+<!--                        </div>-->
+<!--                        <div class="text-center">-->
+<!--                            <h4 class="text-lg font-medium text-gray-500 dark:text-gray-400">Horas Promedio Diarias</h4>-->
+<!--                            <p class="text-4xl font-bold mt-2">{{NumToHour(props.promedioDiario)}}</p>-->
+<!--                        </div>-->
                     </div>
                 </div>
             </div>
