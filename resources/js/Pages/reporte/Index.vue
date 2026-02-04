@@ -236,7 +236,7 @@ watchEffect(() => {
                         <PrimaryButton
                             class="rounded-lg px-1 h-9 mt-1 flex items-center justify-center hover:bg-indigo-800"
                             v-if="can(['isadministrativo'])">
-                            <Link :href="route('mochar')">  
+                            <Link :href="'/mochar'">  
                             Cortar reportes
                         </Link>
                         </PrimaryButton>
