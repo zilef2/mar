@@ -17,7 +17,10 @@ class DashboardController extends Controller {
 	public array $semanas = [];
 	
 	public function Dashboard(Request $request) {
-		if(!config('app.pagoOno')) return redirect('/nopago');
+		$pago = config('app.pagoOno');
+		if (!$pago) {
+			return redirect('/nopago');
+		}
 		
 		$numberPermissions = Myhelp::getPermissionToNumber(Myhelp::EscribirEnLog($this, ' Dashboard'));
 		if ($numberPermissions > 1) {
@@ -26,7 +29,6 @@ class DashboardController extends Controller {
 			$month = $request->input('month', Carbon::now()->month);
 			$esteMes = Carbon::create($year, $month, 1)->startOfMonth();
 			//		$MesPasado = Carbon::now()->addMonth(- 1)->startOfMonth();
-			
 			
 			//grafico1
 			$int_limit = 10;
@@ -58,22 +60,18 @@ class DashboardController extends Controller {
         SUM(reportes.tiempo_transcurrido) as total_mins
         ')->where('fecha', '>=', $esteMes)->where('fecha', '<', $esteMes
 				->copy()->addMonth())->where('reportes.user_id', '!=', 1)->groupBy('reportes.user_id', 'users.name')->orderBy('total_mins')->limit($int_limit)->get()->map(function ($row) use ($disponible) {
-					
-					$minstrabajados = (float)$row->total_mins;
-					$minstrabajados = $minstrabajados * 60;
-					
-					return [
-						'trabajador' => $dosPrimeras = implode(' ', array_slice(explode(' ', trim(($row->trabajador))), 0, 2)),
-						'total_mins' => $minstrabajados,
-						'disponible' => $disponible - $minstrabajados,
-						'minimo'     => $disponible,
-					];
-				})->toArray()
-			;
+				
+				$minstrabajados = (float)$row->total_mins;
+				$minstrabajados = $minstrabajados * 60;
+				
+				return [
+					'trabajador' => $dosPrimeras = implode(' ', array_slice(explode(' ', trim(($row->trabajador))), 0, 2)),
+					'total_mins' => $minstrabajados,
+					'disponible' => $disponible - $minstrabajados,
+					'minimo'     => $disponible,
+				];
+			})->toArray();
 			//</editor-fold>
-			
-			
-			
 			
 			//<editor-fold desc="g2">
 			$data = Reporte::selectRaw('
@@ -105,7 +103,6 @@ class DashboardController extends Controller {
 			})->toArray();
 			//</editor-fold>
 			
-			
 			//<editor-fold desc="g4 - dona">
 			$acquisitionsData4 = Reporte::selectRaw('
 	        SUM(CASE 
@@ -125,16 +122,14 @@ class DashboardController extends Controller {
 	    ')->where('fecha', '>=', $esteMes)->where('fecha', '<', $esteMes->copy()->addMonth())->first();
 			//</editor-fold>
 			
-			
 			$promedioDiario = Reporte::whereHas('trabajador.roles', function ($q) {
 				$q->whereNotIn('name', ['superadmin', 'admin', 'administrativo']);
 			})->whereBetween('fecha', [
 				$esteMes,
 				$esteMes->copy()->addMonth()
-			])->selectRaw('DATE(fecha) as dia, user_id, SUM(tiempo_transcurrido) as horas_dia')
-			  ->groupBy('dia', 'user_id')
-			  ->get();
-			  $promedioDiario = $promedioDiario->avg('horas_dia');
+			])->selectRaw('DATE(fecha) as dia, user_id, SUM(tiempo_transcurrido) as horas_dia')->groupBy('dia', 'user_id')->get()
+			;
+			$promedioDiario = $promedioDiario->avg('horas_dia');
 			$porcentajeJornada = round(($promedioDiario / 8) * 100, 1);
 			
 			return Inertia::render('Dashboard', [
@@ -147,9 +142,9 @@ class DashboardController extends Controller {
 				'acquisitionsData5' => $data5,
 				'semanas'           => $this->semanas,
 				'int_limit'         => $int_limit,
-				'porcentajeJornada'   => $porcentajeJornada,
-				'promedioDiario'     => $promedioDiario,
-				'bloqueoNoPago'     => false,
+				'porcentajeJornada' => $porcentajeJornada,
+				'promedioDiario'    => $promedioDiario,
+				'bloqueoNoPago'     => $pago,
 			]);
 		}
 		else {

@@ -162,7 +162,7 @@ onMounted(() => {
                 <div v-if="bloqueoNoPago" class="bg-gradient-to-br from-sky-100 to-indigo-50 dark:from-purple-700 dark:to-indigo-800 dark:text-white overflow-hidden shadow-lg sm:rounded-lg p-4">
                     <div class="flex justify-center items-center gap-2">
                         <h2 class="text-xl font-bold text-center">
-                            Análisis de Actividades: Semanal y Mensual
+                            Análisis de Actividades
                         </h2>
                         <button v-tooltip="'Desglose de las actividades por semana y por mes.'" class="text-gray-400 hover:text-gray-200">
                             <QuestionMarkCircleIcon class="h-5 w-5"/>
