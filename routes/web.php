@@ -67,6 +67,7 @@ Route::middleware('auth', 'verified')->group(function () {
 	Route::resource('/Ordenproduccion', OrdenproduccionController::class);
 	Route::get('/mochar', [PersonalizacionController::class, 'mochar'])->name('mochar'); //sin ejemplos papa
 	Route::post('/reporte/mochar-seleccionados', [PersonalizacionController::class, 'mocharSeleccionados'])->name('reporte.mocharSeleccionados');
+	Route::get('/corregirReportesInvalidos', [PersonalizacionController::class, 'corregirReportesInvalidos'])->name('corregirReportesInvalidos');
 
 	//aquipues
 	
