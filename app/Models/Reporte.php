@@ -79,12 +79,24 @@ class Reporte extends Model {
 		
 		$horaInicial = Carbon::parse($this->hora_inicial);
 		
-		return ($horaFinal->diffInSeconds($horaInicial) / 3600);
+		return ($horaInicial->diffInSeconds($horaFinal) / 3600);
 	}
 	
 	public function CerrarReporte($horaFinal): void {
 		
 		$horaInicial = Carbon::parse($this->hora_inicial);
+		$tiemtras = number_format($horaFinal->diffInSeconds($horaInicial) / 3600, 3);
+		$repor = [
+			'hora_final'          => $horaFinal,
+			'tiempo_transcurrido' => $tiemtras //debe estar en horas
+		];
+		
+		$this->update($repor);
+	}
+	public function CerrarReporte8horas(): void {
+		
+		$horaInicial = Carbon::parse($this->hora_inicial);
+		$horaFinal = $horaInicial->copy()->addHours(8);
 		$tiemtras = number_format($horaFinal->diffInSeconds($horaInicial) / 3600, 3);
 		$repor = [
 			'hora_final'          => $horaFinal,

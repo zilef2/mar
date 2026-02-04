@@ -28,7 +28,13 @@ class PersonalizacionController extends Controller
 		}
 		
 		foreach ($reportesActivos as $index => $reportesActivo) {
-			$reportesActivo->CerrarReporte($hoyHora);
+			
+			if($reportesActivo->TiempoTranscurrido($hoyHora) >= 8){
+				
+				$reportesActivo->CerrarReporte8horas();
+			}else{
+				$reportesActivo->CerrarReporte($hoyHora);
+			}
 		}
 		
 		
