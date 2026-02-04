@@ -168,6 +168,7 @@ const tipoReporte = [
 const mostrarTiempoTranscurrido = (raw) => {
     const valor = parseFloat(raw)
     if (isNaN(valor)) return '-'
+      console.log("🚀🚀mostrarTiempoTranscurrido ~ valor: ", valor);
     if (valor < 1) {
         return zilef_number_format(valor * 60, 0, false) + ' mins'
     } else {
@@ -414,7 +415,6 @@ watchEffect(() => {
                             <td v-else>
                                 <ClockWorking class=""/>
                             </td>
-
                             <td>{{ mostrarTiempoTranscurrido(clasegenerica['tiempo_transcurrido']) }}</td>
                             <td class="border-b-[1px] border-gray-300">
                                 {{ (clasegenerica['actividadsini']) }}
