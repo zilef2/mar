@@ -157,7 +157,7 @@ onMounted(() => {
                     </button>
                 </div>
                 <button @click="singleColumnView = !singleColumnView" class="px-4 py-2 dark:bg-gray-700 dark:hover:bg-gray-600 bg-white hover:bg-gray-100 text-gray-800 dark:text-white text-sm font-medium rounded-md shadow-sm transition">
-                    {{ singleColumnView ? 'Vista Múltiple' : 'Vista Sencilla' }}
+                    {{ singleColumnView ? 'Vista Sencilla' : 'Vista Doble' }}
                 </button>
             </div>
 

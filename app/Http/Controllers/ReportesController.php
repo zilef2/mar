@@ -440,16 +440,4 @@ class ReportesController extends Controller {
 	
 	//FIN : STORE - UPDATE - DELETE
 	
-	public function subirexceles() { //just  a view
-		$permissions = Myhelp::EscribirEnLog($this, ' reporte');
-		$numberPermissions = Myhelp::getPermissionToNumber($permissions);
-		
-		return Inertia::render('reporte/subirExceles', [
-			'breadcrumbs' => [['label' => __('app.label.reporte'), 'href' => route('reporte.index')]],
-			'title'       => __('app.label.reporte'),
-			'numUsuarios' => count(Reporte::all()) - 1,
-			// 'UniversidadSelect'   => Universidad::all()
-		]);
-	}
-	
 }

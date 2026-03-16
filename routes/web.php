@@ -69,6 +69,9 @@ Route::middleware('auth', 'verified')->group(function () {
 	Route::post('/reporte/mochar-seleccionados', [PersonalizacionController::class, 'mocharSeleccionados'])->name('reporte.mocharSeleccionados');
 	Route::get('/corregirReportesInvalidos', [PersonalizacionController::class, 'corregirReportesInvalidos'])->name('corregirReportesInvalidos');
 
+	Route::resource("/Cotizacion", \App\Http\Controllers\CotizacionController::class);
+	Route::get('/Cotizacion/{cotizacion}/pdf', [\App\Http\Controllers\CotizacionController::class, 'generatePdf'])->name('Cotizacion.pdf');
+	Route::resource("/INterruptores", \App\Http\Controllers\INterruptoresController::class);
 	//aquipues
 	
 	//# EXCEL

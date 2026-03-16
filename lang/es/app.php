@@ -2,31 +2,43 @@
 
 return [
     'label' => [
-        //adicion a op
-        
-		'cantidad_minutos' => 'cantidad_minutos',
-		'pedido' => 'pedido',
-		'Pedido' => 'Pedido',
-		'estado' => 'Estado',
-		'asesor' => 'Asesor',
-		'fecha_solicitud' => 'Fecha de Solicitud',
-		'op' => 'orden de prod',
-		'obra' => 'obra', 
-		'contrato' => 'contrato',
-		'producto_descripcion' => 'descripcion del producto',
-	    
-        //paros
+        // adicion Cotizacion
+        'Cotizacion' => 'Cotización',
+        'engineer_name' => 'Ingeniero',
+        'company' => 'Empresa',
+        'project' => 'Obra',
+        'date' => 'Fecha de cotización',
+        'subtotal' => 'Subtotal',
+        'tax_rate' => 'IVA (%)',
+        'tax_amount' => 'Valor IVA',
+        'total' => 'Total',
+        'status' => 'Estado',
+
+        // adicion a op
+
+        'cantidad_minutos' => 'cantidad_minutos',
+        'pedido' => 'pedido',
+        'Pedido' => 'Pedido',
+        'estado' => 'Estado',
+        'asesor' => 'Asesor',
+        'fecha_solicitud' => 'Fecha de Solicitud',
+        'op' => 'orden de prod',
+        'obra' => 'obra',
+        'contrato' => 'contrato',
+        'producto_descripcion' => 'descripcion del producto',
+
+        // paros
         'descripcion' => 'descripción',
-        //actividad
+        // actividad
         'identificacion' => 'Identificación',
         'tipo' => 'tipo',
         'Tipo' => 'Tipo',
         'centros' => 'Centros',
 
-        //google sheets
+        // google sheets
         'sheet' => 'Hojas de google',
 
-        //clases simples
+        // clases simples
         'cantidad_horas' => 'Cantidad (horas)',
         'ordenproduccion' => 'Orden de producción',
         'Ordenproduccion' => 'Orden de producción',
@@ -41,15 +53,14 @@ return [
         'Email' => 'Email',
         'Sexo' => 'Sexo',
         'Fecha nacimiento' => 'Fecha nacimiento',
-        //dashboard
+        // dashboard
         'reportes' => 'reportes',
         'roles' => 'roles',
 
-        //parametros
+        // parametros
         'parametros' => 'parametros',
 
-
-        //reporte
+        // reporte
         'Orden' => 'Orden de producción',
         'trabajador' => 'Trabajador',
         'actividad' => 'Actividad',
@@ -73,7 +84,7 @@ return [
         'pieza' => 'Pieza',
         'reproceso' => 'Reproceso',
 
-        //user
+        // user
         'RequiredFields' => 'Los campos con * son obligatorios',
         'area' => 'Area',
         'cargo' => 'Cargo',
@@ -83,7 +94,6 @@ return [
         'anio' => 'edad',
         'sexo' => 'sexo',
         'fecha_nacimiento' => 'Fecha de nacimiento',
-
 
         'cliente' => 'Cliente',
         'valor_tentativo' => 'Valor tentativo',
@@ -119,7 +129,7 @@ return [
         'forgot_password' => 'Olvido su contraseña? Solo permitanos saber su correo y le enviaremos un link para recuperarla.',
         'reset_password' => 'Cambiar su contraseña',
         'confirm_password' => 'Esta es una area segura de la aplicación. Por favor confirme su contraseña antes de continuar.',
-        'verify_email' => "Gracias por ingresar! Antes de comnezar, ¿Podria verificar su correo electronico haciendo click en el link que acabamos de enviar a su correo? Si no resiviste el correo, Con mucho gusto le enviaremos otro.",
+        'verify_email' => 'Gracias por ingresar! Antes de comnezar, ¿Podria verificar su correo electronico haciendo click en el link que acabamos de enviar a su correo? Si no resiviste el correo, Con mucho gusto le enviaremos otro.',
         'data' => 'Info',
         'user' => 'Persona',
         'users' => 'Personas',
@@ -130,7 +140,7 @@ return [
         'profile' => 'Perfil',
         'setting' => 'Configuración',
         'help' => 'Ayuda',
-        'loged_in' => "Has ingresado!",
+        'loged_in' => 'Has ingresado!',
         'logout' => 'Cerrar sesión',
         'created' => 'Creado',
         'updated' => 'Actualizado',
@@ -139,7 +149,6 @@ return [
         'of' => 'de',
         'logout_confirm' => 'Seguro que va a salir?',
         'delete_confirm' => 'Desea borrar ',
-
 
         'op_successfully' => 'Operacion finalizada satisfactoriamente.',
         'op_not_successfully' => 'Operacion errada. ',
@@ -164,7 +173,6 @@ return [
         'edit' => 'Editar',
         'delete' => 'Borrar',
         'add' => 'Nuevo',
-
 
         'verify_email_notification' => 'A new verification link has been sent to the email address you provided during registration.',
         'no_data' => 'No data',
@@ -195,13 +203,13 @@ return [
         'delete' => 'borrar',
         'prev' => 'Anterior',
         'next' => 'Siguiente',
-        'delete_account' => 'Borar cuenta'
+        'delete_account' => 'Borar cuenta',
     ],
     'placeholder' => [
-        //materia
+        // materia
         'cuantosReq' => 'cuantos Requisitos?',
 
-        //carrera
+        // carrera
         'UnObjetivo' => 'Describa el objetivo',
 
         'search' => 'Buscar...',

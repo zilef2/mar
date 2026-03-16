@@ -28,8 +28,8 @@ class PersonalImport implements ToModel {
 		   5 => "dir"
 		   6 => "cel"
 	
-	 valores del model
-	  'name',
+	valores del model
+	'name',
 	'email',
 	'password',
 	'identificacion',

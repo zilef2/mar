@@ -8,7 +8,7 @@ import SwitchDarkModeNavbar from '@/Components/SwitchDarkModeNavbar.vue'
 import SwitchLangNavbar from '@/Components/SwitchLangNavbar.vue'
 
 const emit = defineEmits(["open"])
-const version = '0.0.1_31oct5_iml'
+const version = '1.2.1_16mar26'
 
 const downloadExcel = () => { window.open('IMI' , '_blank') }
 

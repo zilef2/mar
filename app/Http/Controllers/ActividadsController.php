@@ -135,13 +135,6 @@ class ActividadsController extends Controller
                 $guardar['tipo'] = $guardar['tipo']['value'];
             }
 
-//            foreach ($request->centro_id as $centro) {
-//                if($centro['value'] && $centro['value'] != 0){
-//                    $vectorCentros[] = $centro['value'];
-//                }
-//            }
-//            $Actividad->centroTrabajos()->sync($vectorCentros);
-
             $Actividad->update($guardar);
 
             DB::commit();
@@ -189,60 +182,6 @@ class ActividadsController extends Controller
         }
     }
     //FIN : STORE - UPDATE - DELETE
-
-    public function subirexceles()
-    { //just  a view
-        $permissions = Myhelp::EscribirEnLog($this, ' Actividad');
-        $numberPermissions = Myhelp::getPermissionToNumber($permissions);
-
-        return Inertia::render('Actividad/subirExceles', [
-            'breadcrumbs'   => [['label' => __('app.label.Actividad'), 'href' => route('Actividad.index')]],
-            'title'         => __('app.label.Actividad'),
-            'numUsuarios'   => count(Actividad::all()) - 1,
-            // 'UniversidadSelect'   => Universidad::all()
-        ]);
-    }
-
-
-    // Duplicate entry '1152194566' for key 'Actividads_identificacion_unique'
-    private function MensajeWar()
-    {
-        $bandera = false;
-        $contares = [
-            'contar1',
-            'contar2',
-            'contar3',
-            'contar4',
-            'contar5',
-            'contarVacios',
-        ];
-        $mensajesWarnings = [
-            '#correos Existentes: ',
-            'Novedad, error interno: ',
-            '#identificacions no numericas: ',
-            '#generos distintos(M,F,otro): ',
-            '#identificaciones repetidas: ',
-            '#filas con celdas vacias: ',
-        ];
-
-        foreach ($contares as $key => $value) {
-            $$value = session($value, 0);
-            session([$value => 0]);
-            $bandera = $bandera || $$value > 0;
-        }
-        session(['contar2' => -1]);
-
-        $mensaje = '';
-        if ($bandera) {
-            foreach ($mensajesWarnings as $key => $value) {
-                if (${$contares[$key]} > 0) {
-                    $mensaje .= $value . ${$contares[$key]} . '. ';
-                }
-            }
-        }
-
-        return $mensaje;
-    }
 
     public function uploadempleados(Request $request)
     {

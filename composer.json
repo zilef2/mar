@@ -6,6 +6,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "ext-zip": "*",
+        "barryvdh/laravel-dompdf": "^3.1",
         "doctrine/dbal": "^4.0",
         "google-gemini-php/laravel": "^2.0",
         "google/apiclient": "^2.17",
@@ -23,8 +25,7 @@
         "spatie/laravel-data": "^4.18",
         "spatie/laravel-permission": "^6.22",
         "spatie/laravel-validation-rules": "^3.4",
-        "tightenco/ziggy": "^2.4",
-      "ext-zip": "*"
+        "tightenco/ziggy": "^2.4"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

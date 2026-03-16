@@ -31,11 +31,12 @@ const sidebarButtoAdmin = [ //SAME AS WEB.PHP
     // 'centrotrabajo',
     'actividad',
     'Paro',
-    // 'material',
-    // 'pieza',
     'reproceso',
-    //aquipuesSide
-
+];
+const sidebarcoti = [ //SAME AS WEB.PHP
+    'Cotizacion',
+	'INterruptores',
+	//aquipuesSide
 ];
 
 </script>
@@ -135,6 +136,19 @@ const sidebarButtoAdmin = [ //SAME AS WEB.PHP
         </ul>
         <ul v-show="can((['isadministrativo']))" class="space-y-2 my-4">
             <div class="" v-for="value in sidebarButtoAdmin">
+                <li v-show="can(['isadministrativo','isAdmin'])"
+                    :class="[ 'rounded-md items-center py-1 px-4 w-full', { 'bg-blue-700 dark:bg-blue-700': route().current(value + '.index') } ]"
+                >
+                    <Link :href="route(value+'.index')" class="flex items-center py-1 px-4">
+
+                        <PresentationChartLineIcon class="w-6 h-5"/>
+                        <span class="ml-3">{{ lang().label[value] }}</span>
+                    </Link>
+                </li>
+            </div>
+        </ul>
+        <ul v-show="can((['isadministrativo']))" class="space-y-2 my-4">
+            <div class="" v-for="value in sidebarcoti">
                 <li v-show="can(['isadministrativo','isAdmin'])"
                     :class="[ 'rounded-md items-center py-1 px-4 w-full', { 'bg-blue-700 dark:bg-blue-700': route().current(value + '.index') } ]"
                 >
