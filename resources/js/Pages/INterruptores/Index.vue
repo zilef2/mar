@@ -13,9 +13,9 @@ import pkg from 'lodash';
 import Pagination from '@/Components/Pagination.vue';
 import {ChevronUpDownIcon, PencilIcon, TrashIcon} from '@heroicons/vue/24/solid';
 // import { CursorArrowRippleIcon, ChevronUpDownIcon,QuestionMarkCircleIcon, EyeIcon, PencilIcon, TrashIcon, UserGroupIcon } from '@heroicons/vue/24/solid';
-import Create from '@/Pages/INterruptores/Create.vue';
-import Edit from '@/Pages/INterruptores/Edit.vue';
-import Delete from '@/Pages/INterruptores/Delete.vue';
+import Create from '@/Pages/Interruptores/Create.vue';
+import Edit from '@/Pages/Interruptores/Edit.vue';
+import Delete from '@/Pages/Interruptores/Delete.vue';
 
 import Checkbox from '@/Components/Checkbox.vue';
 import InfoButton from '@/Components/InfoButton.vue';
@@ -27,7 +27,6 @@ const props = defineProps({
     fromController: Object,
     total: Number,
     filters: Object,
-    breadcrumbs: Object,
     perPage: Number,
 
     title: String,
@@ -45,7 +44,7 @@ const data = reactive({
         order: props.filters.order,
         perPage: props.perPage,
     },
-    INterruptoreso: null,
+    Interruptoreso: null,
     selectedId: [],
     multipleSelect: false,
     createOpen: false,
@@ -63,7 +62,7 @@ const order = (field) => {
 
 watch(() => _.cloneDeep(data.params), debounce(() => {
     let params = pickBy(data.params)
-    router.get(route("INterruptores.index"), params, {
+    router.get(route("Interruptores.index"), params, {
         replace: true,
         preserveState: true,
         preserveScroll: true,
@@ -74,8 +73,8 @@ const selectAll = (event) => {
     if (event.target.checked === false) {
         data.selectedId = []
     } else {
-        props.fromController?.data.forEach((INterruptores) => {
-            data.selectedId.push(INterruptores.id)
+        props.fromController?.data.forEach((Interruptores) => {
+            data.selectedId.push(Interruptores.id)
         })
     }
 }
@@ -103,26 +102,25 @@ const titulos = [
     <Head :title="props.title" />
 
     <AuthenticatedLayout>
-        <Breadcrumb :title="title" :breadcrumbs="breadcrumbs" class="capitalize text-xl font-bold"/>
         <div class="space-y-4">
             <!-- {{ props.fromController.data[2] }} -->
             <div class="px-4 sm:px-0">
                 <div class="rounded-lg overflow-hidden w-fit">
                     <PrimaryButton class="rounded-none" @click="data.createOpen = true"
-                        v-if="can(['create INterruptores'])">
+                        v-if="can(['create Interruptores'])">
                         {{ lang().button.new }}
                     </PrimaryButton>
 
-                    <Create v-if="can(['create INterruptores'])" :numberPermissions="props.numberPermissions"
+                    <Create v-if="can(['create Interruptores'])" :numberPermissions="props.numberPermissions"
                         :titulos="titulos" :show="data.createOpen" @close="data.createOpen = false" :title="props.title"
                         :losSelect=props.losSelect />
 
-                    <Edit v-if="can(['update INterruptores'])" :titulos="titulos"
+                    <Edit v-if="can(['update Interruptores'])" :titulos="titulos"
                         :numberPermissions="props.numberPermissions" :show="data.editOpen" @close="data.editOpen = false"
-                        :INterruptoresa="data.INterruptoreso" :title="props.title" :losSelect=props.losSelect />
+                        :Interruptoresa="data.Interruptoreso" :title="props.title" :losSelect=props.losSelect />
 
-                    <Delete v-if="can(['delete INterruptores'])" :numberPermissions="props.numberPermissions"
-                        :show="data.deleteOpen" @close="data.deleteOpen = false" :INterruptoresa="data.INterruptoreso"
+                    <Delete v-if="can(['delete Interruptores'])" :numberPermissions="props.numberPermissions"
+                        :show="data.deleteOpen" @close="data.deleteOpen = false" :Interruptoresa="data.Interruptoreso"
                         :title="props.title" />
                 </div>
             </div>
@@ -131,7 +129,7 @@ const titulos = [
                     <div class="flex space-x-2">
                         <SelectInput v-model="data.params.perPage" :dataSet="data.dataSet" />
                         <!-- <DangerButton @click="data.deleteBulkOpen = true"
-                            v-show="data.selectedId.length != 0 && can(['delete INterruptores'])" class="px-3 py-1.5"
+                            v-show="data.selectedId.length != 0 && can(['delete Interruptores'])" class="px-3 py-1.5"
                             v-tooltip="lang().tooltip.delete_selected">
                             <TrashIcon class="w-5 h-5" />
                         </DangerButton> -->
@@ -177,13 +175,13 @@ const titulos = [
                                 <td v-if="numberPermissions > 1" class="whitespace-nowrap py-4 w-12 px-2 sm:py-3">
                                     <div class="flex justify-center items-center">
                                         <div class="rounded-md overflow-hidden">
-                                            <InfoButton v-show="can(['update INterruptores'])" type="button"
-                                                @click="(data.editOpen = true), (data.INterruptoreso = claseFromController)"
+                                            <InfoButton v-show="can(['update Interruptores'])" type="button"
+                                                @click="(data.editOpen = true), (data.Interruptoreso = claseFromController)"
                                                 class="px-2 py-1.5 rounded-none" v-tooltip="lang().tooltip.edit">
                                                 <PencilIcon class="w-4 h-4" />
                                             </InfoButton>
-                                            <DangerButton v-show="can(['delete INterruptores'])" type="button"
-                                                @click="(data.deleteOpen = true), (data.INterruptoreso = claseFromController)"
+                                            <DangerButton v-show="can(['delete Interruptores'])" type="button"
+                                                @click="(data.deleteOpen = true), (data.Interruptoreso = claseFromController)"
                                                 class="px-2 py-1.5 rounded-none" v-tooltip="lang().tooltip.delete">
                                                 <TrashIcon class="w-4 h-4" />
                                             </DangerButton>

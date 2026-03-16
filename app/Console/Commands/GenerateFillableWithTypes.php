@@ -57,10 +57,12 @@ class GenerateFillableWithTypes extends Command {
 		// Función a insertar
 		$functionCode = <<<'EOT'
 
+    use Illuminate\Support\Facades\DB;
+
     public static function getFillableWithTypes()
     {
         $table = (new static)->getTable();
-        $columns = \DB::select("SHOW COLUMNS FROM {$table}");
+        $columns = DB::select("SHOW COLUMNS FROM {$table}");
 
         $fillable = (new static)->getFillable();
         $result = [];

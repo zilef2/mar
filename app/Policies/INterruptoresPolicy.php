@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\INterruptores;
+use App\Models\Interruptores;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class INterruptoresPolicy
+class InterruptoresPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class INterruptoresPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, INterruptores $iNterruptores): bool
+    public function view(User $user, Interruptores $interruptores): bool
     {
         return false;
     }
@@ -35,7 +35,7 @@ class INterruptoresPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, INterruptores $iNterruptores): bool
+    public function update(User $user, Interruptores $interruptores): bool
     {
         return false;
     }
@@ -43,7 +43,7 @@ class INterruptoresPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, INterruptores $iNterruptores): bool
+    public function delete(User $user, Interruptores $interruptores): bool
     {
         return false;
     }
@@ -51,7 +51,7 @@ class INterruptoresPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, INterruptores $iNterruptores): bool
+    public function restore(User $user, Interruptores $interruptores): bool
     {
         return false;
     }
@@ -59,7 +59,7 @@ class INterruptoresPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, INterruptores $iNterruptores): bool
+    public function forceDelete(User $user, Interruptores $interruptores): bool
     {
         return false;
     }

@@ -2,8 +2,15 @@
 
 return [
     'label' => [
-        // adicion Cotizacion
+        // aquipues
         'Cotizacion' => 'Cotización',
+        'Interruptores' => 'Interruptores',
+        'reference' => 'Referencia',
+        'description' => 'Descripción',
+        'value' => 'Valor',
+        'discounted_value' => 'Costo con descuento',
+        'unit_price' => 'Valor unitario',
+        // adicion Cotizacion
         'engineer_name' => 'Ingeniero',
         'company' => 'Empresa',
         'project' => 'Obra',

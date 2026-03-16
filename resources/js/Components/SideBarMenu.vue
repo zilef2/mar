@@ -35,7 +35,7 @@ const sidebarButtoAdmin = [ //SAME AS WEB.PHP
 ];
 const sidebarcoti = [ //SAME AS WEB.PHP
     'Cotizacion',
-	'INterruptores',
+	'Interruptores',
 	//aquipuesSide
 ];
 

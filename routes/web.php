@@ -53,7 +53,7 @@ Route::middleware('auth', 'verified')->group(function () {
 	Route::post('/reporte/destroy-bulk', [ReportesController::class, 'destroyBulk'])->name('reporte.destroy-bulk');
 	Route::post('/uploadUser', [ExcelController::class, 'uploadUser'])->name('uploadUser');
 	Route::post('/uploadOP', [ExcelController::class, 'uploadOP'])->name('uploadOP');
-	Route::post('//deploy/artisan-down', [ExcelController::class, 'deployartisandown'])->name('deploy.artisan-down');
+	Route::post('/deploy/artisan-down', [ExcelController::class, 'deployartisandown'])->name('deploy.artisan-down');
 	Route::get('/subirexceles', [ExcelController::class, 'subirexceles'])->name('subirexceles');
 	
 	Route::get('/reporte/createdev', [ReportesController::class, 'createdev'])->name('createdev');
@@ -71,7 +71,12 @@ Route::middleware('auth', 'verified')->group(function () {
 
 	Route::resource("/Cotizacion", \App\Http\Controllers\CotizacionController::class);
 	Route::get('/Cotizacion/{cotizacion}/pdf', [\App\Http\Controllers\CotizacionController::class, 'generatePdf'])->name('Cotizacion.pdf');
-	Route::resource("/INterruptores", \App\Http\Controllers\INterruptoresController::class);
+	Route::resource("/Interruptores", \App\Http\Controllers\InterruptoresController::class);
+
+	//excel
+	Route::post('upload-excel/{importClass}', [ExcelController::class, 'uploadExcelVariable'])->name('upload.excel');
+	Route::get('upload-excel/{importClass}', [ExcelController::class, 'subirexcelesVariable'])->name('get.excel');
+
 	//aquipues
 	
 	//# EXCEL

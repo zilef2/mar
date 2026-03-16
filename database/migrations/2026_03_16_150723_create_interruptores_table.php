@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('i_nterruptores', function (Blueprint $table) {
+        Schema::create('interruptores', function (Blueprint $table) {
             $table->string('reference')->nullable();
             $table->string('description')->nullable();
             $table->integer('value')->nullable();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('i_nterruptores');
+        Schema::dropIfExists('interruptores');
     }
 };

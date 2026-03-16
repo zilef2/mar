@@ -13,7 +13,7 @@ import "vue-select/dist/vue-select.css";
 const props = defineProps({
     show: Boolean,
     title: String,
-    INterruptoresa: Object,
+    Interruptoresa: Object,
     titulos: Object, //parametros de la clase principal
     losSelect: Object,
 
@@ -48,19 +48,19 @@ props.titulos.forEach(names => {
 watchEffect(() => {
     if (props.show) {
         // data.justNames.forEach(element => {
-        //     form[element] =  props.INterruptoresa[element]
+        //     form[element] =  props.Interruptoresa[element]
         // });
         form.errors = {}
         props.titulos.forEach(names => {
-            form[names['order']] = props.INterruptoresa[names['order']]
+            form[names['order']] = props.Interruptoresa[names['order']]
         });
 
-        // form.codigo = props.INterruptoresa?.codigo
+        // form.codigo = props.Interruptoresa?.codigo
     }
 })
 
 const update = () => {
-    form.put(route('INterruptores.update', props.INterruptoresa?.id), {
+    form.put(route('Interruptores.update', props.Interruptoresa?.id), {
         preserveScroll: true,
         onSuccess: () => {
             emit("close")
