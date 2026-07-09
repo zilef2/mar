@@ -18,8 +18,9 @@ class CopyUserPages extends Command
 {
     use Constants;
 
-	const MSJ_EXITO = ' fue realizada con exito ';
-	const MSJ_FALLO = ' Fallo';
+    const MSJ_EXITO = ' fue realizada con exito ';
+
+    const MSJ_FALLO = ' Fallo';
 
     public $generando;
 
@@ -32,57 +33,69 @@ class CopyUserPages extends Command
     // notacion de notas:
     // //todo:
     // very usefull
-    // heyRemember: --> quiero borrar esta notacion
-    // ts has this
+    // heyRemember:
     // nexttochange:
     // todo: sync: añadir a los demas repos
     // justtesting: cuando hay que qutiar cosas que solo deberian aparecer en la version de pruebas
     // thisisnew!!!
+    protected $thename = 'Presupuesto';
 
-    /**
-     Para anotar que es hijo de una funcion ===>>>  s( watch(() => data.equipos)
-     * donde s() significa hijo (son) y watch() es la funcion hija
-     */
     protected function aagenerateAttributes(): array
     {
-        // string text number  date datetime boolean foreign json
-        // float1 dinero float3 bigdecimal3
+        // string text number dinero date datetime boolean foreign json
         return [
-            'descripcion' => 'string',
-            'cantitdad' => 'float3',
-            'metros' => 'float3',
-            'calibre' => 'string',
-            'total' => 'float3',
+            // Core
+            'centro_costo_id' => 'foreign',
+            'nombre' => 'string',
+            'descripcion' => 'text',
+            'fecha_inicio' => 'datetime',
+            'fecha_fin' => 'datetime',
 
-            'campoauxiliar1' => 'float3',
-            'tipo' => 'string',
-            'tiponum' => 'number',
-            // 'campoauxiliar2' => 'float3',
-            //			'fecha_ultima_actuacion' => 'datetime',
-            //			'sujetos_procesales'     => 'text',
-            //			'es_privado'             => 'string',
-            //			'cant_filas'             => 'number',
-            //			'validacioncini'         => 'bool',
+            // Montos
+            'monto_total' => 'dinero',
+            'monto_ejecutado' => 'dinero',
+            'monto_disponible' => 'dinero',
+
+            // Relaciones futuras (Reporte, Viaticos, Materiales)
+            'total_salarios' => 'dinero',
+            'total_viaticos' => 'dinero',
+            'total_materiales' => 'dinero',
+
+            // Estado
+            'estado' => 'string',   // borrador | aprobado | cerrado | suspendido
+            'user_id_aprobado' => 'foreign',   // FK a users implícita, sin foreign key duro
+            'aprobado_por' => 'string',  
+            'fecha_aprobacion' => 'datetime',
+
+            // Opcionales
+            'codigo_interno' => 'string',
+            'observaciones' => 'text',
+            'porcentaje_ejecutado' => 'float3',   // calculable pero útil persistirlo para reportes
+
+            // 💡 Novedad 1: alerta de sobreejecution
+            'umbral_alerta' => 'float3',   // ej: 0.85 → alerta cuando ejecutado >= 85% del total
+
+            // 💡 Novedad 2: vigencia de reajuste
+            'fecha_ultimo_reajuste' => 'datetime', // cuándo se modificó el monto_total por última vez
+            'motivo_reajuste' => 'text',     // justificación del cambio de presupuesto
         ];
     }
 
     public function handle(): int
     {
         try {
-            $this->info('Iniciando copia de entidad generica, los atributos registrados son: '.
-                                        implode(', ', array_map(fn ($k, $v) => "$k ($v)", array_keys($this->aagenerateAttributes()), $this->aagenerateAttributes()))
-            );
             $this->generando = self::getMessage('generando');
 
             $this->contadorMetodos = 0;
             $submetodo['Lenguaje'] = 0;
 
-            $modelName = $this->ask('¿Cuál es el nombre del modelo? Recuerde revisar los atributos.');
-            if (! $modelName || $modelName == '') {
-                $this->info('Sin modelo');
+            // $modelName = $this->ask('¿Cuál es el nombre del modelo? Recuerde revisar los atributos.');
+            // if (! $modelName || $modelName == '') {
+            //     $this->info('Sin modelo');
 
-                return 0;
-            }
+            //     return 0;
+            // }
+            $modelName = $this->thename;
 
             $progressBar = $this->output->createProgressBar(2);
             $progressBar->start();
@@ -90,17 +103,14 @@ class CopyUserPages extends Command
             $this->MetodologiaInicial($modelName, 'generic', '');
             $this->AddAttributesVue($modelName);
             $this->Paso2($modelName, $submetodo);
-            $progressBar->advance();
 
-            $this->Paso3($modelName);
+            $this->info('generando permisos');
+            $this->info(Artisan::call('make:permission-seeder '.$modelName));
+            $progressBar->advance();
 
             $this->info(Artisan::call('optimize'));
             $this->info(Artisan::call('optimize:clear'));
             $progressBar->advance();
-
-            $this->info('Artisan optimize ='.Artisan::call('optimize'));
-            $this->info('Artisan optimize clear = '.Artisan::call('optimize:clear'));
-            $this->info('Artisan ziggy generate = '.Artisan::call('ziggy:generate', ['path' => 'resources/js/ziggy.js']));
             $progressBar->finish();
 
             return 1;
@@ -121,9 +131,10 @@ class CopyUserPages extends Command
         $this->warn('Empezando copies');
         Artisan::call('copy:f'); // Commands/WriteFillable.php
         $this->warn('Ahora Lang');
-        Artisan::call('lang:u '.$modelName);
+        Artisan::call('lang:u '.$modelName); // LanguageCopyU.php
 
         $EsValidoSeguir = $this->ValidatePages($plantillaActual, $modelName);
+		if(!$EsValidoSeguir) return 0;
 
         $RealizoVueConExito = $this->MakeVuePages($plantillaActual, $modelName);
         $mensaje = $RealizoVueConExito ? self::getMessage('generando').' Vuejs'.self::MSJ_EXITO : self::getMessage('generando').' Vuejs'.self::getMessage('fallo');
@@ -295,15 +306,18 @@ class CopyUserPages extends Command
 
     private function Paso2($modelName, &$submetodo): int
     {
+
+        $thereturn = 1;
         // estos metodos para abajo tienen validacion
         if ($this->DoWebphp($modelName)) {
 
-            $this->info('DoWebphp'.self::MSJ_EXITO);
-            $this->contadorMetodos++; // 1
+            $this->info('DoWebphp'.__FUNCTION__.' '.self::MSJ_EXITO);
+            $this->contadorMetodos++;
         } else {
-            $this->error('DoWebphp '.self::MSJ_FALLO);
+            $this->error('DoWebphp '.__FUNCTION__.' '.self::MSJ_FALLO);
 
             return 0;
+
         }
 
         if ($this->L2_LenguajeInsert($modelName, $submetodo) === 0) {
@@ -312,17 +326,17 @@ class CopyUserPages extends Command
 
         if ($this->DoSideBar($modelName)) {
 
-            $this->info('DoSideBar'.self::MSJ_EXITO);
-            $this->contadorMetodos++; // 3
+            $this->info('DoSideBar'.__FUNCTION__.' '.self::MSJ_EXITO);
+            $this->contadorMetodos++;
         } else {
-            $this->error('DoSideBar '.self::MSJ_FALLO);
+            $this->error('DoSideBar '.__FUNCTION__.' '.self::MSJ_FALLO);
 
             return 0;
         }
         $this->DoFillable($modelName);
-        $this->contadorMetodos++; // 4
+        $this->contadorMetodos++;
         $this->updateMigration($modelName);
-        $this->contadorMetodos++; // 5
+        $this->contadorMetodos++;
 
         return 1;
     }
@@ -520,11 +534,7 @@ class CopyUserPages extends Command
 
     protected function updateMigration($modelName): int
     {
-        // === ⚠️ IMPORTANTE: Corregir duplicación y posibles typos en funciones ===
-        // Asumiendo que generateAttributes() es la función correcta para obtener los atributos.
         $atributos = $this->aagenerateAttributes();
-
-        // 1. Encontrar el archivo de migración
         $migrationFile = collect(glob(database_path('migrations/*.php')))->first(fn ($file) => str_contains($file, 'create_'.Str::snake(Str::plural($modelName)).'_table'));
 
         if (! $migrationFile) {
@@ -533,100 +543,30 @@ class CopyUserPages extends Command
             return 0;
         }
 
-        // 2. Generar el código de las columnas
         $columns = collect($atributos)->map(function ($type, $name) {
-            // Validación básica de nombre (evita problemas con guiones)
-            if (! preg_match('/^[a-zA-Z0-9_]+$/', $name)) {
-                // Podrías lanzar una excepción o registrar un error si el nombre es inválido
-                throw new \InvalidArgumentException("El nombre de la columna '$name' contiene caracteres no permitidos.");
-            }
-
-            // --- Tipos Personalizados Solicitados y Comunes ---
-
-            // money => decimal(62, 2)
             if ($type === 'dinero') {
                 return "\$table->decimal('$name', 62, 2)->default(0);";
             }
-
-            // float1 => float con 1 decimal (ej: 10, 1)
-            if ($type === 'float1') {
-                return "\$table->float('$name', 10, 1)->nullable();";
-            }
-
-            // float3 => float con 3 decimales (ej: 10, 3)
-            if ($type === 'float3') {
-                return "\$table->float('$name', 10, 3)->nullable();";
-            }
-            // bigdecimal3 => decimal(60, 3) para números grandes con 3 decimales
-            if ($type === 'bigdecimal3') {
-                // 60 es la precisión total (dígitos antes y después del punto)
-                // 3 es la escala (dígitos después del punto)
-                return "\$table->decimal('$name', 60, 3)->nullable();";
-            }
-
-            // dateTime con default(now())
             if ($type === 'dateTime') {
                 return "\$table->dateTime('$name')->default(now());";
             }
-
-            // text (para textos largos)
-            if ($type === 'text') {
-                return "\$table->text('$name')->nullable();";
+            if ($type === 'boolean') {
+                return "\$table->boolean('$name')->default(false);";
             }
 
-            // json (para datos estructurados)
-            if ($type === 'json') {
-                return "\$table->json('$name')->nullable();";
-            }
-
-            // --- Aliases y Tipos Base ---
-
-            // number => integer (tu alias solicitado/existente)
             if ($type === 'number') {
                 $type = 'integer';
             }
 
-            // boolean con default(false)
-            if ($type === 'boolean') {
-                // Se puede omitir el default(false) si se usa ->boolean() directamente,
-                // pero lo mantenemos para consistencia.
-                return "\$table->boolean('$name')->default(false);";
-            }
-
-            // Catch-all: Usa el tipo tal cual (string, integer, etc.) y permite nulls.
             return "\$table->$type('$name')->nullable();";
         })->implode("\n            ");
 
-        // 3. Insertar las columnas en el archivo
         $content = file_get_contents($migrationFile);
-        // Nota: El regex busca 'Schema::create(...) {', lo que funciona si el archivo está formateado así.
         $content = preg_replace('/Schema::create\(.*?\{/', "$0\n            $columns", $content);
         file_put_contents($migrationFile, $content);
 
         $this->info("Migración actualizada para $modelName");
 
         return 1;
-    }
-
-    /**
-     * @return int|mixed
-     */
-    public function Paso3(mixed $modelName): int
-    {
-        $this->info("Iniciando generación de fillable para el modelo: $modelName");
-
-        $result = $this->call('generate:fillable', [
-            // El primer elemento es el nombre del argumento definido en la firma del comando
-            'modelName' => $modelName,
-        ]);
-        if ($result === 0) {
-            $this->info("Comando 'generate:fillable' ejecutado con éxito.");
-            $result = 1;
-        } else {
-            $result = 0;
-            $this->error("El comando 'generate:fillable' falló.");
-        }
-
-        return $result;
     }
 }

@@ -45,6 +45,9 @@ class ReportesController extends Controller {
 			'search5',
 			'search6',
 			'search7',
+			'search8',
+			'search9',
+			'search10',
 		];
 		
 		return Inertia::render('reporte/Index', [
@@ -120,6 +123,15 @@ class ReportesController extends Controller {
 		}
 		if ($request->has('searchDate')) {
 			$reportes->where('fecha', $request->searchDate);
+		}
+		if ($request->has('search8') && $request->search8 === 'true') {
+			$reportes = $reportes->whereTime('hora_final', '>', '16:30:00');
+		}
+		if ($request->has('search9') && $request->search9 === 'true') {
+			$reportes = $reportes->where('tiempo_transcurrido', '<', 0);
+		}
+		if ($request->has('search10') && $request->search10 === 'true') {
+			$reportes = $reportes->whereNotNull('tiempo_transcurrido')->where('tiempo_transcurrido', '<', 1);
 		}
 		if ($request->has('soloTiEstimado')) {
 			$reportes = $reportes->WhereNotnull('MinutosEstimados');

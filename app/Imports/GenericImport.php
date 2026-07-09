@@ -71,7 +71,7 @@ class GenericImport implements ToCollection, WithHeadingRow, SkipsOnError, WithC
 		"asesor"               => 'asesor',
 		"estado"               => 'estado',
 		"cantidad"               => 'cant',
-		//		fecha	
+		//		fecha	//la fecha no es un campo mapeado, esta en la variable camposFecha
 	
 	];
 	
@@ -105,21 +105,26 @@ class GenericImport implements ToCollection, WithHeadingRow, SkipsOnError, WithC
 		}
 		
 		$this->interrupcionPorExcesoDeErrores = false;
-		file_put_contents(storage_path("logs/$this->nombredebugTXT.txt"), print_r('Antes del ciclo, linea 105 --- ' . Carbon::now(), true), FILE_APPEND);
+		file_put_contents(storage_path("logs/$this->nombredebugTXT.txt"), print_r('\n----Antes del ciclo, linea 105 --- ' . Carbon::now(), true), FILE_APPEND);
 		$ArrayMensajeome = [];
 		
+		
 		foreach ($collection as $row) {//foreach principal
-			$keys = implode(', ', $row->keys()->toArray());
-			Log::channel('solosuper')->info('indices row: ' . $keys);
-			Log::channel('solosuper')->info('  ' . $this->columnaIndice);
+			$row = json_decode($row, true);
 			Log::channel('solosuper')->info('this columna indice  ' . $this->columnaIndice);
-			Log::channel('solosuper')->info('$row[$this->columnaIndice]  ' . $row[$this->columnaIndice]);
+			Log::channel('solosuper')->info('valor del if  ' . (!isset($row[$this->columnaIndice]) || $row[$this->columnaIndice] === "op"));
+			Log::channel('solosuper')->info('valor del if izq  ' . !isset($row[$this->columnaIndice]));
+			Log::channel('solosuper')->info('valor del if der ' . ( $row['op']));
+			Log::channel('solosuper')->info('valor del if probar ' . $row[$this->columnaIndice]);
 			$this->numeroFilas ++;
 			
 			
 			if (!isset($row[$this->columnaIndice]) || $row[$this->columnaIndice] === "op") {
-				$ArrayMensajeome[] = '!!row omitida: Sin ' . $this->columnaIndice;
-				Log::channel('solosuper')->info('Genericimport  no hay indice');
+				
+				Log::channel('solosuper')->info('valor del if der2 ' . ( $row));
+				$errorsini = 'row omitida: Sin ' . $this->columnaIndice . '  | valor con error: ' . $row[$this->columnaIndice];
+				$ArrayMensajeome[] = $errorsini;
+				Log::channel('solosuper')->info('Genericimport  no hay indice  '.$errorsini);
 				
 				$this->nFilasOmitidas ++;
 				continue;

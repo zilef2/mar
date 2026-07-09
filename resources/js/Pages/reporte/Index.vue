@@ -60,6 +60,9 @@ const data = reactive({
         search5: props.filters.search5, //actividad
         search6: props.filters.search6, //mes
         search7: props.filters.search7, //anio
+        search8: props.filters.search8 === 'true' || props.filters.search8 === true,
+        search9: props.filters.search9 === 'true' || props.filters.search9 === true,
+        search10: props.filters.search10 === 'true' || props.filters.search10 === true,
         field: props.filters.field,
         order: props.filters.order,
         perPage: props.perPage,
@@ -282,6 +285,21 @@ watchEffect(() => {
                                            class="w-36 rounded-lg h-10"
                                            placeholder="Buscar por Fecha (mes o año)"/>
                             </div>
+                            
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" v-model="data.params.search8" id="search8" class="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="search8" class="text-sm text-gray-700 dark:text-white">Fin > 4:30pm</label>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" v-model="data.params.search9" id="search9" class="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="search9" class="text-sm text-gray-700 dark:text-white">Tiempo Negativo</label>
+                            </div>
+
+                            <button type="button" @click="data.params.search10 = !data.params.search10" :class="['px-3 py-1.5 text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800', data.params.search10 ? 'bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500' : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600']">
+                                <span v-if="data.params.search10">Reportes de duración: &lt; 1 hr</span>
+                                <span v-else>Ver &lt; 1 hr</span>
+                            </button>
                         </div>
                     </div>
 
@@ -292,10 +310,10 @@ watchEffect(() => {
                 <div
                     class="
                         overflow-y-auto
-                        max-h-[60vh]          <!-- móviles -->
-                        md:max-h-[70vh]       <!-- pantallas medianas -->
-                        lg:max-h-[80vh]       <!-- pantallas grandes -->
-                        xl:max-h-[85vh]       <!-- monitores grandes -->
+                        max-h-[40vh]          <!-- móviles -->
+                        md:max-h-[50vh]       <!-- pantallas medianas -->
+                        lg:max-h-[60vh]       <!-- pantallas grandes -->
+                        xl:max-h-[65vh]       <!-- monitores grandes -->
                       "
                 >
                     <table v-if="props.total > 0" class=" w-full z-20">

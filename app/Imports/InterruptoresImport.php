@@ -30,7 +30,7 @@ class InterruptoresImport implements ToModel
         try {
             $this->larow = $row;
 
-            if ($row[0] === 'reference') return null;
+            if ($row[0] === 'reference' || $row[0] === 'REFERENCIA') return null;
 
             if (!$this->Requeridos($row)) {
                 $this->contarVacios++;
