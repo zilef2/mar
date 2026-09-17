@@ -20,7 +20,8 @@ return [
     'allowed_methods' => ['*'],
 
     // 'allowed_origins' => ['http://127.0.0.1:8008', 'http://192.168.1.102:8008'],
-    'allowed_origins' => ['http://127.0.0.1:8008', 'http://192.168.1.79:8008'],
+    // 'allowed_origins' => ['http://127.0.0.1:8008', 'http://192.168.1.79:8008'],
+    'allowed_origins' => ['http://127.0.0.1:8008', 'http://192.168.1.108:8008'],
 //php artisan ziggy:generate resources/js/ziggy.js
     'allowed_origins_patterns' => [],
 
