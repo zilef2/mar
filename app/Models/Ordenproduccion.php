@@ -17,18 +17,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 	     */
 	    protected $fillable = [
         'id',
-//	    'pedido',
 		'op',
 		'cliente',
 		'obra',
-//		'contrato',
 		'producto_descripcion',
 		'estado',
 		'asesor',
 		'cantidad',
 		'fecha_solicitud',
 	    
-		'cantidad_minutos',
+		'cantidad',
     ];
 
 

@@ -70,7 +70,7 @@ class GenericImport implements ToCollection, WithHeadingRow, SkipsOnError, WithC
 		"producto_descripcion" => 'producto_descripcion',
 		"asesor"               => 'asesor',
 		"estado"               => 'estado',
-		"cantidad"               => 'cant',
+		"cantidad"               => 'cantidad',
 		//		fecha	//la fecha no es un campo mapeado, esta en la variable camposFecha
 	
 	];
@@ -254,6 +254,8 @@ class GenericImport implements ToCollection, WithHeadingRow, SkipsOnError, WithC
 			$fechasProcesadas[$campoFecha] = $valorFecha;
 		}
 		$camposFinal = [];
+		Log::channel('solosuper')->info('Keys del row: ', array_keys($row));
+		Log::channel('solosuper')->info('Row completo: ', $row);
 		foreach ($this->camposMapeados as $modelo => $excel) {
 			
 			$camposFinal[$modelo] = $row[$excel];
